@@ -8,7 +8,7 @@
       <Card icon="log-in" title="欢迎登录" :bordered="false">
         <div class="form-con">
           <login-form @on-success-valid="handleSubmit"></login-form>
-          <p class="login-tip">{{ $t('login_tip') }}</p>
+          <p class="login-tip">{{$t('login_tip')}}</p>
         </div>
       </Card>
     </div>
