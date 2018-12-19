@@ -1,5 +1,6 @@
-export default { 
+export default {
   home: '首頁',
   join_page: 'QQ群',
-  message_page: '消息中心'
- }
+  message_page: '消息中心',
+  login_tip: '登入提示'
+}
