@@ -1,6 +1,8 @@
 import axios from 'axios'
 import store from '@/store'
-// import {  Spin  } from 'iview'
+// import { Spin } from 'iview'
+import Cookies from 'js-cookie'
+
 const addErrorLog = errorInfo => {
   const { statusText, status, request: { responseURL } } = errorInfo
   let info = {
@@ -18,11 +20,16 @@ class HttpRequest {
     this.queue = { }
   }
   getInsideConfig () {
+    let token = Cookies.get('token')
+    let header = {}
+    if (token) {
+      header = {
+        token: Cookies.get('token')
+      }
+    }
     const config = {
       baseURL: this.baseUrl,
-      headers: {
-        //
-      }
+      headers: header
     }
     return config
   }

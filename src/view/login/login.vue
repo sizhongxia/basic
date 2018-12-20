@@ -27,19 +27,15 @@ export default {
       'handleLogin'
     ]),
     handleSubmit ({ userName, password }) {
-      const _this = this, _$t = $t
-      _this.handleLogin({ userName, password }).then(res => {
-
-        console.info(res)
-        // this.getUserInfo().then(res => {
-        //   this.$router.push({
-        //     name: this.$config.homeName
-        //   })
-        // })
-      }).catch(function (reason) {
-        _this.$Notice.error({
-          title: _$t('login_error')
+      // const _this = this, _$t = $t
+      this.handleLogin({ userName, password }).then(res => {
+        this.$router.push({
+          name: this.$config.homeName
         })
+      }).catch(function (reason) {
+        // this.$Notice.error({
+        //   title: $t('login_error')
+        // })
         console.error(reason)
       })
     }

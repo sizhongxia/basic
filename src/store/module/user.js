@@ -1,6 +1,7 @@
 import {
   login,
   logout,
+  getUserInfo,
   getMessage,
   getContentByMsgId,
   hasRead,
@@ -76,7 +77,6 @@ export default {
           userName,
           password
         }).then(res => {
-          console.info(res)
           if (res.status !== 200) {
             reject(new Error(res.status))
             return
@@ -102,40 +102,43 @@ export default {
     // 退出登录
     handleLogOut ({ state, commit }) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
+        logout().then(() => {
           commit('setToken', '')
           commit('setAccess', [])
           resolve()
         }).catch(err => {
           reject(err)
         })
-        // 如果你的退出登录无需请求接口，则可以直接使用下面三行代码而无需使用logout调用接口
-        // commit('setToken', '')
-        // commit('setAccess', [])
-        // resolve()
       })
     },
     // 获取用户相关信息
-    // getUserInfo ({ state, commit }) {
-    //   return new Promise((resolve, reject) => {
-    //     try {
-    //       getUserInfo(state.token).then(res => {
-    //         const data = res.data
-    //         console.info(data)
-    //         commit('setAvator', data.avator)
-    //         commit('setUserName', data.userName)
-    //         commit('setUserId', data.userId)
-    //         commit('setAccess', data.access)
-    //         commit('setHasGetInfo', true)
-    //         resolve(data)
-    //       }).catch(err => {
-    //         reject(err)
-    //       })
-    //     } catch (error) {
-    //       reject(error)
-    //     }
-    //   })
-    // },
+    getUserInfo ({ state, commit }) {
+      return new Promise((resolve, reject) => {
+        try {
+          getUserInfo(state.token).then(res => {
+            if (res.status !== 200) {
+              reject(new Error(res.status))
+              return
+            }
+            const data = res.data
+            if (data.code !== 200) {
+              reject(new Error(data.message))
+              return
+            }
+            const userinfo = data.data
+            commit('setAvator', userinfo.avator)
+            commit('setUserName', userinfo.userName)
+            commit('setAccess', userinfo.access)
+            commit('setHasGetInfo', true)
+            resolve(userinfo)
+          }).catch(err => {
+            reject(err)
+          })
+        } catch (error) {
+          reject(error)
+        }
+      })
+    },
     // 此方法用来获取未读消息条数，接口只返回数值，不返回消息列表
     getUnreadMessageCount ({ state, commit }) {
       getUnreadCount().then(res => {
