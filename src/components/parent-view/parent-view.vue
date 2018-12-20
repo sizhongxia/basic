@@ -4,17 +4,17 @@
   </keep-alive>
 </template>
 <script>
-export default { 
+export default {
   name: 'ParentView',
-  data () { 
-    return { 
+  data () {
+    return {
       cacheChaildName: ''
-     }
-   },
-  computed: { 
-    notCacheName () { 
+    }
+  },
+  computed: {
+    notCacheName () {
       return (this.$route.meta && this.$route.meta.notCache) ? this.$route.name : ''
-     }
-   }
- }
+    }
+  }
+}
 </script>

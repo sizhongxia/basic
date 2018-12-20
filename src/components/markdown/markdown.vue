@@ -7,49 +7,49 @@
 <script>
 import Simplemde from 'simplemde'
 import 'simplemde/dist/simplemde.min.css'
-export default { 
+export default {
   name: 'MarkdownEditor',
-  props: { 
-    value: { 
+  props: {
+    value: {
       type: String,
       default: ''
-     },
-    options: { 
+    },
+    options: {
       type: Object,
-      default: () => { 
-        return {  }
-       }
-     },
-    localCache: { 
+      default: () => {
+        return {}
+      }
+    },
+    localCache: {
       type: Boolean,
       default: true
-     }
-   },
-  data () { 
-    return { 
+    }
+  },
+  data () {
+    return {
       editor: null
-     }
-   },
-  methods: { 
-    addEvents () { 
-      this.editor.codemirror.on('change', () => { 
+    }
+  },
+  methods: {
+    addEvents () {
+      this.editor.codemirror.on('change', () => {
         let value = this.editor.value()
         if (this.localCache) localStorage.markdownContent = value
         this.$emit('input', value)
         this.$emit('on-change', value)
-       })
-      this.editor.codemirror.on('focus', () => { 
+      })
+      this.editor.codemirror.on('focus', () => {
         this.$emit('on-focus', this.editor.value())
-       })
-      this.editor.codemirror.on('blur', () => { 
+      })
+      this.editor.codemirror.on('blur', () => {
         this.$emit('on-blur', this.editor.value())
-       })
-     }
-   },
-  mounted () { 
-    this.editor = new Simplemde(Object.assign(this.options, { 
+      })
+    }
+  },
+  mounted () {
+    this.editor = new Simplemde(Object.assign(this.options, {
       element: this.$refs.editor
-     }))
+    }))
     /**
      * 事件列表为Codemirror编辑器的事件，更多事件类型，请参考：
      * https://codemirror.net/doc/manual.html#events
@@ -57,20 +57,20 @@ export default {
     this.addEvents()
     let content = localStorage.markdownContent
     if (content) this.editor.value(content)
-   }
- }
+  }
+}
 </script>
 
 <style lang="less">
-.markdown-wrapper{ 
-  .editor-toolbar.fullscreen{ 
+.markdown-wrapper{
+  .editor-toolbar.fullscreen{
     z-index: 9999;
-   }
-  .CodeMirror-fullscreen{ 
+  }
+  .CodeMirror-fullscreen{
     z-index: 9999;
-   }
-  .CodeMirror-fullscreen ~ .editor-preview-side{ 
+  }
+  .CodeMirror-fullscreen ~ .editor-preview-side{
     z-index: 9999;
-   }
- }
+  }
+}
 </style>

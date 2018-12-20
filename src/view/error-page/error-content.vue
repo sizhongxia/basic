@@ -14,15 +14,15 @@
 <script>
 import './error.less'
 import backBtnGroup from './back-btn-group.vue'
-export default { 
+export default {
   name: 'error_content',
-  components: { 
+  components: {
     backBtnGroup
-   },
-  props: { 
+  },
+  props: {
     code: String,
     desc: String,
     src: String
-   }
- }
+  }
+}
 </script>

@@ -4,6 +4,7 @@
       <Badge :dot="!!messageUnreadCount">
         <Avatar :src="userAvator"/>
       </Badge>
+      <span>{{ userName }}</span>
       <Icon :size="18" type="md-arrow-dropdown"></Icon>
       <DropdownMenu slot="list">
         <DropdownItem name="message">
@@ -21,6 +22,10 @@ import { mapActions } from 'vuex'
 export default {
   name: 'User',
   props: {
+    userName: {
+      type: String,
+      default: ''
+    },
     userAvator: {
       type: String,
       default: ''
@@ -43,7 +48,7 @@ export default {
     },
     message () {
       this.$router.push({
-        name: 'message_page'
+        name: 'message_center'
       })
     },
     handleClick (name) {

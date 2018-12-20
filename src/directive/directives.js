@@ -1,9 +1,9 @@
 import draggable from './module/draggable'
 import clipboard from './module/clipboard'
 
-const directives = { 
+const directives = {
   draggable,
   clipboard
- }
+}
 
 export default directives

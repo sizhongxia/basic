@@ -1,33 +1,33 @@
 <template>
-  <i :class="`iconfont icon-${ type }`" :style="styles"></i>
+  <i :class="`iconfont icon-${type}`" :style="styles"></i>
 </template>
 
 <script>
-export default { 
+export default {
   name: 'Icons',
-  props: { 
-    type: { 
+  props: {
+    type: {
       type: String,
       required: true
-     },
-    color: { 
+    },
+    color: {
       type: String,
       default: '#5c6b77'
-     },
-    size: { 
+    },
+    size: {
       type: Number,
       default: 16
-     }
-   },
-  computed: { 
-    styles () { 
-      return { 
-        fontSize: `${ this.size }px`,
+    }
+  },
+  computed: {
+    styles () {
+      return {
+        fontSize: `${this.size}px`,
         color: this.color
-       }
-     }
-   }
- }
+      }
+    }
+  }
+}
 </script>
 
 <style>

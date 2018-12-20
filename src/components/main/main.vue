@@ -12,7 +12,7 @@
     <Layout>
       <Header class="header-con">
         <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
-          <user :message-unread-count="unreadCount" :user-avator="userAvator"/>
+          <user :message-unread-count="unreadCount" :user-avator="userAvator" :user-name="userName"/>
           <language v-if="$config.useI18n" @on-lang-change="setLocal" style="margin-right: 10px;" :lang="local"/>
           <error-store v-if="$config.plugin['error-store'] && $config.plugin['error-store'].showInHeader" :has-read="hasReadErrorPage" :count="errorCount"></error-store>
         </header-bar>
@@ -75,6 +75,9 @@ export default {
     tagRouter () {
       return this.$store.state.app.tagRouter
     },
+    userName () {
+      return this.$store.state.user.userName
+    },
     userAvator () {
       return this.$store.state.user.avatorImgPath
     },
@@ -103,7 +106,6 @@ export default {
       'setHomeRoute'
     ]),
     ...mapActions([
-      'handleLogin',
       'getUnreadMessageCount'
     ]),
     turnToPage (route) {

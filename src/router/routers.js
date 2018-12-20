@@ -1,5 +1,5 @@
 import Main from '@/components/main'
-import parentView from '@/components/parent-view'
+// import parentView from '@/components/parent-view'
 
 /**
  * iview-admin中meta除了原生参数外可配置的参数:
@@ -25,7 +25,6 @@ export default [
       title: 'Login - 登录',
       hideInMenu: true
     },
-    // eslint-disable-next-line
     component: () => import('@/view/login/login.vue')
   },
   {
@@ -51,42 +50,30 @@ export default [
   },
   {
     path: '/',
-    name: 'multilevel', // 一级目录
+    name: 'user', // 用户管理
     meta: {
-      title: '多级菜单',
-      icon: 'arrow-graph-up-right'
+      title: '用户',
+      icon: 'md-people'
     },
     component: Main, // 一级目录必须使用Main组件作为component
     children: [
       {
-        path: 'level_2_1',
-        name: 'level_2_1', // 一级目录下的二级页面
+        path: '/user/manage',
+        name: 'user_manage',
         meta: {
-          icon: 'arrow-graph-up-right',
-          title: '二级-1'
+          icon: 'md-people',
+          title: '用户管理'
         },
-        component: () => import('@/view/basic.vue') // 这引入的是页面单文件
+        component: () => import('@/view/basic.vue')
       },
       {
-        path: 'level_2_2',
-        name: 'level_2_2',
+        path: '/authorization/manage',
+        name: 'authorization_manage',
         meta: {
-          access: ['super_admin'], // 权限控制<Array>，包含可访问该页面的用户权限
-          icon: 'arrow-graph-up-right',
-          title: '二级-2'
+          icon: 'md-lock',
+          title: '权限管理'
         },
-        component: parentView, // 如果该路由不是页面，而是二级即更多级目录，需要用parentView组件
-        children: [
-          {
-            path: 'level_2_2_1',
-            name: 'level_2_2_1',
-            meta: {
-              icon: 'arrow-graph-up-right',
-              title: '三级'
-            },
-            component: () => import('@/view/basic.vue') // 这引入的是页面单文件
-          }
-        ]
+        component: () => import('@/view/basic.vue')
       }
     ]
   },
@@ -100,8 +87,8 @@ export default [
     },
     children: [
       {
-        path: 'message_page',
-        name: 'message_page',
+        path: '/center',
+        name: 'message_center',
         meta: {
           icon: 'md-notifications',
           title: '消息中心'

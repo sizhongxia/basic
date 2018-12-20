@@ -2,25 +2,25 @@
   <a @click="handleChange" type="text" :class="['sider-trigger-a', collapsed ? 'collapsed' : '']"><Icon :type="icon" :size="size" /></a>
 </template>
 <script>
-export default { 
+export default {
   name: 'siderTrigger',
-  props: { 
+  props: {
     collapsed: Boolean,
-    icon: { 
+    icon: {
       type: String,
       default: 'navicon-round'
-     },
-    size: { 
+    },
+    size: {
       type: Number,
       default: 26
-     }
-   },
-  methods: { 
-    handleChange () { 
+    }
+  },
+  methods: {
+    handleChange () {
       this.$emit('on-change', !this.collapsed)
-     }
-   }
- }
+    }
+  }
+}
 </script>
 <style lang="less">
 @import './sider-trigger.less';
