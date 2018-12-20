@@ -56,7 +56,7 @@ export default {
     },
     iconSize: {
       type: Number,
-      default: 16
+      default: 18
     },
     accordion: Boolean,
     activeName: {

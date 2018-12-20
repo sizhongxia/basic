@@ -27,16 +27,15 @@ export default {
       'handleLogin'
     ]),
     handleSubmit ({ userName, password }) {
-      // const _this = this, _$t = $t
-      this.handleLogin({ userName, password }).then(res => {
+      const _this = this
+      _this.handleLogin({ userName, password }).then(res => {
         this.$router.push({
-          name: this.$config.homeName
+          name: _this.$config.homeName
         })
       }).catch(function (reason) {
-        // this.$Notice.error({
-        //   title: $t('login_error')
-        // })
-        console.error(reason)
+        _this.$Modal.error({
+          title: _this.$t('login_error') + reason.message
+        })
       })
     }
   }

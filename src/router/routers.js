@@ -42,14 +42,63 @@ export default [
         meta: {
           title: '首页',
           notCache: true,
-          icon: 'md-home'
+          icon: 'ios-speedometer'
         },
         component: () => import('@/view/main/home')
       }
     ]
   },
   {
-    path: '/',
+    path: '/farm',
+    name: 'farm', // 农场管理
+    meta: {
+      title: '农场',
+      icon: 'ios-globe'
+    },
+    component: Main, // 一级目录必须使用Main组件作为component
+    children: [
+      {
+        path: '/farm/manage',
+        name: 'farm_manage',
+        meta: {
+          icon: 'logo-buffer',
+          title: '农场管理'
+        },
+        component: () => import('@/view/basic.vue')
+      },
+      {
+        path: '/farm/add',
+        name: 'farm_add',
+        meta: {
+          icon: 'ios-easel',
+          title: '新增农场'
+        },
+        component: () => import('@/view/basic.vue')
+      }
+    ]
+  },
+  {
+    path: '/equipment',
+    name: 'equipment', // 设备管理
+    meta: {
+      title: '设备',
+      icon: 'ios-settings'
+    },
+    component: Main, // 一级目录必须使用Main组件作为component
+    children: [
+      {
+        path: '/equipment/manage',
+        name: 'equipment_manage',
+        meta: {
+          icon: 'ios-settings',
+          title: '设备管理'
+        },
+        component: () => import('@/view/basic.vue')
+      }
+    ]
+  },
+  {
+    path: '/user',
     name: 'user', // 用户管理
     meta: {
       title: '用户',
@@ -67,10 +116,10 @@ export default [
         component: () => import('@/view/basic.vue')
       },
       {
-        path: '/authorization/manage',
+        path: '/user/authorization/manage',
         name: 'authorization_manage',
         meta: {
-          icon: 'md-lock',
+          icon: 'ios-lock',
           title: '权限管理'
         },
         component: () => import('@/view/basic.vue')

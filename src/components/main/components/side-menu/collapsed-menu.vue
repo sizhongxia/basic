@@ -24,7 +24,7 @@ export default {
     },
     rootIconSize: {
       type: Number,
-      default: 16
+      default: 18
     }
   },
   data () {
