@@ -26,13 +26,14 @@ export default {
     ...mapActions([
       'handleLogin'
     ]),
-    handleSubmit ({ userName, password }) {
+    handleSubmit ({ userName, password, callback }) {
       const _this = this
       _this.handleLogin({ userName, password }).then(res => {
         this.$router.push({
           name: _this.$config.homeName
         })
       }).catch(function (reason) {
+        callback()
         _this.$Modal.error({
           title: _this.$t('login_error') + reason.message
         })
