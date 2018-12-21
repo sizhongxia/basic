@@ -52,6 +52,7 @@ export default [
     path: '/farm',
     name: 'farm', // 农场管理
     meta: {
+      access: ['super_admin'],
       title: '农场',
       icon: 'ios-globe'
     },
@@ -81,6 +82,7 @@ export default [
     path: '/equipment',
     name: 'equipment', // 设备管理
     meta: {
+      access: ['super_admin'],
       title: '设备',
       icon: 'ios-settings'
     },
@@ -101,6 +103,7 @@ export default [
     path: '/user',
     name: 'user', // 用户管理
     meta: {
+      access: ['super_admin'],
       title: '用户',
       icon: 'md-people'
     },

@@ -21,6 +21,9 @@ export default {
   farm_manage: 'Farm Manage',
   farm_add: 'Create Farm',
 
+  equipment: 'Equipment',
+  equipment_manage: 'Equipment Manage',
+
   code_401_msg: 'Unauthorized Access',
   code_404_msg: 'Page Has Expired',
   code_500_msg: 'Go Wrong',
