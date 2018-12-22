@@ -79,3 +79,78 @@ export const restoreTrash = msg_id => {
     }
   })
 }
+
+export const loadUsers = ({ searchValue, page, size, orderField, orderType }) => {
+  const data = {
+    searchValue,
+    page,
+    size,
+    orderField,
+    orderType
+  }
+  return axios.request({
+    url: 'user/list',
+    data,
+    method: 'post'
+  })
+}
+
+export const toggleStateUser = ({ resultId }) => {
+  const data = {
+    resultId
+  }
+  return axios.request({
+    url: 'user/toggleState',
+    data,
+    method: 'post'
+  })
+}
+
+export const upinsertUser = ({ userId, userName, phoneNo, email, organizeId }) => {
+  const data = {
+    userId,
+    userName,
+    phoneNo,
+    email,
+    organizeId
+  }
+  return axios.request({
+    url: 'user/upinsert',
+    data,
+    method: 'post'
+  })
+}
+
+export const resetUserPwd = ({ resultId }) => {
+  const data = {
+    resultId
+  }
+  return axios.request({
+    url: 'user/resetPwd',
+    data,
+    method: 'post'
+  })
+}
+
+export const userIdentities = ({ resultId }) => {
+  const data = {
+    resultId
+  }
+  return axios.request({
+    url: 'user/identities',
+    data,
+    method: 'post'
+  })
+}
+
+export const changeUserIdentities = ({ userId, identities }) => {
+  const data = {
+    userId,
+    identities
+  }
+  return axios.request({
+    url: 'user/changeIdentity',
+    data,
+    method: 'post'
+  })
+}

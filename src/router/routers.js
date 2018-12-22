@@ -53,7 +53,7 @@ export default [
     name: 'farm', // 农场管理
     meta: {
       access: ['super_admin'],
-      title: '农场',
+      title: '农场管理',
       icon: 'ios-globe'
     },
     component: Main, // 一级目录必须使用Main组件作为component
@@ -62,15 +62,17 @@ export default [
         path: '/farm/manage',
         name: 'farm_manage',
         meta: {
+          access: ['super_admin'],
           icon: 'logo-buffer',
           title: '农场管理'
         },
-        component: () => import('@/view/basic.vue')
+        component: () => import('@/view/farm/index.vue')
       },
       {
         path: '/farm/add',
         name: 'farm_add',
         meta: {
+          access: ['super_admin'],
           icon: 'ios-easel',
           title: '新增农场'
         },
@@ -92,6 +94,7 @@ export default [
         path: '/equipment/manage',
         name: 'equipment_manage',
         meta: {
+          access: ['super_admin'],
           icon: 'ios-settings',
           title: '设备管理'
         },
@@ -113,19 +116,31 @@ export default [
         path: '/user/manage',
         name: 'user_manage',
         meta: {
+          access: ['super_admin'],
           icon: 'md-people',
           title: '用户管理'
         },
-        component: () => import('@/view/basic.vue')
+        component: () => import('@/view/user/index.vue')
       },
       {
         path: '/user/authorization/manage',
         name: 'authorization_manage',
         meta: {
+          access: ['super_admin'],
           icon: 'ios-lock',
           title: '权限管理'
         },
         component: () => import('@/view/basic.vue')
+      },
+      {
+        path: '/user/organize/manage',
+        name: 'organize_manage',
+        meta: {
+          access: ['super_admin'],
+          icon: 'logo-codepen',
+          title: '组织管理'
+        },
+        component: () => import('@/view/organize/index.vue')
       }
     ]
   },

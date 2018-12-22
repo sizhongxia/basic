@@ -1,18 +1,6 @@
 import axios from 'axios'
-import store from '@/store'
 // import { Spin } from 'iview'
 import Cookies from 'js-cookie'
-
-const addErrorLog = errorInfo => {
-  const { statusText, status, request: { responseURL } } = errorInfo
-  let info = {
-    type: 'ajax',
-    code: status,
-    mes: statusText,
-    url: responseURL
-  }
-  if (!responseURL.includes('save_error_logger')) store.dispatch('addErrorLog', info)
-}
 
 class HttpRequest {
   constructor (baseUrl = baseURL) {
@@ -67,7 +55,9 @@ class HttpRequest {
           request: { responseURL: config.url }
         }
       }
-      addErrorLog(errorInfo)
+      if (errorInfo.status === 401) {
+        window.location.href = '/login'
+      }
       return Promise.reject(error)
     })
   }
