@@ -595,6 +595,7 @@ export default {
       this.hadAuthUserModel = true
       const _this = this
       _this.farmUserDataloading = true
+      _this.farmUserTableData = [];
       farmAuthUsers({ resultId: params.row.farmId }).then(res => {
         _this.farmUserDataloading = false
         if (res.status === 200 && res.data.code === 200) {
