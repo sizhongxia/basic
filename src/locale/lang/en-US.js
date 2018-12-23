@@ -54,6 +54,8 @@ export default {
   farm_change_owner: 'Change Owner',
   farm_current_owner: 'Current Owner',
   new_farm_owner: 'New Owner',
+  farm_auth_new_user: 'Auth New User',
+  farm_had_auth_users: 'Had Auth Users',
 
   area_name: 'Farm Area Name',
   area_position: 'Farm Area Position',

@@ -78,3 +78,14 @@ export const changeFarmOwner = ({ farmId, ownerUserId }) => {
     method: 'post'
   })
 }
+
+export const farmAuthUsers = ({ resultId }) => {
+  const data = {
+    resultId
+  }
+  return axios.request({
+    url: 'farm/authUsers',
+    data,
+    method: 'post'
+  })
+}

@@ -14,7 +14,7 @@ export default {
 
   message_center: '消息中心',
 
-  user: '用户权限',
+  user: '用户',
   user_manage: '用户管理',
   user_name: '用户名称',
   phone_no: '手机号',
@@ -54,6 +54,8 @@ export default {
   farm_change_owner: '变更所属用户',
   farm_current_owner: '当前所有用户',
   new_farm_owner: '新所有用户',
+  farm_auth_new_user: '授权新用户',
+  farm_had_auth_users: '已授权用户',
 
   area_name: '厂区名称',
   area_position: '厂区位置',

@@ -35,9 +35,11 @@
           <span>{{ $t('farm_change_owner') }}</span>
       </p>
       <div>
-        <p>{{ $t('farm_current_owner') }}: {{ farmOwnerFormObj.ownerUserName }} ({{ farmOwnerFormObj.ownerUserPhone }})</p>
         <div>
-          <Form :model="farmOwnerFormObj">
+          <Form :model="farmOwnerFormObj" :label-width="140" ref="farmOwnerForm">
+            <FormItem :label="$t('farm_current_owner')">
+              {{ farmOwnerFormObj.ownerUserName }} ({{ farmOwnerFormObj.ownerUserPhone }})
+            </FormItem>
             <FormItem :label="$t('new_farm_owner')">
               <Select
                 v-model="farmOwnerFormObj.newOwnerUserId"
@@ -58,11 +60,82 @@
       </div>
       <Spin size="large" fix v-if="ownerLoading"></Spin>
     </Modal>
+    <Modal
+      v-model="createAuthUserModel"
+      scrollable
+      width="620"
+      mask
+      :mask-closable="false">
+      <p slot="header">
+          <Icon type="ios-bulb-outline"></Icon>
+          <span>{{ $t('farm_auth_new_user') }}</span>
+      </p>
+      <div>
+        <div>
+          <Form :model="farmAuthFormObj" :label-width="140" ref="farmAuthForm">
+            <FormItem :label="$t('user')">
+              <Select
+                v-model="farmAuthFormObj.userId"
+                filterable
+                remote
+                :remote-method="remoteGetUsers"
+                clearable
+                :loading="usersLoading"
+                style="width: 240px">
+                <Option v-for="option in users" :value="option.value" :key="option.value">{{option.label}} ({{option.phoneNo}}, {{option.email}})</Option>
+              </Select>
+            </FormItem>
+            <FormItem :label="$t('identity')">
+              <Select
+                v-model="farmAuthFormObj.identity"
+                clearable
+                style="width: 240px">
+                <Option value="admin">admin</Option>
+                <Option value="manager">manager</Option>
+                <Option value="visitor">visitor</Option>
+              </Select>
+            </FormItem>
+            <FormItem :label="$t('remark')">
+              <Input v-model="farmAuthFormObj.applyRemark" type="textarea" :autosize="{minRows: 3,maxRows: 5}" :placeholder="$t('please_input')+$t('remark')" style="width: 350px"></Input>
+            </FormItem>
+          </Form>
+        </div>
+      </div>
+      <div slot="footer" style="text-align:center">
+        <Button type="primary" size="large" :loading="saveAuthUserSubmiting" @click="saveAuthUserHandle">{{ $t('submit') }}</Button>
+      </div>
+    </Modal>
+    <Modal
+      v-model="hadAuthUserModel"
+      scrollable
+      width="620"
+      mask
+      :mask-closable="false">
+      <p slot="header">
+          <Icon type="md-heart-outline"></Icon>
+          <span>{{ $t('farm_had_auth_users') }}</span>
+      </p>
+      <div>
+        <Table
+          :border="false"
+          :stripe="true"
+          :show-header="true"
+          :data="farmUserTableData"
+          :loading="farmUserDataloading"
+          :columns="farmUserColumns"
+          size="small"
+          :height="260"
+          :highlight-row="true"
+        ></Table>
+      </div>
+      <div slot="footer"></div>
+      <Spin size="large" fix v-if="farmAuthUsersloading"></Spin>
+    </Modal>
   </div>
 </template>
 <script>
-import { loadFarms, deleteFarm, farmOwnerInfo, changeFarmOwner } from '@/api/farm'
-import { query } from '@/api/user'
+import { loadFarms, deleteFarm, farmOwnerInfo, changeFarmOwner, farmAuthUsers } from '@/api/farm'
+import { query, authFarmVisit } from '@/api/user'
 export default {
   data () {
     return {
@@ -84,10 +157,23 @@ export default {
       users: [],
       farmOwnerFormObj: {
         newOwnerUserId: '',
+        farmId: '',
         ownerUserId: '',
         ownerUserName: '',
         ownerUserPhone: ''
-      }
+      },
+      farmAuthFormObj: {
+        farmId: '',
+        userId: '',
+        identity: '',
+        applyRemark: ''
+      },
+      createAuthUserModel: false,
+      saveAuthUserSubmiting: false,
+      hadAuthUserModel: false,
+      farmUserTableData: [],
+      farmUserDataloading: false,
+      farmAuthUsersloading: false
     }
   },
   computed: {
@@ -176,7 +262,7 @@ export default {
               props: {
                 type: 'text',
                 size: 'small',
-                icon: 'ios-create-outline'
+                icon: 'ios-leaf-outline'
               },
               on: {
                 'click': () => {
@@ -208,16 +294,101 @@ export default {
               props: {
                 type: 'text',
                 size: 'small',
-                icon: 'ios-create-outline'
+                icon: 'md-repeat'
               },
               on: {
                 'click': () => {
                   this.showChangeOwnerModel(params)
                 }
               }
-            }, this.$t('farm_change_owner'))
+            }, this.$t('farm_change_owner')),
+            h('Button', {
+              props: {
+                type: 'text',
+                size: 'small',
+                icon: 'md-key'
+              },
+              on: {
+                'click': () => {
+                  this.showCreateAuthUserModel(params)
+                }
+              }
+            }, this.$t('farm_auth_new_user')),
+            h('Button', {
+              props: {
+                type: 'text',
+                size: 'small',
+                icon: 'ios-people'
+              },
+              on: {
+                'click': () => {
+                  this.showHadAuthUsersModel(params)
+                }
+              }
+            }, this.$t('farm_had_auth_users'))
           ])
         }
+      }]
+    },
+    farmUserColumns () {
+      return [{
+        type: 'index',
+        width: 60,
+        align: 'center'
+      },
+      {
+        title: this.$t('record_id'),
+        key: 'userId',
+        width: 220,
+        tooltip: true
+      },
+      {
+        title: this.$t('user_name'),
+        key: 'userName',
+        width: 200,
+        tooltip: true
+      },
+      {
+        title: this.$t('phone_no'),
+        key: 'userPhoneNo',
+        width: 120,
+        tooltip: true
+      },
+      {
+        title: this.$t('identity'),
+        key: 'identity',
+        width: 150,
+        tooltip: true
+      },
+      {
+        title: this.$t('apply_at'),
+        key: 'applyAt',
+        width: 150,
+        tooltip: true
+      },
+      {
+        title: this.$t('apply_remark'),
+        key: 'applyRemark',
+        width: 280,
+        tooltip: true
+      },
+      {
+        title: this.$t('apply_state'),
+        key: 'applyState',
+        width: 120,
+        tooltip: true
+      },
+      {
+        title: this.$t('handle_at'),
+        key: 'handleAt',
+        width: 150,
+        tooltip: true
+      },
+      {
+        title: this.$t('handle_user_id'),
+        key: 'handleUserId',
+        width: 150,
+        tooltip: true
       }]
     }
   },
@@ -319,13 +490,14 @@ export default {
     },
     showChangeOwnerModel (params) {
       const _this = this
+      _this.$refs['farmOwnerForm'].resetFields()
       _this.changeOwnerModel = true
       _this.ownerLoading = true
       farmOwnerInfo({ resultId: params.row.farmId }).then(res => {
         _this.ownerLoading = false
         if (res.status === 200 && res.data.code === 200) {
           _this.farmOwnerFormObj = res.data.data
-          _this.farmOwnerFormObj.newOwnerUserId = ""
+          _this.farmOwnerFormObj.newOwnerUserId = ''
         } else {
           _this.$Modal.error({
             title: _this.$t('error_message_info') + res.data.message
@@ -370,13 +542,13 @@ export default {
         return
       }
       _this.ownerChangeSubmiting = true
-      changeFarmOwner({ farmId: _this.farmId, ownerUserId: _this.farmOwnerFormObj.newOwnerUserId }).then(res => {
+      changeFarmOwner({ farmId: _this.farmOwnerFormObj.farmId, ownerUserId: _this.farmOwnerFormObj.newOwnerUserId }).then(res => {
         _this.ownerChangeSubmiting = false
         if (res.status === 200 && res.data.code === 200) {
+          _this.changeOwnerModel = false
           _this.$Modal.success({
             title: _this.$t('save_success')
           })
-          _this.$Modal.remove()
         } else {
           _this.$Modal.error({
             title: _this.$t('error_message_info') + res.data.message
@@ -384,6 +556,56 @@ export default {
         }
       }).catch(function (reason) {
         _this.ownerChangeSubmiting = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
+    },
+    showCreateAuthUserModel (params) {
+      this.$refs['farmAuthForm'].resetFields()
+      this.createAuthUserModel = true
+      this.farmAuthFormObj.farmId = params.row.farmId
+      this.farmAuthFormObj.userId = ''
+      this.farmAuthFormObj.identity = ''
+      this.farmAuthFormObj.applyRemark = '系统Sys'
+    },
+    saveAuthUserHandle () {
+      this.saveAuthUserSubmiting = true
+      const _this = this
+      authFarmVisit(this.farmAuthFormObj).then(res => {
+        _this.saveAuthUserSubmiting = false
+        if (res.status === 200 && res.data.code === 200) {
+          _this.createAuthUserModel = false
+          _this.$Modal.success({
+            title: _this.$t('save_success')
+          })
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.saveAuthUserSubmiting = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
+    },
+    showHadAuthUsersModel (params) {
+      this.hadAuthUserModel = true
+      const _this = this
+      _this.farmUserDataloading = true
+      farmAuthUsers({ resultId: params.row.farmId }).then(res => {
+        _this.farmUserDataloading = false
+        if (res.status === 200 && res.data.code === 200) {
+          _this.farmUserTableData = res.data.data
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.farmUserDataloading = false
         _this.$Modal.error({
           title: _this.$t('error_message_info') + reason.message
         })

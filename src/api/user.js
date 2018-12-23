@@ -176,3 +176,17 @@ export const query = ({ searchValue }) => {
     method: 'post'
   })
 }
+
+export const authFarmVisit = ({ farmId, userId, identity, applyRemark }) => {
+  const data = {
+    farmId,
+    userId,
+    identity,
+    applyRemark
+  }
+  return axios.request({
+    url: 'user/authFarm',
+    data,
+    method: 'post'
+  })
+}

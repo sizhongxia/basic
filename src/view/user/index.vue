@@ -336,19 +336,19 @@ export default {
       {
         title: this.$t('record_id'),
         key: 'farmId',
-        width: 150,
+        width: 220,
         tooltip: true
       },
       {
         title: this.$t('farm_name'),
         key: 'farmName',
-        width: 150,
+        width: 220,
         tooltip: true
       },
       {
         title: this.$t('farm_code'),
         key: 'farmCode',
-        width: 150,
+        width: 190,
         tooltip: true
       },
       {
@@ -366,7 +366,7 @@ export default {
       {
         title: this.$t('apply_remark'),
         key: 'applyRemark',
-        width: 200,
+        width: 280,
         tooltip: true
       },
       {
@@ -523,6 +523,7 @@ export default {
       userAuthFarms({ resultId: params.row.userId }).then(res => {
         _this.userAuthFarmsloading = false
         if (res.status === 200 && res.data.code === 200) {
+          _this.userFarmTableData = res.data.data
         } else {
           _this.$Modal.error({
             title: _this.$t('error_message_info') + res.data.message
