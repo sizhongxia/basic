@@ -103,6 +103,7 @@ export default {
     handleLogOut ({ state, commit }) {
       return new Promise((resolve, reject) => {
         logout().then(() => {
+          localStorage.removeItem('tagNaveList')
           commit('setToken', '')
           commit('setAccess', [])
           resolve()

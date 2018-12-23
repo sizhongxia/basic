@@ -44,7 +44,7 @@
       :closable="false">
       <Form :model="formObj" :label-width="120" :rules="ruleValidate" ref="baseForm">
         <FormItem :label="$t('user_name')" prop="userName">
-            <Input v-model="formObj.userName" :placeholder="$t('please_input')+$t('user_name')"/>
+            <Input v-model="formObj.userName" :disabled="formObj.userId !== ''" :placeholder="$t('please_input')+$t('user_name')"/>
         </FormItem>
         <FormItem :label="$t('phone_no')" prop="phoneNo">
             <Input v-model="formObj.phoneNo" :placeholder="$t('please_input')+$t('phone_no')"/>
@@ -177,29 +177,34 @@ export default {
         title: this.$t('record_id'),
         key: 'userId',
         sortable: 'custom',
+        width: 200,
         tooltip: true
       },
       {
         title: this.$t('user_name'),
         key: 'userName',
         sortable: 'custom',
+        width: 200,
         tooltip: true
       },
       {
         title: this.$t('phone_no'),
         key: 'phoneNo',
         sortable: 'custom',
+        width: 140,
         tooltip: true
       },
       {
         title: this.$t('email'),
         key: 'email',
         sortable: 'custom',
+        width: 140,
         tooltip: true
       },
       {
         title: this.$t('account_state'),
         key: 'accountState',
+        width: 120,
         sortable: 'custom',
         render: (h, params) => {
           const row = params.row
@@ -215,11 +220,13 @@ export default {
       {
         title: this.$t('create_at'),
         sortable: 'custom',
+        width: 210,
         key: 'createAt'
       },
       {
         title: this.$t('update_at'),
         sortable: 'custom',
+        width: 210,
         key: 'updateAt'
       },
       {
@@ -335,6 +342,12 @@ export default {
       {
         title: this.$t('farm_name'),
         key: 'farmName',
+        width: 150,
+        tooltip: true
+      },
+      {
+        title: this.$t('farm_code'),
+        key: 'farmCode',
         width: 150,
         tooltip: true
       },
@@ -539,6 +552,7 @@ export default {
       this.load()
     },
     showCreateForm () {
+      this.$refs['baseForm'].resetFields()
       this.formObj.userId = ''
       this.formObj.userName = ''
       this.formObj.phoneNo = ''
@@ -564,6 +578,7 @@ export default {
       })
     },
     showEditForm (params) {
+      this.$refs['baseForm'].resetFields()
       this.formObj.userId = params.row.userId
       this.formObj.userName = params.row.userName
       this.formObj.phoneNo = params.row.phoneNo

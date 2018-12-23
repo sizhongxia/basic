@@ -165,3 +165,14 @@ export const userAuthFarms = ({ resultId }) => {
     method: 'post'
   })
 }
+
+export const query = ({ searchValue }) => {
+  const data = {
+    searchValue
+  }
+  return axios.request({
+    url: 'user/query',
+    data,
+    method: 'post'
+  })
+}

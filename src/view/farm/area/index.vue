@@ -4,7 +4,8 @@
 <template>
   <div>
     <Card class="search-con">
-      <Input clearable :placeholder="$t('search_by_keyword_organize_name')" class="search-input" v-model="searchValue"/>
+      <p slot="title">{{ $t('current_farm') }}: {{ farmName }}</p>
+      <Input clearable :placeholder="$t('search_by_keyword_farm_area_name')" class="search-input" v-model="name"/>
       <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="search"/>&nbsp;&nbsp;{{ $t('search') }}</Button>
     </Card>
     <Button type="primary" icon="ios-add-circle-outline" style="margin-bottom: 18px" @click="showCreateForm">{{ $t('create') }}</Button>
@@ -31,19 +32,28 @@
       width="620"
       mask
       :mask-closable="false">
-      <p>{{ $t('organize_name') }}: {{formObj.organizeName}}</p>
+      <p>{{ $t('area_name') }}: {{formObj.areaName}}</p>
     </Modal>
     <Modal
       v-model="baseFormModel"
-      :title="formObj.organizeId === '' ? $t('create') : $t('update')"
+      :title="formObj.areaId === '' ? $t('create') : $t('update')"
       scrollable
       width="620"
       mask
       :mask-closable="false"
       :closable="false">
       <Form :model="formObj" :label-width="80" :rules="ruleValidate" ref="baseForm">
-        <FormItem :label="$t('organize_name')" prop="organizeName">
-            <Input v-model="formObj.organizeName" :placeholder="$t('please_input')+$t('organize_name')"/>
+        <FormItem :label="$t('area_name')" prop="areaName">
+            <Input v-model="formObj.areaName" :placeholder="$t('please_input')+$t('area_name')"/>
+        </FormItem>
+        <FormItem :label="$t('area_position')" prop="areaPosition">
+            <Input v-model="formObj.areaPosition" :placeholder="$t('please_input')+$t('area_position')"/>
+        </FormItem>
+        <FormItem :label="$t('area_acreage')" prop="acreage">
+            <Input v-model="formObj.acreage" :placeholder="$t('please_input')+$t('area_acreage')"/>
+        </FormItem>
+        <FormItem :label="$t('area_describe')" prop="areaDescribe">
+            <Input v-model="formObj.areaDescribe" type="textarea" :autosize="{minRows: 2,maxRows: 5}" :placeholder="$t('please_input')+$t('area_describe')"/>
         </FormItem>
       </Form>
       <Spin size="large" fix v-if="submiting"></Spin>
@@ -55,24 +65,30 @@
   </div>
 </template>
 <script>
-import { loadOrganizes, deleteOrganize, upinsertOrganize } from '@/api/organize'
+import { loadFarmAreas, deleteFarmArea, upinsertFarmArea } from '@/api/farmArea'
+import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
+      farmId: '',
+      farmName: '',
       tableData: [],
       total: 0,
       size: 10,
       loading: false,
       submiting: false,
       formObj: {
-        organizeId: '',
-        organizeName: ''
+        areaId: '',
+        areaName: '',
+        areaDescribe: '',
+        areaPosition: '',
+        acreage: ''
       },
       baseFormModel: false,
       detailModel: false,
       deleting: false,
       current: 1,
-      searchValue: '',
+      name: '',
       orderField: '',
       orderType: ''
     }
@@ -86,16 +102,35 @@ export default {
       },
       {
         title: this.$t('record_id'),
-        key: 'organizeId',
+        key: 'areaId',
         sortable: 'custom',
         width: 200,
         tooltip: true
       },
       {
-        title: this.$t('organize_name'),
-        key: 'organizeName',
+        title: this.$t('area_name'),
+        key: 'areaName',
         sortable: 'custom',
         width: 200,
+        tooltip: true
+      },
+      {
+        title: this.$t('area_acreage'),
+        key: 'acreage',
+        sortable: 'custom',
+        width: 180,
+        tooltip: true
+      },
+      {
+        title: this.$t('area_position'),
+        key: 'areaPosition',
+        width: 220,
+        tooltip: true
+      },
+      {
+        title: this.$t('area_describe'),
+        key: 'areaDescribe',
+        width: 360,
         tooltip: true
       },
       {
@@ -166,24 +201,34 @@ export default {
     },
     ruleValidate () {
       return {
-        organizeName: [{
+        areaName: [{
           required: true,
-          message: this.$t('please_input') + this.$t('organize_name'),
+          message: this.$t('please_input') + this.$t('area_name'),
           trigger: 'blur'
         }]
       }
     }
   },
   methods: {
+    ...mapMutations([
+      'closeTag'
+    ]),
     load () {
+      if (!this.farmId) {
+        this.closeTag({
+          name: 'farm_area'
+        })
+        return
+      }
       this.loading = true
-      let searchValue = this.searchValue
+      let farmId = this.farmId
+      let name = this.name
       let size = this.size
       let page = this.current
       let orderField = this.orderField
       let orderType = this.orderType
       const _this = this
-      loadOrganizes({ searchValue, page, size, orderField, orderType }).then(res => {
+      loadFarmAreas({ farmId, name, page, size, orderField, orderType }).then(res => {
         _this.loading = false
         if (res.status === 200 && res.data.code === 200) {
           let data = res.data.data
@@ -203,7 +248,7 @@ export default {
     handleDelete (params) {
       const _this = this
       _this.deleting = true
-      deleteOrganize({ resultId: params.row.organizeId }).then(res => {
+      deleteFarmArea({ resultId: params.row.areaId }).then(res => {
         _this.deleting = false
         if (res.status === 200 && res.data.code === 200) {
           this.load()
@@ -236,13 +281,19 @@ export default {
       this.load()
     },
     showCreateForm () {
-      this.formObj.organizeId = ''
-      this.formObj.organizeName = ''
+      this.formObj.areaId = ''
+      this.formObj.areaName = ''
+      this.formObj.areaDescribe = ''
+      this.formObj.areaPosition = ''
+      this.formObj.acreage = ''
       this.baseFormModel = true
     },
     showEditForm (params) {
-      this.formObj.organizeId = params.row.organizeId
-      this.formObj.organizeName = params.row.organizeName
+      this.formObj.areaId = params.row.areaId
+      this.formObj.areaName = params.row.areaName
+      this.formObj.areaPosition = params.row.areaPosition
+      this.formObj.acreage = params.row.acreage
+      this.formObj.areaDescribe = params.row.areaDescribe
       this.baseFormModel = true
     },
     submitBaseFormHandle () {
@@ -250,7 +301,8 @@ export default {
       _this.$refs['baseForm'].validate((valid) => {
         if (valid) {
           _this.submiting = true
-          upinsertOrganize(_this.formObj).then(res => {
+          _this.formObj.farmId = _this.farmId
+          upinsertFarmArea(_this.formObj).then(res => {
             _this.submiting = false
             if (res.status === 200 && res.data.code === 200) {
               _this.closeBaseFormHandle()
@@ -271,19 +323,21 @@ export default {
       })
     },
     closeBaseFormHandle () {
-      this.formObj.organizeId = ''
-      this.formObj.organizeName = ''
+      this.formObj.areaId = ''
+      this.formObj.areaName = ''
       this.baseFormModel = false
     },
     showDetailModel (params) {
       this.detailModel = true
-      this.formObj.organizeName = params.row.organizeName
+      this.formObj.areaName = params.row.areaName
     },
     detailModelOkHandle () {
       this.detailModel = false
     }
   },
   mounted () {
+    this.farmId = this.$route.query.farmId
+    this.farmName = this.$route.query.farmName
     this.load()
   }
 }

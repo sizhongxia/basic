@@ -76,7 +76,29 @@ export default [
           icon: 'ios-easel',
           title: '新增农场'
         },
-        component: () => import('@/view/basic.vue')
+        component: () => import('@/view/farm/add.vue')
+      },
+      {
+        path: '/farm/edit',
+        name: 'farm_edit',
+        meta: {
+          access: ['super_admin'],
+          hideInMenu: true,
+          icon: 'ios-easel',
+          title: '修改农场'
+        },
+        component: () => import('@/view/farm/edit.vue')
+      },
+      {
+        path: '/farm/area',
+        name: 'farm_area',
+        meta: {
+          access: ['super_admin'],
+          hideInMenu: true,
+          icon: 'ios-easel',
+          title: '农场厂区'
+        },
+        component: () => import('@/view/farm/area/index.vue')
       }
     ]
   },
