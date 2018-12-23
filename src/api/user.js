@@ -154,3 +154,14 @@ export const changeUserIdentities = ({ userId, identities }) => {
     method: 'post'
   })
 }
+
+export const userAuthFarms = ({ resultId }) => {
+  const data = {
+    resultId
+  }
+  return axios.request({
+    url: 'user/authFarms',
+    data,
+    method: 'post'
+  })
+}

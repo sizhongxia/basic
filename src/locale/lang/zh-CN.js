@@ -23,12 +23,20 @@ export default {
   reset_pwd: '重置密码',
   new_pwd_is: '重置成功，新密码为：',
   user_identity: '用户身份',
+  user_auth_farms: '已授权农场',
 
   authorization_manage: '权限管理',
 
   farm: '农场管理',
   farm_manage: '农场管理',
   farm_add: '新增农场',
+  farm_name: '农场名称',
+  identity: '身份/角色',
+  apply_at: '申请日期',
+  apply_remark: '申请描述',
+  apply_state: '申请状态',
+  handle_at: '处理时间',
+  handle_user_id: '处理人',
 
   equipment: '设备',
   equipment_manage: '设备管理',

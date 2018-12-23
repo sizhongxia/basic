@@ -17,7 +17,6 @@
       :columns="columns"
       size="small"
       :highlight-row="true"
-      editable
       @on-sort-change="handleSortChange"
     ></Table>
     <div class="page">
@@ -54,8 +53,7 @@
             <Input v-model="formObj.email" :placeholder="$t('please_input')+$t('email')"/>
         </FormItem>
         <FormItem :label="$t('organize')">
-          <Select v-model="formObj.organizeId">
-            <Option value="">{{ $t('not_set') }}</Option>
+          <Select v-model="formObj.organizeId" clearable filterable>
             <Option v-for="item in organizes" :key="item.organizeId" :value="item.organizeId">{{ item.organizeName }}</Option>
           </Select>
         </FormItem>
@@ -73,7 +71,7 @@
       mask
       :mask-closable="false">
       <p slot="header">
-          <Icon type="ios-people"></Icon>
+          <Icon type="ios-bulb-outline"></Icon>
           <span>{{ $t('user_identity') }}</span>
       </p>
       <div>
@@ -99,10 +97,36 @@
       <div slot="footer"></div>
       <Spin size="large" fix v-if="identityloading"></Spin>
     </Modal>
+    <Modal
+      v-model="userAuthFarmModel"
+      scrollable
+      width="620"
+      mask
+      :mask-closable="false">
+      <p slot="header">
+          <Icon type="md-heart-outline"></Icon>
+          <span>{{ $t('user_auth_farms') }}</span>
+      </p>
+      <div>
+        <Table
+          :border="false"
+          :stripe="true"
+          :show-header="true"
+          :data="userFarmTableData"
+          :loading="userFarmDataloading"
+          :columns="userFarmColumns"
+          size="small"
+          :height="260"
+          :highlight-row="true"
+        ></Table>
+      </div>
+      <div slot="footer"></div>
+      <Spin size="large" fix v-if="userAuthFarmsloading"></Spin>
+    </Modal>
   </div>
 </template>
 <script>
-import { loadUsers, toggleStateUser, upinsertUser, resetUserPwd, userIdentities, changeUserIdentities } from '@/api/user'
+import { loadUsers, toggleStateUser, upinsertUser, resetUserPwd, userIdentities, userAuthFarms, changeUserIdentities } from '@/api/user'
 import { allOrganizes } from '@/api/organize'
 export default {
   data () {
@@ -110,7 +134,9 @@ export default {
       tableData: [],
       total: 0,
       size: 10,
+      userFarmTableData: [],
       loading: false,
+      userFarmDataloading: false,
       submiting: false,
       organizesloading: false,
       organizes: [],
@@ -127,9 +153,11 @@ export default {
         userName: '',
         identities: []
       },
+      userAuthFarmsloading: false,
       baseFormModel: false,
       detailModel: false,
       userIdentityModel: false,
+      userAuthFarmModel: false,
       deleting: false,
       resetpwding: false,
       current: 1,
@@ -275,9 +303,76 @@ export default {
                   this.showUserIdentityModel(params)
                 }
               }
-            }, this.$t('user_identity'))
+            }, this.$t('user_identity')),
+            h('Button', {
+              props: {
+                type: 'text',
+                size: 'small',
+                icon: 'md-heart-outline'
+              },
+              on: {
+                'click': () => {
+                  this.showUserAuthFarmModel(params)
+                }
+              }
+            }, this.$t('user_auth_farms'))
           ])
         }
+      }]
+    },
+    userFarmColumns () {
+      return [{
+        type: 'index',
+        width: 60,
+        align: 'center'
+      },
+      {
+        title: this.$t('record_id'),
+        key: 'farmId',
+        width: 150,
+        tooltip: true
+      },
+      {
+        title: this.$t('farm_name'),
+        key: 'farmName',
+        width: 150,
+        tooltip: true
+      },
+      {
+        title: this.$t('identity'),
+        key: 'identity',
+        width: 150,
+        tooltip: true
+      },
+      {
+        title: this.$t('apply_at'),
+        key: 'applyAt',
+        width: 150,
+        tooltip: true
+      },
+      {
+        title: this.$t('apply_remark'),
+        key: 'applyRemark',
+        width: 200,
+        tooltip: true
+      },
+      {
+        title: this.$t('apply_state'),
+        key: 'applyState',
+        width: 120,
+        tooltip: true
+      },
+      {
+        title: this.$t('handle_at'),
+        key: 'handleAt',
+        width: 150,
+        tooltip: true
+      },
+      {
+        title: this.$t('handle_user_id'),
+        key: 'handleUserId',
+        width: 150,
+        tooltip: true
       }]
     },
     ruleValidate () {
@@ -403,6 +498,25 @@ export default {
       }).catch(function (reason) {
         _this.identityloading = false
         _this.userIdentityModel = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
+    },
+    showUserAuthFarmModel (params) {
+      this.userAuthFarmModel = true
+      this.userAuthFarmsloading = true
+      const _this = this
+      userAuthFarms({ resultId: params.row.userId }).then(res => {
+        _this.userAuthFarmsloading = false
+        if (res.status === 200 && res.data.code === 200) {
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.userAuthFarmsloading = false
         _this.$Modal.error({
           title: _this.$t('error_message_info') + reason.message
         })

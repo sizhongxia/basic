@@ -23,12 +23,20 @@ export default {
   reset_pwd: 'Reset Password',
   new_pwd_is: 'Success!New Password Is: ',
   user_identity: 'User Identity',
+  user_auth_farms: 'User Auth Farms',
 
   authorization_manage: 'Auth Manage',
 
   farm: 'Farm',
   farm_manage: 'Farm Manage',
   farm_add: 'Create Farm',
+  farm_name: 'Farm Name',
+  identity: 'Identity',
+  apply_at: 'Apply At',
+  apply_remark: 'Apply Remark',
+  apply_state: 'Apply State',
+  handle_at: 'Handle At',
+  handle_user_id: 'Handle User Id',
 
   equipment: 'Equipment',
   equipment_manage: 'Equipment Manage',
