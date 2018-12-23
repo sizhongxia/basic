@@ -520,6 +520,7 @@ export default {
       this.userAuthFarmModel = true
       this.userAuthFarmsloading = true
       const _this = this
+      _this.userFarmTableData = [];
       userAuthFarms({ resultId: params.row.userId }).then(res => {
         _this.userAuthFarmsloading = false
         if (res.status === 200 && res.data.code === 200) {
