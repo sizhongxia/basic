@@ -70,6 +70,13 @@ export default {
   equipment: '设备',
   equipment_manage: '设备管理',
 
+  equipment_type: '设备类型',
+  equipment_type_name: '设备类型名称',
+
+  equipment_model: '设备型号',
+  equipment_model_name: '设备型号名称',
+  supplier: '厂商/供应商',
+
   organize: '组织',
   organize_manage: '组织管理',
   organize_name: '组织名称',
@@ -80,6 +87,8 @@ export default {
   search_by_keyword_farm_name: '输入农场名称检索',
   search_by_keyword_farm_code: '输入农场编码检索',
   search_by_keyword_farm_area_name: '输入厂区名称检索',
+  search_by_keyword_equipment_type_name: '输入设备类型名称检索',
+  search_by_keyword_equipment_model_name: '输入设备型号名称检索',
   create_at: '创建时间',
   update_at: '修改时间',
   table_handle_delete_tip: '确定要删除吗?',

@@ -121,6 +121,26 @@ export default [
           title: '设备管理'
         },
         component: () => import('@/view/basic.vue')
+      },
+      {
+        path: '/equipment/model',
+        name: 'equipment_model',
+        meta: {
+          access: ['super_admin'],
+          icon: 'ios-settings',
+          title: '设备型号'
+        },
+        component: () => import('@/view/equipment/model/index.vue')
+      },
+      {
+        path: '/equipment/type',
+        name: 'equipment_type',
+        meta: {
+          access: ['super_admin'],
+          icon: 'ios-settings',
+          title: '设备类型'
+        },
+        component: () => import('@/view/equipment/type/index.vue')
       }
     ]
   },

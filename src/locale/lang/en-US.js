@@ -70,9 +70,13 @@ export default {
   equipment: 'Equipment',
   equipment_manage: 'Equipment Manage',
 
+  equipment_type: 'Equipment Type',
+  equipment_type_name: 'Equipment Type Name',
+
   organize: 'Organize',
   organize_manage: 'Organize Manage',
   organize_name: 'Organize Name',
+  supplier: 'Supplier',
 
   search_by_keyword: 'Search By Keyword',
   search_by_keyword_organize_name: 'Search By Organize Name',
@@ -80,6 +84,7 @@ export default {
   search_by_keyword_farm_name: 'Search By Farm Name',
   search_by_keyword_farm_code: 'Search By Farm Code',
   search_by_keyword_farm_area_name: 'Search By Farm Area Name',
+  search_by_keyword_equipment_type_name: 'Search By Equipment Type Name',
   create_at: 'Create Time',
   update_at: 'Update Time',
   table_handle_delete_tip: 'Delete It?',
