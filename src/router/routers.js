@@ -131,7 +131,7 @@ export default [
           icon: 'ios-settings',
           title: '设备管理'
         },
-        component: () => import('@/view/basic.vue')
+        component: () => import('@/view/equipment/index.vue')
       },
       {
         path: '/equipment/model',
@@ -174,16 +174,6 @@ export default [
           title: '用户管理'
         },
         component: () => import('@/view/user/index.vue')
-      },
-      {
-        path: '/user/authorization/manage',
-        name: 'authorization_manage',
-        meta: {
-          access: ['super_admin'],
-          icon: 'ios-lock',
-          title: '权限管理'
-        },
-        component: () => import('@/view/basic.vue')
       },
       {
         path: '/user/organize/manage',

@@ -186,7 +186,7 @@ export default {
         title: this.$t('user_name'),
         key: 'userName',
         sortable: 'custom',
-        width: 200,
+        width: 120,
         tooltip: true
       },
       {
@@ -200,7 +200,7 @@ export default {
         title: this.$t('email'),
         key: 'email',
         sortable: 'custom',
-        width: 140,
+        width: 220,
         tooltip: true
       },
       {

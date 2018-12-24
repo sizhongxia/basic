@@ -74,6 +74,7 @@ export default {
   equipment_sn: '设备序列号',
   operator: '操作人',
   equipment_manage: '设备管理',
+  equipment_manage_note: '注：设备在农场控制台中进行维护。',
 
   equipment_type: '设备类型',
   equipment_type_name: '设备类型名称',
@@ -94,6 +95,9 @@ export default {
   search_by_keyword_farm_area_name: '输入厂区名称检索',
   search_by_keyword_equipment_type_name: '输入设备类型名称检索',
   search_by_keyword_equipment_model_name: '输入设备型号名称检索',
+  search_by_keyword_equipment_name: '输入设备名称检索',
+  search_by_keyword_equipment_code: '输入设备编码检索',
+  search_by_keyword_equipment_sn: '输入设备序列号检索',
   create_at: '创建时间',
   update_at: '修改时间',
   table_handle_delete_tip: '确定要删除吗?',
@@ -132,6 +136,7 @@ export default {
   save_success: '保存成功',
 
   not_set: '未设置',
+  more_options: '更多操作',
 
   un_read_msg: '未读信息',
   had_read_msg: '已读信息',

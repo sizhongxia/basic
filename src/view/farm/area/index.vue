@@ -283,6 +283,7 @@ export default {
       this.load()
     },
     showCreateForm () {
+      this.$refs['baseForm'].resetFields()
       this.formObj.areaId = ''
       this.formObj.areaName = ''
       this.formObj.areaDescribe = ''
@@ -291,6 +292,7 @@ export default {
       this.baseFormModel = true
     },
     showEditForm (params) {
+      this.$refs['baseForm'].resetFields()
       this.formObj.areaId = params.row.areaId
       this.formObj.areaName = params.row.areaName
       this.formObj.areaPosition = params.row.areaPosition

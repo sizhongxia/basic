@@ -184,6 +184,97 @@ export default {
         align: 'center'
       },
       {
+        title: this.$t('action'),
+        key: 'action',
+        align: 'center',
+        width: 190,
+        render: (h, params) => {
+          return h('div', [
+            h('Button', {
+              props: {
+                type: 'text',
+                size: 'small'
+              },
+              on: {
+                'click': () => {
+                  this.openFarmConsoleTab(params)
+                }
+              }
+            }, this.$t('farm_console')),
+            h('Dropdown', {
+              props: {
+                trigger: 'click'
+              },
+              on: {
+                'on-click': (name) => {
+                  switch (name) {
+                    case 'edit' : this.openEditFormTab(params)
+                      break
+                    case 'farm_area' : this.openFarmAreasTab(params)
+                      break
+                    case 'delete' : this.handleDelete(params)
+                      break
+                    case 'farm_change_owner' : this.showChangeOwnerModel(params)
+                      break
+                    case 'farm_auth_new_user' : this.showCreateAuthUserModel(params)
+                      break
+                    case 'farm_had_auth_users' : this.showHadAuthUsersModel(params)
+                      break
+                  }
+                }
+              }
+            }, [
+              h('Button', {
+                props: {
+                  type: 'text',
+                  size: 'small'
+                }
+              }, this.$t('more_options')),
+              h('DropdownMenu', {
+                slot: 'list'
+              }, [
+                h('DropdownItem', {
+                  props: {
+                    name: 'edit'
+                  }
+                }, this.$t('edit')),
+                h('DropdownItem', {
+                  props: {
+                    name: 'farm_area'
+                  }
+                }, this.$t('farm_area')),
+                h('DropdownItem', {
+                  props: {
+                    name: 'farm_change_owner'
+                  }
+                }, this.$t('farm_change_owner')),
+                h('DropdownItem', {
+                  props: {
+                    name: 'farm_auth_new_user'
+                  }
+                }, this.$t('farm_auth_new_user')),
+                h('DropdownItem', {
+                  props: {
+                    name: 'farm_had_auth_users'
+                  }
+                }, this.$t('farm_had_auth_users')),
+                h('DropdownItem', {
+                  props: {
+                    name: 'delete'
+                  }
+                }, [
+                  h('span', {
+                    style: {
+                      color: '#ed4014'
+                    }
+                  }, this.$t('delete'))
+                ])
+              ])
+            ])
+          ])
+        }
+      },
+      {
         title: this.$t('record_id'),
         key: 'farmId',
         sortable: 'custom',
@@ -207,25 +298,25 @@ export default {
       {
         title: this.$t('province'),
         key: 'provinceName',
-        width: 160,
+        width: 100,
         tooltip: true
       },
       {
         title: this.$t('city'),
         key: 'cityName',
-        width: 160,
+        width: 100,
         tooltip: true
       },
       {
         title: this.$t('county'),
         key: 'countyName',
-        width: 160,
+        width: 100,
         tooltip: true
       },
       {
         title: this.$t('address'),
         key: 'address',
-        width: 200,
+        width: 240,
         tooltip: true
       },
       {
@@ -239,120 +330,6 @@ export default {
         sortable: 'custom',
         width: 210,
         key: 'updateAt'
-      },
-      {
-        title: this.$t('action'),
-        key: 'action',
-        width: 280,
-        fixed: 'right',
-        render: (h, params) => {
-          return h('div', [
-            h('Button', {
-              props: {
-                type: 'text',
-                size: 'small',
-                icon: 'ios-create-outline'
-              },
-              on: {
-                'click': () => {
-                  this.openEditFormTab(params)
-                }
-              }
-            }, this.$t('edit')),
-            h('Button', {
-              props: {
-                type: 'text',
-                size: 'small',
-                icon: 'ios-leaf-outline'
-              },
-              on: {
-                'click': () => {
-                  this.openFarmAreasTab(params)
-                }
-              }
-            }, this.$t('farm_area')),
-            // h('Poptip', {
-            //   props: {
-            //     confirm: true,
-            //     title: this.$t('table_handle_delete_tip')
-            //   },
-            //   on: {
-            //     'on-ok': () => {
-            //       this.handleDelete(params)
-            //     }
-            //   }
-            // }, [
-            //   h('Button', {
-            //     props: {
-            //       type: 'text',
-            //       size: 'small',
-            //       icon: 'ios-trash-outline',
-            //       loading: this.deleting
-            //     }
-            //   }, this.$t('delete'))
-            // ]),
-            h('Button', {
-              props: {
-                type: 'text',
-                size: 'small',
-                icon: 'ios-trash-outline'
-              },
-              on: {
-                'click': () => {
-                  this.handleDelete(params)
-                }
-              }
-            }, this.$t('delete')),
-            h('Button', {
-              props: {
-                type: 'text',
-                size: 'small',
-                icon: 'md-repeat'
-              },
-              on: {
-                'click': () => {
-                  this.showChangeOwnerModel(params)
-                }
-              }
-            }, this.$t('farm_change_owner')),
-            h('Button', {
-              props: {
-                type: 'text',
-                size: 'small',
-                icon: 'md-key'
-              },
-              on: {
-                'click': () => {
-                  this.showCreateAuthUserModel(params)
-                }
-              }
-            }, this.$t('farm_auth_new_user')),
-            h('Button', {
-              props: {
-                type: 'text',
-                size: 'small',
-                icon: 'ios-people'
-              },
-              on: {
-                'click': () => {
-                  this.showHadAuthUsersModel(params)
-                }
-              }
-            }, this.$t('farm_had_auth_users')),
-            h('Button', {
-              props: {
-                type: 'text',
-                size: 'small',
-                icon: 'ios-apps-outline'
-              },
-              on: {
-                'click': () => {
-                  this.openFarmConsoleTab(params)
-                }
-              }
-            }, this.$t('farm_console'))
-          ])
-        }
       }]
     },
     farmUserColumns () {
@@ -489,8 +466,8 @@ export default {
         loading: true,
         onOk: () => {
           deleteFarm({ resultId: params.row.farmId }).then(res => {
+            _this.$Modal.remove()
             if (res.status === 200 && res.data.code === 200) {
-              _this.$Modal.remove()
               _this.load()
             } else {
               _this.$Modal.error({
@@ -498,6 +475,7 @@ export default {
               })
             }
           }).catch(function (reason) {
+            _this.$Modal.remove()
             _this.$Modal.error({
               title: _this.$t('error_message_info') + reason.message
             })

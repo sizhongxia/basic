@@ -26,12 +26,12 @@
         <Card shadow>
           <p slot="title">{{ $t('equipment') }} ({{ farmEquipments.length }})</p>
           <a href="#" slot="extra" @click.prevent="showCreateEquipmentModel">{{ $t('create') }}</a>
-          <CellGroup @on-click="showEquipmentDetailModel">
+          <CellGroup @on-click="showEditEquipmentModel">
             <Cell v-if="farmEquipments.length === 0">{{ $t('i.table.noDataText') }}</Cell>
             <Cell v-for="item in farmEquipments" v-bind:key="item.equipmentId" :name="item.equipmentId">
               <Icon type="ios-pulse-outline" slot="icon" />
               {{ item.equipmentName }}
-              <p slot="label">{{ $t('equipment_code') + ' : '+ item.equipmentSn }} | {{ item.typeName }} | {{ item.modelName }}</p>
+              <p slot="label">{{ $t('equipment_code') + ' : '+ item.equipmentSn }} <Divider type="vertical" /> {{ item.typeName }} <Divider type="vertical" /> {{ item.modelName }}</p>
               <p slot="extra">{{ 'SN: '+ item.equipmentCode }}</p>
             </Cell>
           </CellGroup>
@@ -98,8 +98,9 @@
           </Col>
         </Row>
       </Form>
-      <Spin size="large" fix v-if="equipmentFormSubmiting || typesLoading"></Spin>
+      <Spin size="large" fix v-if="equipmentFormSubmiting || typesLoading || equipmentDetailLoading"></Spin>
       <div slot="footer">
+        <Button v-if="equipmentFormObj.equipmentId != ''" type="error" @click="deleteEquipmentHandle">{{ $t('delete') }}</Button>
         <Button type="text" @click="closeEquipmentFormHandle">{{ $t('i.modal.cancelText') }}</Button>
         <Button type="primary" @click="submitEquipmentFormHandle">{{ $t('i.modal.okText') }}</Button>
       </div>
@@ -108,7 +109,7 @@
 </template>
 <script>
 import { farmAllAreas } from '@/api/farmArea'
-import { farmAllEquipments, upinsertEquipment } from '@/api/equipment'
+import { farmAllEquipments, upinsertEquipment, equipmentDetail, deleteEquipment } from '@/api/equipment'
 import { allEquipmentTypes } from '@/api/equipmentType'
 import { allEquipmentModels } from '@/api/equipmentModel'
 import { mapMutations } from 'vuex'
@@ -128,19 +129,22 @@ export default {
         equipmentName: '',
         equipmentCode: '',
         equipmentSn: '',
-        farmId: '',
-        farmAreaId: '',
         typeId: '',
         typeName: '',
         modelId: '',
         modelName: '',
+        farmId: '',
+        farmName: '',
+        farmAreaId: '',
+        farmAreaName: '',
         operator: '',
         remark: ''
       },
       typesLoading: false,
       types: [],
       modelsLoading: false,
-      models: []
+      models: [],
+      equipmentDetailLoading: false
     }
   },
   computed: {
@@ -281,8 +285,71 @@ export default {
         })
       })
     },
-    showEquipmentDetailModel (name) {
-      // console.info(name)
+    showEditEquipmentModel (resultId) {
+      if (!resultId) {
+        return
+      }
+      const _this = this
+      _this.equipmentDetailLoading = true
+      _this.equipmentFormObj = {}
+      equipmentDetail({ resultId }).then(res => {
+        _this.equipmentDetailLoading = false
+        if (res.status === 200 && res.data.code === 200) {
+          _this.equipmentFormObj = res.data.data
+          _this.equipmentFormModel = true
+          _this.typesLoading = false
+          allEquipmentTypes().then(res => {
+            _this.typesLoading = false
+            if (res.status === 200 && res.data.code === 200) {
+              _this.types = res.data.data
+              _this.loadEquipmentModels()
+            } else {
+              _this.$Modal.error({
+                title: _this.$t('error_message_info') + res.data.message
+              })
+            }
+          }).catch(function (reason) {
+            _this.typesLoading = false
+            _this.$Modal.error({
+              title: _this.$t('error_message_info') + reason.message
+            })
+          })
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.equipmentDetailLoading = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
+    },
+    deleteEquipmentHandle () {
+      const _this = this
+      _this.$Modal.confirm({
+        title: _this.$t('table_handle_delete_tip'),
+        loading: true,
+        onOk: () => {
+          deleteEquipment({ resultId: _this.equipmentFormObj.equipmentId }).then(res => {
+            if (res.status === 200 && res.data.code === 200) {
+              _this.equipmentFormObj = {}
+              _this.equipmentFormModel = false
+              _this.$Modal.remove()
+              _this.loadAllFarmEquipments()
+            } else {
+              _this.$Modal.error({
+                title: _this.$t('error_message_info') + res.data.message
+              })
+            }
+          }).catch(function (reason) {
+            _this.$Modal.error({
+              title: _this.$t('error_message_info') + reason.message
+            })
+          })
+        }
+      })
     }
   },
   mounted () {

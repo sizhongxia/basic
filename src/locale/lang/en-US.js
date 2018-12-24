@@ -74,14 +74,18 @@ export default {
   equipment_sn: 'Equipment Sn',
   operator: 'Operator',
   equipment_manage: 'Equipment Manage',
+  equipment_manage_note: 'Note: The equipment is maintained in the farm console.',
 
   equipment_type: 'Equipment Type',
   equipment_type_name: 'Equipment Type Name',
 
+  equipment_model: 'Equipment Model',
+  equipment_model_name: 'Equipment Model Name',
+  supplier: 'Supplier',
+
   organize: 'Organize',
   organize_manage: 'Organize Manage',
   organize_name: 'Organize Name',
-  supplier: 'Supplier',
 
   search_by_keyword: 'Search By Keyword',
   search_by_keyword_organize_name: 'Search By Organize Name',
@@ -90,6 +94,10 @@ export default {
   search_by_keyword_farm_code: 'Search By Farm Code',
   search_by_keyword_farm_area_name: 'Search By Farm Area Name',
   search_by_keyword_equipment_type_name: 'Search By Equipment Type Name',
+  search_by_keyword_equipment_model_name: 'Search By Equipment Model Name',
+  search_by_keyword_equipment_name: 'Search By Equipment Name',
+  search_by_keyword_equipment_code: 'Search By Equipment Code',
+  search_by_keyword_equipment_sn: 'Search By Equipment Sn',
   create_at: 'Create Time',
   update_at: 'Update Time',
   table_handle_delete_tip: 'Delete It?',
@@ -132,6 +140,7 @@ export default {
   un_read_msg: 'Un Read Message',
   had_read_msg: 'Had Read Message',
   recycle_bin: 'Recycle Bin',
+  more_options: 'More Options',
 
   confirm_close_current_page: 'Confirm Close Current Page?',
 

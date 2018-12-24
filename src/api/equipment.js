@@ -1,11 +1,39 @@
 import axios from '@/libs/api.request'
 
+export const loadEquipments = ({ name, code, sn, page, size, orderField, orderType }) => {
+  const data = {
+    name,
+    code,
+    sn,
+    page,
+    size,
+    orderField,
+    orderType
+  }
+  return axios.request({
+    url: 'equipment/list',
+    data,
+    method: 'post'
+  })
+}
+
 export const farmAllEquipments = ({ farmId }) => {
   const data = {
     farmId
   }
   return axios.request({
     url: 'equipment/farmAll',
+    data,
+    method: 'post'
+  })
+}
+
+export const equipmentDetail = ({ resultId }) => {
+  const data = {
+    resultId
+  }
+  return axios.request({
+    url: 'equipment/detail',
     data,
     method: 'post'
   })
