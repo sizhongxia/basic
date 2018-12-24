@@ -34,3 +34,14 @@ export const upinsertFarmArea = (data) => {
     method: 'post'
   })
 }
+
+export const farmAllAreas = ({ farmId }) => {
+  const data = {
+    farmId
+  }
+  return axios.request({
+    url: 'farmArea/farmAll',
+    data,
+    method: 'post'
+  })
+}

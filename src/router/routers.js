@@ -99,6 +99,17 @@ export default [
           title: '农场厂区'
         },
         component: () => import('@/view/farm/area/index.vue')
+      },
+      {
+        path: '/farm/console',
+        name: 'farm_console',
+        meta: {
+          access: ['super_admin'],
+          hideInMenu: true,
+          icon: 'ios-easel',
+          title: '农场控制台'
+        },
+        component: () => import('@/view/farm/console/index.vue')
       }
     ]
   },

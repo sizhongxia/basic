@@ -41,8 +41,9 @@ export const upinsertEquipmentModel = ({ modelId, modelName, typeId, supplier, r
   })
 }
 
-export const allEquipmentModels = () => {
+export const allEquipmentModels = ({ typeId }) => {
   const data = {
+    typeId
   }
   return axios.request({
     url: 'equipmentModel/all',

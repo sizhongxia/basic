@@ -3,12 +3,11 @@
 </style>
 <template>
   <div>
-    <Card class="search-con">
+    <Card class="search-con" shadow>
       <Input clearable :placeholder="$t('search_by_keyword_farm_name')" class="search-input" v-model="name"/>
       <Input clearable :placeholder="$t('search_by_keyword_farm_code')" class="search-input" v-model="code"/>
       <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="search"/>&nbsp;&nbsp;{{ $t('search') }}</Button>
     </Card>
-    <Button type="primary" icon="ios-add-circle-outline" style="margin-bottom: 18px" @click="openCreateFormTab">{{ $t('create') }}</Button>
     <Table
       :border="false"
       :stripe="true"
@@ -145,7 +144,6 @@ export default {
       total: 0,
       size: 10,
       loading: false,
-      deleting: false,
       current: 1,
       name: '',
       code: '',
@@ -246,6 +244,7 @@ export default {
         title: this.$t('action'),
         key: 'action',
         width: 280,
+        fixed: 'right',
         render: (h, params) => {
           return h('div', [
             h('Button', {
@@ -272,26 +271,38 @@ export default {
                 }
               }
             }, this.$t('farm_area')),
-            h('Poptip', {
+            // h('Poptip', {
+            //   props: {
+            //     confirm: true,
+            //     title: this.$t('table_handle_delete_tip')
+            //   },
+            //   on: {
+            //     'on-ok': () => {
+            //       this.handleDelete(params)
+            //     }
+            //   }
+            // }, [
+            //   h('Button', {
+            //     props: {
+            //       type: 'text',
+            //       size: 'small',
+            //       icon: 'ios-trash-outline',
+            //       loading: this.deleting
+            //     }
+            //   }, this.$t('delete'))
+            // ]),
+            h('Button', {
               props: {
-                confirm: true,
-                title: this.$t('table_handle_delete_tip')
+                type: 'text',
+                size: 'small',
+                icon: 'ios-trash-outline'
               },
               on: {
-                'on-ok': () => {
+                'click': () => {
                   this.handleDelete(params)
                 }
               }
-            }, [
-              h('Button', {
-                props: {
-                  type: 'text',
-                  size: 'small',
-                  icon: 'ios-trash-outline',
-                  loading: this.deleting
-                }
-              }, this.$t('delete'))
-            ]),
+            }, this.$t('delete')),
             h('Button', {
               props: {
                 type: 'text',
@@ -327,7 +338,19 @@ export default {
                   this.showHadAuthUsersModel(params)
                 }
               }
-            }, this.$t('farm_had_auth_users'))
+            }, this.$t('farm_had_auth_users')),
+            h('Button', {
+              props: {
+                type: 'text',
+                size: 'small',
+                icon: 'ios-apps-outline'
+              },
+              on: {
+                'click': () => {
+                  this.openFarmConsoleTab(params)
+                }
+              }
+            }, this.$t('farm_console'))
           ])
         }
       }]
@@ -461,21 +484,25 @@ export default {
     },
     handleDelete (params) {
       const _this = this
-      _this.deleting = true
-      deleteFarm({ resultId: params.row.farmId }).then(res => {
-        _this.deleting = false
-        if (res.status === 200 && res.data.code === 200) {
-          this.load()
-        } else {
-          _this.$Modal.error({
-            title: _this.$t('error_message_info') + res.data.message
+      _this.$Modal.confirm({
+        title: _this.$t('table_handle_delete_tip'),
+        loading: true,
+        onOk: () => {
+          deleteFarm({ resultId: params.row.farmId }).then(res => {
+            if (res.status === 200 && res.data.code === 200) {
+              _this.$Modal.remove()
+              _this.load()
+            } else {
+              _this.$Modal.error({
+                title: _this.$t('error_message_info') + res.data.message
+              })
+            }
+          }).catch(function (reason) {
+            _this.$Modal.error({
+              title: _this.$t('error_message_info') + reason.message
+            })
           })
         }
-      }).catch(function (reason) {
-        _this.deleting = false
-        _this.$Modal.error({
-          title: _this.$t('error_message_info') + reason.message
-        })
       })
     },
     handleSearch (e) {
@@ -493,15 +520,6 @@ export default {
       this.orderField = e.key
       this.orderType = e.order
       this.load()
-    },
-    openCreateFormTab () {
-      const route = {
-        name: 'farm_add',
-        meta: {
-          title: this.$t('farm_add')
-        }
-      }
-      this.$router.push(route)
     },
     openEditFormTab (params) {
       const route = {
@@ -524,6 +542,19 @@ export default {
         },
         meta: {
           title: this.$t('farm_area')
+        }
+      }
+      this.$router.push(route)
+    },
+    openFarmConsoleTab (params) {
+      const route = {
+        name: 'farm_console',
+        query: {
+          farmId: params.row.farmId,
+          farmName: params.row.farmName
+        },
+        meta: {
+          title: this.$t('farm_console')
         }
       }
       this.$router.push(route)
@@ -607,7 +638,7 @@ export default {
       this.farmAuthFormObj.farmId = params.row.farmId
       this.farmAuthFormObj.userId = ''
       this.farmAuthFormObj.identity = ''
-      this.farmAuthFormObj.applyRemark = '系统Sys'
+      this.farmAuthFormObj.applyRemark = '系统/Sys'
     },
     saveAuthUserHandle () {
       this.saveAuthUserSubmiting = true
@@ -682,14 +713,14 @@ export default {
   },
   mounted () {
     const _this = this
-    _this.tableHeight = window.document.body.offsetHeight - 350
+    _this.tableHeight = window.document.body.offsetHeight - 300
     var ctimer = false
     window.addEventListener('resize', () => {
       if (ctimer) {
         window.clearTimeout(ctimer)
       }
       ctimer = window.setTimeout(() => {
-        _this.tableHeight = window.document.body.offsetHeight - 350
+        _this.tableHeight = window.document.body.offsetHeight - 300
       }, 100)
     })
     _this.load()

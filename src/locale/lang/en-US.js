@@ -56,6 +56,7 @@ export default {
   new_farm_owner: 'New Owner',
   farm_auth_new_user: 'Auth New User',
   farm_had_auth_users: 'Auth Users',
+  farm_console: 'Farm Console',
 
   area_name: 'Farm Area Name',
   area_position: 'Farm Area Position',
@@ -68,6 +69,10 @@ export default {
   apply_state_n: 'Fail',
 
   equipment: 'Equipment',
+  equipment_name: 'Equipment Name',
+  equipment_code: 'Equipment Code',
+  equipment_sn: 'Equipment Sn',
+  operator: 'Operator',
   equipment_manage: 'Equipment Manage',
 
   equipment_type: 'Equipment Type',

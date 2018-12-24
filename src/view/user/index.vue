@@ -3,7 +3,7 @@
 </style>
 <template>
   <div>
-    <Card class="search-con">
+    <Card class="search-con" shadow>
       <Input clearable :placeholder="$t('search_by_keyword_user_name')" class="search-input" v-model="searchValue"/>
       <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="search"/>&nbsp;&nbsp;{{ $t('search') }}</Button>
     </Card>
