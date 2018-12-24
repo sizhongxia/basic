@@ -16,6 +16,7 @@
       :loading="loading"
       :columns="columns"
       size="small"
+      :height="tableHeight"
       :highlight-row="true"
       editable
       @on-sort-change="handleSortChange"
@@ -60,6 +61,7 @@ export default {
   data () {
     return {
       tableData: [],
+      tableHeight: 100,
       total: 0,
       size: 10,
       loading: false,
@@ -88,7 +90,7 @@ export default {
         title: this.$t('record_id'),
         key: 'organizeId',
         sortable: 'custom',
-        width: 200,
+        width: 100,
         tooltip: true
       },
       {
@@ -284,7 +286,18 @@ export default {
     }
   },
   mounted () {
-    this.load()
+    const _this = this
+    _this.tableHeight = window.document.body.offsetHeight - 350
+    var ctimer = false
+    window.addEventListener('resize', () => {
+      if (ctimer) {
+        window.clearTimeout(ctimer)
+      }
+      ctimer = window.setTimeout(() => {
+        _this.tableHeight = window.document.body.offsetHeight - 350
+      }, 100)
+    })
+    _this.load()
   }
 }
 </script>

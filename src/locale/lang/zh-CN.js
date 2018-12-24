@@ -55,13 +55,17 @@ export default {
   farm_current_owner: '当前所有用户',
   new_farm_owner: '新所有用户',
   farm_auth_new_user: '授权新用户',
-  farm_had_auth_users: '已授权用户',
+  farm_had_auth_users: '授权用户列表',
 
   area_name: '厂区名称',
   area_position: '厂区位置',
   area_acreage: '厂区面积',
   area_describe: '厂区描述',
   current_farm: '当前农场',
+
+  apply_state_d: '待审核',
+  apply_state_y: '审核通过',
+  apply_state_n: '审核未通过',
 
   equipment: '设备',
   equipment_manage: '设备管理',
@@ -81,6 +85,7 @@ export default {
   table_handle_delete_tip: '确定要删除吗?',
   table_handle_toggle_state_tip: '确定要切换状态吗？',
   table_handle_reset_pwd_tip: '确定要重置密码吗？',
+  table_handle_handle_apply_tip: '确定要提交处理吗？',
 
   record_id: '记录ID',
   detail: '详情',
@@ -98,6 +103,9 @@ export default {
 
   normal: '正常',
   disabled: '禁用',
+
+  agree: '通过',
+  disagree: '不通过',
 
   super_admin: '超级管理员',
   admin: '管理员',

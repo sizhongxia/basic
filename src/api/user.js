@@ -190,3 +190,16 @@ export const authFarmVisit = ({ farmId, userId, identity, applyRemark }) => {
     method: 'post'
   })
 }
+
+export const handleAuthApply = ({ farmId, userId, applyState }) => {
+  const data = {
+    farmId,
+    userId,
+    applyState
+  }
+  return axios.request({
+    url: 'user/handleAuthApply',
+    data,
+    method: 'post'
+  })
+}

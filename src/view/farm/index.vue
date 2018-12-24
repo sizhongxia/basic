@@ -17,6 +17,7 @@
       :loading="loading"
       :columns="columns"
       size="small"
+      :height="tableHeight"
       :highlight-row="true"
       editable
       @on-sort-change="handleSortChange"
@@ -135,11 +136,12 @@
 </template>
 <script>
 import { loadFarms, deleteFarm, farmOwnerInfo, changeFarmOwner, farmAuthUsers } from '@/api/farm'
-import { query, authFarmVisit } from '@/api/user'
+import { query, authFarmVisit, handleAuthApply } from '@/api/user'
 export default {
   data () {
     return {
       tableData: [],
+      tableHeight: 100,
       total: 0,
       size: 10,
       loading: false,
@@ -187,7 +189,7 @@ export default {
         title: this.$t('record_id'),
         key: 'farmId',
         sortable: 'custom',
-        width: 200,
+        width: 100,
         tooltip: true
       },
       {
@@ -339,7 +341,7 @@ export default {
       {
         title: this.$t('record_id'),
         key: 'userId',
-        width: 220,
+        width: 100,
         tooltip: true
       },
       {
@@ -375,21 +377,59 @@ export default {
       {
         title: this.$t('apply_state'),
         key: 'applyState',
-        width: 120,
-        tooltip: true
-      },
-      {
-        title: this.$t('handle_at'),
-        key: 'handleAt',
-        width: 150,
-        tooltip: true
-      },
-      {
-        title: this.$t('handle_user_id'),
-        key: 'handleUserId',
-        width: 150,
-        tooltip: true
+        width: 200,
+        render: (h, params) => {
+          const row = params.row
+          if (row.applyState === 'D') {
+            return h('div', [
+              h('Button', {
+                props: {
+                  type: 'text',
+                  size: 'small',
+                  icon: 'ios-checkmark-circle-outline'
+                },
+                on: {
+                  'click': () => {
+                    this.userFarmApplyHandle(true, params)
+                  }
+                }
+              }, this.$t('agree')),
+              h('Button', {
+                props: {
+                  type: 'text',
+                  size: 'small',
+                  icon: 'ios-close-circle-outline'
+                },
+                on: {
+                  'click': () => {
+                    this.userFarmApplyHandle(false, params)
+                  }
+                }
+              }, this.$t('disagree'))
+            ])
+          }
+          const text = row.applyState === 'D' ? this.$t('apply_state_d') : row.applyState === 'Y' ? this.$t('apply_state_y') : this.$t('apply_state_n')
+          const color = row.applyState === 'D' ? 'warning' : row.applyState === 'Y' ? 'success' : 'error'
+          return h('Tag', {
+            props: {
+              color: color
+            }
+          }, text)
+        }
       }]
+      // ,
+      // {
+      //   title: this.$t('handle_at'),
+      //   key: 'handleAt',
+      //   width: 150,
+      //   tooltip: true
+      // },
+      // {
+      //   title: this.$t('handle_user_id'),
+      //   key: 'handleUserId',
+      //   width: 150,
+      //   tooltip: true
+      // }
     }
   },
   methods: {
@@ -595,7 +635,7 @@ export default {
       this.hadAuthUserModel = true
       const _this = this
       _this.farmUserDataloading = true
-      _this.farmUserTableData = [];
+      _this.farmUserTableData = []
       farmAuthUsers({ resultId: params.row.farmId }).then(res => {
         _this.farmUserDataloading = false
         if (res.status === 200 && res.data.code === 200) {
@@ -611,10 +651,48 @@ export default {
           title: _this.$t('error_message_info') + reason.message
         })
       })
+    },
+    userFarmApplyHandle (type, params) {
+      const _this = this
+      _this.$Modal.confirm({
+        title: _this.$t('table_handle_handle_apply_tip'),
+        loading: true,
+        onOk: () => {
+          handleAuthApply({ farmId: params.row.farmId, userId: params.row.userId, applyState: type ? 'Y' : 'N' }).then(res => {
+            _this.$Modal.remove()
+            if (res.status === 200 && res.data.code === 200) {
+              _this.$Modal.success({
+                title: _this.$t('save_success')
+              })
+              _this.showHadAuthUsersModel(params)
+            } else {
+              _this.$Modal.error({
+                title: _this.$t('error_message_info') + res.data.message
+              })
+            }
+          }).catch(function (reason) {
+            _this.$Modal.remove()
+            _this.$Modal.error({
+              title: _this.$t('error_message_info') + reason.message
+            })
+          })
+        }
+      })
     }
   },
   mounted () {
-    this.load()
+    const _this = this
+    _this.tableHeight = window.document.body.offsetHeight - 350
+    var ctimer = false
+    window.addEventListener('resize', () => {
+      if (ctimer) {
+        window.clearTimeout(ctimer)
+      }
+      ctimer = window.setTimeout(() => {
+        _this.tableHeight = window.document.body.offsetHeight - 350
+      }, 100)
+    })
+    _this.load()
   }
 }
 </script>

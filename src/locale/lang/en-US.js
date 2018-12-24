@@ -55,13 +55,17 @@ export default {
   farm_current_owner: 'Current Owner',
   new_farm_owner: 'New Owner',
   farm_auth_new_user: 'Auth New User',
-  farm_had_auth_users: 'Had Auth Users',
+  farm_had_auth_users: 'Auth Users',
 
   area_name: 'Farm Area Name',
   area_position: 'Farm Area Position',
   area_acreage: 'Farm Area Acreage',
   area_describe: 'Farm Area Describe',
   current_farm: 'Current Farm',
+
+  apply_state_d: 'Wait Audit',
+  apply_state_y: 'Pass',
+  apply_state_n: 'Fail',
 
   equipment: 'Equipment',
   equipment_manage: 'Equipment Manage',
@@ -80,7 +84,8 @@ export default {
   update_at: 'Update Time',
   table_handle_delete_tip: 'Delete It?',
   table_handle_toggle_state_tip: 'Toggle State?',
-  table_handle_reset_pwd_tip: 'Reset Password？',
+  table_handle_reset_pwd_tip: 'Reset Password?',
+  table_handle_handle_apply_tip: 'Handle Apply?',
 
   record_id: 'Record ID',
   detail: 'Detail',
@@ -98,6 +103,9 @@ export default {
 
   normal: 'Normal',
   disabled: 'Disabled',
+
+  agree: 'Agree',
+  disagree: 'Disagree',
 
   super_admin: 'Super Admin',
   admin: 'Admin',

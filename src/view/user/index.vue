@@ -16,6 +16,7 @@
       :loading="loading"
       :columns="columns"
       size="small"
+      :height="tableHeight"
       :highlight-row="true"
       @on-sort-change="handleSortChange"
     ></Table>
@@ -132,6 +133,7 @@ export default {
   data () {
     return {
       tableData: [],
+      tableHeight: 100,
       total: 0,
       size: 10,
       userFarmTableData: [],
@@ -177,7 +179,7 @@ export default {
         title: this.$t('record_id'),
         key: 'userId',
         sortable: 'custom',
-        width: 200,
+        width: 100,
         tooltip: true
       },
       {
@@ -336,7 +338,7 @@ export default {
       {
         title: this.$t('record_id'),
         key: 'farmId',
-        width: 220,
+        width: 100,
         tooltip: true
       },
       {
@@ -364,15 +366,24 @@ export default {
         tooltip: true
       },
       {
-        title: this.$t('apply_remark'),
-        key: 'applyRemark',
-        width: 280,
-        tooltip: true
-      },
-      {
         title: this.$t('apply_state'),
         key: 'applyState',
         width: 120,
+        render: (h, params) => {
+          const row = params.row
+          const text = row.applyState === 'D' ? this.$t('apply_state_d') : row.applyState === 'Y' ? this.$t('apply_state_y') : this.$t('apply_state_n')
+          const color = row.applyState === 'D' ? 'warning' : row.applyState === 'Y' ? 'success' : 'error'
+          return h('Tag', {
+            props: {
+              color: color
+            }
+          }, text)
+        }
+      },
+      {
+        title: this.$t('apply_remark'),
+        key: 'applyRemark',
+        width: 280,
         tooltip: true
       },
       {
@@ -384,7 +395,7 @@ export default {
       {
         title: this.$t('handle_user_id'),
         key: 'handleUserId',
-        width: 150,
+        width: 100,
         tooltip: true
       }]
     },
@@ -520,7 +531,7 @@ export default {
       this.userAuthFarmModel = true
       this.userAuthFarmsloading = true
       const _this = this
-      _this.userFarmTableData = [];
+      _this.userFarmTableData = []
       userAuthFarms({ resultId: params.row.userId }).then(res => {
         _this.userAuthFarmsloading = false
         if (res.status === 200 && res.data.code === 200) {
@@ -650,7 +661,18 @@ export default {
     }
   },
   mounted () {
-    this.load()
+    const _this = this
+    _this.tableHeight = window.document.body.offsetHeight - 350
+    var ctimer = false
+    window.addEventListener('resize', () => {
+      if (ctimer) {
+        window.clearTimeout(ctimer)
+      }
+      ctimer = window.setTimeout(() => {
+        _this.tableHeight = window.document.body.offsetHeight - 350
+      }, 100)
+    })
+    _this.load()
   }
 }
 </script>
