@@ -22,8 +22,9 @@ export default {
   account_state: 'Account State',
   reset_pwd: 'Reset Password',
   new_pwd_is: 'Success!New Password Is: ',
-  user_identity: 'User Identity',
-  user_auth_farms: 'User Auth Farms',
+  user_identity: 'Identities',
+  user_auth_farms: 'Auth Farms',
+  user_auth_menus: 'Auth Menus',
 
   authorization_manage: 'Auth Manage',
 
@@ -162,5 +163,6 @@ export default {
   'i.poptip.cancelText': 'Cancel',
   'i.poptip.okText': 'Ok',
   'i.modal.cancelText': 'Close',
-  'i.modal.okText': 'OK'
+  'i.modal.okText': 'OK',
+  'i.tree.emptyText': 'No Data'
 }

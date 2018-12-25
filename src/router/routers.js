@@ -52,7 +52,7 @@ export default [
     path: '/farm',
     name: 'farm', // 农场管理
     meta: {
-      access: ['super_admin'],
+      access: ['super_admin', 'farm'],
       title: '农场管理',
       icon: 'ios-globe'
     },
@@ -62,7 +62,7 @@ export default [
         path: '/farm/manage',
         name: 'farm_manage',
         meta: {
-          access: ['super_admin'],
+          access: ['super_admin', 'farm_manage'],
           icon: 'logo-buffer',
           title: '农场管理'
         },
@@ -72,7 +72,7 @@ export default [
         path: '/farm/add',
         name: 'farm_add',
         meta: {
-          access: ['super_admin'],
+          access: ['super_admin', 'farm_add'],
           icon: 'ios-easel',
           title: '新增农场'
         },
@@ -82,7 +82,7 @@ export default [
         path: '/farm/edit',
         name: 'farm_edit',
         meta: {
-          access: ['super_admin'],
+          access: ['super_admin', 'farm_edit'],
           hideInMenu: true,
           icon: 'ios-easel',
           title: '修改农场'
@@ -93,7 +93,7 @@ export default [
         path: '/farm/area',
         name: 'farm_area',
         meta: {
-          access: ['super_admin'],
+          access: ['super_admin', 'farm_area'],
           hideInMenu: true,
           icon: 'ios-easel',
           title: '农场厂区'
@@ -104,7 +104,7 @@ export default [
         path: '/farm/console',
         name: 'farm_console',
         meta: {
-          access: ['super_admin'],
+          access: ['super_admin', 'farm_console'],
           hideInMenu: true,
           icon: 'ios-easel',
           title: '农场控制台'
@@ -117,7 +117,7 @@ export default [
     path: '/equipment',
     name: 'equipment', // 设备管理
     meta: {
-      access: ['super_admin'],
+      access: ['super_admin', 'equipment'],
       title: '设备',
       icon: 'ios-settings'
     },
@@ -127,7 +127,7 @@ export default [
         path: '/equipment/manage',
         name: 'equipment_manage',
         meta: {
-          access: ['super_admin'],
+          access: ['super_admin', 'equipment_manage'],
           icon: 'ios-settings',
           title: '设备管理'
         },
@@ -137,7 +137,7 @@ export default [
         path: '/equipment/model',
         name: 'equipment_model',
         meta: {
-          access: ['super_admin'],
+          access: ['super_admin', 'equipment_model'],
           icon: 'ios-settings',
           title: '设备型号'
         },
@@ -147,7 +147,7 @@ export default [
         path: '/equipment/type',
         name: 'equipment_type',
         meta: {
-          access: ['super_admin'],
+          access: ['super_admin', 'equipment_type'],
           icon: 'ios-settings',
           title: '设备类型'
         },
@@ -159,7 +159,7 @@ export default [
     path: '/user',
     name: 'user', // 用户管理
     meta: {
-      access: ['super_admin'],
+      access: ['super_admin', 'user'],
       title: '用户',
       icon: 'md-people'
     },
@@ -169,7 +169,7 @@ export default [
         path: '/user/manage',
         name: 'user_manage',
         meta: {
-          access: ['super_admin'],
+          access: ['super_admin', 'user_manage'],
           icon: 'md-people',
           title: '用户管理'
         },
@@ -179,7 +179,7 @@ export default [
         path: '/user/organize/manage',
         name: 'organize_manage',
         meta: {
-          access: ['super_admin'],
+          access: ['super_admin', 'organize_manage'],
           icon: 'logo-codepen',
           title: '组织管理'
         },

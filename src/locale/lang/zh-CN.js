@@ -24,6 +24,7 @@ export default {
   new_pwd_is: '重置成功，新密码为：',
   user_identity: '用户身份',
   user_auth_farms: '已授权农场',
+  user_auth_menus: '授权菜单',
 
   authorization_manage: '权限管理',
 
@@ -162,5 +163,6 @@ export default {
   'i.poptip.cancelText': '取消',
   'i.poptip.okText': '确认',
   'i.modal.okText': '确认',
-  'i.modal.cancelText': '取消'
+  'i.modal.cancelText': '取消',
+  'i.tree.emptyText': '暂无数据'
 }

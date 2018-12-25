@@ -124,10 +124,23 @@
       <div slot="footer"></div>
       <Spin size="large" fix v-if="userAuthFarmsloading"></Spin>
     </Modal>
+    <Modal
+      v-model="userAuthMenuModel"
+      scrollable
+      width="420"
+      mask
+      :mask-closable="false">
+      <p slot="header">
+        <Icon type="ios-globe-outline"></Icon>
+        <span>{{ $t('user_auth_menus') }}</span>
+      </p>
+      <Tree :data="authMenus" show-checkbox @on-check-change="changeUserMenuAuthHandle"></Tree>
+      <Spin size="large" fix v-if="authMenusLoading"></Spin>
+    </Modal>
   </div>
 </template>
 <script>
-import { loadUsers, toggleStateUser, upinsertUser, resetUserPwd, userIdentities, userAuthFarms, changeUserIdentities } from '@/api/user'
+import { loadUsers, toggleStateUser, upinsertUser, resetUserPwd, userIdentities, userAuthFarms, changeUserIdentities, userAuthMenus, handleMenuAuth } from '@/api/user'
 import { allOrganizes } from '@/api/organize'
 export default {
   data () {
@@ -165,7 +178,10 @@ export default {
       current: 1,
       searchValue: '',
       orderField: '',
-      orderType: ''
+      orderType: '',
+      userAuthMenuModel: false,
+      authMenusLoading: false,
+      authMenus: []
     }
   },
   computed: {
@@ -324,7 +340,19 @@ export default {
                   this.showUserAuthFarmModel(params)
                 }
               }
-            }, this.$t('user_auth_farms'))
+            }, this.$t('user_auth_farms')),
+            h('Button', {
+              props: {
+                type: 'text',
+                size: 'small',
+                icon: 'ios-globe-outline'
+              },
+              on: {
+                'click': () => {
+                  this.showUserAuthMenuModel(params)
+                }
+              }
+            }, this.$t('user_auth_menus'))
           ])
         }
       }]
@@ -543,6 +571,45 @@ export default {
         }
       }).catch(function (reason) {
         _this.userAuthFarmsloading = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
+    },
+    showUserAuthMenuModel (params) {
+      this.userAuthMenuModel = true
+      this.authMenusLoading = true
+      const _this = this
+      _this.authMenus = []
+      userAuthMenus({ userId: params.row.userId }).then(res => {
+        _this.authMenusLoading = false
+        if (res.status === 200 && res.data.code === 200) {
+          _this.authMenus = res.data.data
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.authMenusLoading = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
+    },
+    changeUserMenuAuthHandle (selected, cnode) {
+      this.authMenusLoading = true
+      const _this = this
+      handleMenuAuth({ userId: cnode.userId, menuAccessKey: cnode.key, checked: cnode.checked ? 'Y' : 'N' }).then(res => {
+        _this.authMenusLoading = false
+        if (res.status === 200 && res.data.code === 200) {
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.authMenusLoading = false
         _this.$Modal.error({
           title: _this.$t('error_message_info') + reason.message
         })

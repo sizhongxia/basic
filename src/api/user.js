@@ -203,3 +203,27 @@ export const handleAuthApply = ({ farmId, userId, applyState }) => {
     method: 'post'
   })
 }
+
+export const userAuthMenus = ({ userId }) => {
+  const data = {
+    userId
+  }
+  return axios.request({
+    url: 'user/authMenus',
+    data,
+    method: 'post'
+  })
+}
+
+export const handleMenuAuth = ({ userId, menuAccessKey, checked }) => {
+  const data = {
+    userId,
+    menuAccessKey,
+    checked
+  }
+  return axios.request({
+    url: 'user/handleMenuAuth',
+    data,
+    method: 'post'
+  })
+}
