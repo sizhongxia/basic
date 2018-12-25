@@ -188,22 +188,34 @@ export default [
     ]
   },
   {
-    path: '/message',
-    name: 'message',
-    component: Main,
+    path: '/zhyz/farm',
+    name: 'zhyz_farm', // 我的农场管理
     meta: {
-      hideInBread: true,
-      hideInMenu: true
+      access: ['super_admin', 'zhyz_farm'],
+      title: '农场管理',
+      icon: 'md-people'
     },
+    component: Main, // 一级目录必须使用Main组件作为component
     children: [
       {
-        path: '/center',
-        name: 'message_center',
+        path: '/zhyz/myfarm',
+        name: 'zhyz_my_farm',
         meta: {
-          icon: 'md-notifications',
-          title: '消息中心'
+          access: ['super_admin', 'zhyz_my_farm'],
+          icon: 'md-people',
+          title: '我的农场'
         },
-        component: () => import('@/view/main/message/index.vue')
+        component: () => import('@/view/basic.vue')
+      },
+      {
+        path: '/zhyz/equipment/manage',
+        name: 'zhyz_equipment_manage',
+        meta: {
+          access: ['super_admin', 'zhyz_equipment_manage'],
+          icon: 'logo-codepen',
+          title: '物联设备'
+        },
+        component: () => import('@/view/basic.vue')
       }
     ]
   },

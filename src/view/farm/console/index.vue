@@ -354,8 +354,8 @@ export default {
   },
   mounted () {
     const _this = this
-    _this.farmId = _this.$route.query.farmId
-    _this.farmName = _this.$route.query.farmName
+    _this.farmId = window.localStorage.getItem('page_farm_console_farm_id')
+    _this.farmName = window.localStorage.getItem('page_farm_console_farm_name')
     _this.farmAreasLoading = true
     farmAllAreas({ farmId: _this.farmId }).then(res => {
       _this.farmAreasLoading = false

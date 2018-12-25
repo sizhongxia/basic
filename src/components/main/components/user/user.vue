@@ -1,15 +1,12 @@
 <template>
   <div class="user-avator-dropdown">
-    <Dropdown @on-click="handleClick">
-      <Badge :dot="!!messageUnreadCount">
+    <Dropdown trigger="click" @on-click="handleClick">
+      <Badge>
         <Avatar :src="userAvator"/>
       </Badge>
       <span>{{ userName }}</span>
       <Icon :size="18" type="md-arrow-dropdown"></Icon>
       <DropdownMenu slot="list">
-        <DropdownItem name="message">
-          {{$t('message_center')}}<Badge style="margin-left: 10px" :count="messageUnreadCount"></Badge>
-        </DropdownItem>
         <DropdownItem name="logout">{{$t('logout')}}</DropdownItem>
       </DropdownMenu>
     </Dropdown>
@@ -29,10 +26,6 @@ export default {
     userAvator: {
       type: String,
       default: ''
-    },
-    messageUnreadCount: {
-      type: Number,
-      default: 0
     }
   },
   methods: {
@@ -46,16 +39,9 @@ export default {
         })
       })
     },
-    message () {
-      this.$router.push({
-        name: 'message_center'
-      })
-    },
     handleClick (name) {
       switch (name) {
         case 'logout': this.logout()
-          break
-        case 'message': this.message()
           break
       }
     }

@@ -159,7 +159,7 @@ export default {
     }
   },
   mounted () {
-    this.farmId = this.$route.query.farmId
+    this.farmId = window.localStorage.getItem('page_farm_edit_farm_id')
     const _this = this
     _this.areasLoading = true
     areas().then(res => {

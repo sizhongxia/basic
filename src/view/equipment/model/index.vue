@@ -110,7 +110,7 @@ export default {
         title: this.$t('record_id'),
         key: 'modelId',
         sortable: 'custom',
-        width: 100,
+        width: 120,
         tooltip: true
       },
       {

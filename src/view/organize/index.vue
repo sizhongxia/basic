@@ -90,7 +90,7 @@ export default {
         title: this.$t('record_id'),
         key: 'organizeId',
         sortable: 'custom',
-        width: 100,
+        width: 120,
         tooltip: true
       },
       {

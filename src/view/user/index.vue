@@ -129,12 +129,13 @@
       scrollable
       width="420"
       mask
-      :mask-closable="false">
+      :mask-closable="false"
+      class-name="vertical-center-modal">
       <p slot="header">
         <Icon type="ios-globe-outline"></Icon>
         <span>{{ $t('user_auth_menus') }}</span>
       </p>
-      <Tree :data="authMenus" show-checkbox @on-check-change="changeUserMenuAuthHandle"></Tree>
+      <Tree :data="authMenus" show-checkbox @on-check-change="changeUserMenuAuthHandle" :check-strictly="true" :empty-text="noUserMenuAuth"></Tree>
       <Spin size="large" fix v-if="authMenusLoading"></Spin>
     </Modal>
   </div>
@@ -195,7 +196,7 @@ export default {
         title: this.$t('record_id'),
         key: 'userId',
         sortable: 'custom',
-        width: 100,
+        width: 120,
         tooltip: true
       },
       {
@@ -366,7 +367,7 @@ export default {
       {
         title: this.$t('record_id'),
         key: 'farmId',
-        width: 100,
+        width: 120,
         tooltip: true
       },
       {
@@ -423,7 +424,7 @@ export default {
       {
         title: this.$t('handle_user_id'),
         key: 'handleUserId',
-        width: 100,
+        width: 120,
         tooltip: true
       }]
     },
@@ -445,6 +446,10 @@ export default {
           trigger: 'blur'
         }]
       }
+    },
+    // No authorization required
+    noUserMenuAuth () {
+      return this.$t('no_authorization_required')
     }
   },
   methods: {
@@ -576,12 +581,11 @@ export default {
         })
       })
     },
-    showUserAuthMenuModel (params) {
-      this.userAuthMenuModel = true
+    loadUserMenuAuthData (userId) {
       this.authMenusLoading = true
       const _this = this
       _this.authMenus = []
-      userAuthMenus({ userId: params.row.userId }).then(res => {
+      userAuthMenus({ userId }).then(res => {
         _this.authMenusLoading = false
         if (res.status === 200 && res.data.code === 200) {
           _this.authMenus = res.data.data
@@ -597,12 +601,17 @@ export default {
         })
       })
     },
+    showUserAuthMenuModel (params) {
+      this.userAuthMenuModel = true
+      this.loadUserMenuAuthData(params.row.userId)
+    },
     changeUserMenuAuthHandle (selected, cnode) {
       this.authMenusLoading = true
       const _this = this
       handleMenuAuth({ userId: cnode.userId, menuAccessKey: cnode.key, checked: cnode.checked ? 'Y' : 'N' }).then(res => {
         _this.authMenusLoading = false
         if (res.status === 200 && res.data.code === 200) {
+          _this.loadUserMenuAuthData(cnode.userId)
         } else {
           _this.$Modal.error({
             title: _this.$t('error_message_info') + res.data.message

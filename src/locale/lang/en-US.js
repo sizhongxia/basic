@@ -1,5 +1,5 @@
 export default {
-  home: 'Home',
+  home: 'Dashboard',
   close_all: 'Close All',
   close_others: 'Close Others',
 
@@ -144,6 +144,12 @@ export default {
   more_options: 'More Options',
 
   confirm_close_current_page: 'Confirm Close Current Page?',
+
+  no_authorization_required: 'Super admin no authorization required!',
+
+  zhyz_farm: 'Farm Manage',
+  zhyz_my_farm: 'My Farm',
+  zhyz_equipment_manage: 'Equipment Manage',
 
   'i.table.noDataText': 'No Data',
   'i.page.prev': 'Prev Page',

@@ -278,7 +278,7 @@ export default {
         title: this.$t('record_id'),
         key: 'farmId',
         sortable: 'custom',
-        width: 100,
+        width: 120,
         tooltip: true
       },
       {
@@ -298,19 +298,19 @@ export default {
       {
         title: this.$t('province'),
         key: 'provinceName',
-        width: 100,
+        width: 120,
         tooltip: true
       },
       {
         title: this.$t('city'),
         key: 'cityName',
-        width: 100,
+        width: 120,
         tooltip: true
       },
       {
         title: this.$t('county'),
         key: 'countyName',
-        width: 100,
+        width: 120,
         tooltip: true
       },
       {
@@ -341,7 +341,7 @@ export default {
       {
         title: this.$t('record_id'),
         key: 'userId',
-        width: 100,
+        width: 120,
         tooltip: true
       },
       {
@@ -502,39 +502,33 @@ export default {
     openEditFormTab (params) {
       const route = {
         name: 'farm_edit',
-        query: {
-          farmId: params.row.farmId
-        },
         meta: {
           title: this.$t('farm_edit')
         }
       }
+      window.localStorage.setItem('page_farm_edit_farm_id', params.row.farmId)
       this.$router.push(route)
     },
     openFarmAreasTab (params) {
       const route = {
         name: 'farm_area',
-        query: {
-          farmId: params.row.farmId,
-          farmName: params.row.farmName
-        },
         meta: {
           title: this.$t('farm_area')
         }
       }
+      window.localStorage.setItem('page_farm_area_farm_id', params.row.farmId)
+      window.localStorage.setItem('page_farm_area_farm_name', params.row.farmName)
       this.$router.push(route)
     },
     openFarmConsoleTab (params) {
       const route = {
         name: 'farm_console',
-        query: {
-          farmId: params.row.farmId,
-          farmName: params.row.farmName
-        },
         meta: {
           title: this.$t('farm_console')
         }
       }
+      window.localStorage.setItem('page_farm_console_farm_id', params.row.farmId)
+      window.localStorage.setItem('page_farm_console_farm_name', params.row.farmName)
       this.$router.push(route)
     },
     showChangeOwnerModel (params) {

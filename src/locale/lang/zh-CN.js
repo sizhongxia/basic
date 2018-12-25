@@ -1,5 +1,5 @@
 export default {
-  home: '首页',
+  home: '主面板',
   close_all: '关闭所有',
   close_others: '关闭其他',
 
@@ -144,6 +144,12 @@ export default {
   recycle_bin: '回收站',
 
   confirm_close_current_page: '是否关闭当前页面？',
+
+  no_authorization_required: '超级管理员无需授权',
+
+  zhyz_farm: '农场管理',
+  zhyz_my_farm: '我的农场',
+  zhyz_equipment_manage: '物联设备',
 
   'i.table.noDataText': '无数据',
   'i.page.prev': '上页',

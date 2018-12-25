@@ -106,7 +106,7 @@ export default {
         title: this.$t('record_id'),
         key: 'areaId',
         sortable: 'custom',
-        width: 100,
+        width: 120,
         tooltip: true
       },
       {
@@ -341,8 +341,8 @@ export default {
   },
   mounted () {
     const _this = this
-    _this.farmId = _this.$route.query.farmId
-    _this.farmName = _this.$route.query.farmName
+    _this.farmId = window.localStorage.getItem('page_farm_area_farm_id')
+    _this.farmName = window.localStorage.getItem('page_farm_area_farm_name')
     _this.tableHeight = window.document.body.offsetHeight - 400
     var ctimer = false
     window.addEventListener('resize', () => {
