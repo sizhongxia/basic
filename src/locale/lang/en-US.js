@@ -51,6 +51,7 @@ export default {
   province: 'Province',
   city: 'City',
   county: 'County',
+  weather_city: 'Weather City',
   owner_user: 'Owner User',
   farm_change_owner: 'Change Owner',
   farm_current_owner: 'Current Owner',

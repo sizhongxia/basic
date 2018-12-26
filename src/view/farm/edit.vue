@@ -19,6 +19,23 @@
         <FormItem :label="$t('area')">
           <Cascader :data="areaData" v-model="formModel.farmArea" trigger="hover" clearable style="width: 420px"></Cascader>
         </FormItem>
+        <FormItem :label="$t('weather_city')">
+          <Select
+            v-model="formModel.weatherCityCode"
+            filterable
+            setQuery=""
+            remote
+            :remote-method="remoteGetWeatherCitys"
+            clearable
+            :loading="weatherCitysLoading"
+             style="width: 240px">
+            <Option v-for="option in weatherCitys" :value="option.value" :key="option.value" :label="option.label">
+              <span>{{ option.cityPinyin }}{{ option.provincePinyin }}</span>
+              <span>{{ option.cityName }}</span>
+              <span style="float:right;color:#ccc">{{ option.provinceName }}</span>
+            </Option>
+          </Select>
+        </FormItem>
         <FormItem :label="$t('address')">
           <Input v-model="formModel.farmAddress" :placeholder="$t('please_input')+$t('address')" style="width: 420px"></Input>
         </FormItem>
@@ -41,7 +58,7 @@
   </Row>
 </template>
 <script>
-import { areas } from '@/api/basic'
+import { areas, weatherCities } from '@/api/basic'
 import { allOrganizes } from '@/api/organize'
 import { query } from '@/api/user'
 import { upinsertFarm, farmDetail } from '@/api/farm'
@@ -57,6 +74,7 @@ export default {
         farmCode: '',
         organizeId: '',
         farmArea: [],
+        weatherCityCode: '',
         farmAddress: '',
         longitude: '',
         latitude: '',
@@ -68,7 +86,9 @@ export default {
       areaData: [],
       organizesloading: false,
       organizes: [],
-      submiting: false
+      submiting: false,
+      weatherCitysLoading: false,
+      weatherCitys: []
     }
   },
   computed: {
@@ -101,10 +121,7 @@ export default {
                 title: _this.$t('save_success') + ',' + _this.$t('confirm_close_current_page'),
                 onOk: () => {
                   _this.closeTag({
-                    name: 'farm_edit',
-                    query: {
-                      farmId: _this.farmId
-                    }
+                    name: 'farm_edit'
                   })
                 }
               })
@@ -137,6 +154,30 @@ export default {
           }
         }).catch(function (reason) {
           _this.usersLoading = false
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + reason.message
+          })
+        })
+      } else {
+        _this.users = []
+      }
+    },
+    remoteGetWeatherCitys (searchValue) {
+      const _this = this
+      _this.weatherCitys = []
+      if (searchValue !== '') {
+        this.weatherCitysLoading = true
+        weatherCities({ searchValue }).then(res => {
+          _this.weatherCitysLoading = false
+          if (res.status === 200 && res.data.code === 200) {
+            _this.weatherCitys = res.data.data
+          } else {
+            _this.$Modal.error({
+              title: _this.$t('error_message_info') + res.data.message
+            })
+          }
+        }).catch(function (reason) {
+          _this.weatherCitysLoading = false
           _this.$Modal.error({
             title: _this.$t('error_message_info') + reason.message
           })

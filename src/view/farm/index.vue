@@ -314,6 +314,12 @@ export default {
         tooltip: true
       },
       {
+        title: this.$t('weather_city'),
+        key: 'weatherCityName',
+        width: 100,
+        tooltip: true
+      },
+      {
         title: this.$t('address'),
         key: 'address',
         width: 240,

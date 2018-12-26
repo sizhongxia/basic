@@ -28,6 +28,23 @@
         <FormItem :label="$t('area')">
           <Cascader :data="areaData" v-model="formModel.farmArea" trigger="hover" clearable style="width: 420px"></Cascader>
         </FormItem>
+        <FormItem :label="$t('weather_city')">
+          <Select
+            v-model="formModel.weatherCityCode"
+            filterable
+            setQuery=""
+            remote
+            :remote-method="remoteGetWeatherCitys"
+            clearable
+            :loading="weatherCitysLoading"
+             style="width: 240px">
+            <Option v-for="option in weatherCitys" :value="option.value" :key="option.value" :label="option.label">
+              <span>{{ option.cityPinyin }}{{ option.provincePinyin }}</span>
+              <span>{{ option.cityName }}</span>
+              <span style="float:right;color:#ccc">{{ option.provinceName }}</span>
+            </Option>
+          </Select>
+        </FormItem>
         <FormItem :label="$t('address')">
           <Input v-model="formModel.farmAddress" :placeholder="$t('please_input')+$t('address')" style="width: 420px"></Input>
         </FormItem>
@@ -50,12 +67,11 @@
   </Row>
 </template>
 <script>
-import { areas } from '@/api/basic'
+import { areas, weatherCities } from '@/api/basic'
 import { allOrganizes } from '@/api/organize'
 import { query } from '@/api/user'
 import { upinsertFarm } from '@/api/farm'
 import { mapMutations } from 'vuex'
-
 export default {
   data () {
     return {
@@ -64,6 +80,7 @@ export default {
         organizeId: '',
         ownerUserId: '',
         farmArea: [],
+        weatherCityCode: '',
         farmAddress: '',
         longitude: '',
         latitude: '',
@@ -76,7 +93,9 @@ export default {
       organizes: [],
       usersLoading: false,
       users: [],
-      submiting: false
+      submiting: false,
+      weatherCitysLoading: false,
+      weatherCitys: []
     }
   },
   computed: {
@@ -107,6 +126,7 @@ export default {
                 organizeId: '',
                 ownerUserId: '',
                 farmArea: [],
+                weatherCityCode: '',
                 farmAddress: '',
                 longitude: '',
                 latitude: '',
@@ -137,6 +157,7 @@ export default {
     },
     remoteGetUsers (searchValue) {
       const _this = this
+      _this.users = []
       if (searchValue !== '') {
         this.usersLoading = true
         query({ searchValue }).then(res => {
@@ -157,13 +178,35 @@ export default {
       } else {
         _this.users = []
       }
+    },
+    remoteGetWeatherCitys (searchValue) {
+      const _this = this
+      _this.weatherCitys = []
+      if (searchValue !== '') {
+        this.weatherCitysLoading = true
+        weatherCities({ searchValue }).then(res => {
+          _this.weatherCitysLoading = false
+          if (res.status === 200 && res.data.code === 200) {
+            _this.weatherCitys = res.data.data
+          } else {
+            _this.$Modal.error({
+              title: _this.$t('error_message_info') + res.data.message
+            })
+          }
+        }).catch(function (reason) {
+          _this.weatherCitysLoading = false
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + reason.message
+          })
+        })
+      } else {
+        _this.users = []
+      }
     }
   },
   mounted () {
-    this.organizesloading = true
-    this.areasLoading = true
-
     const _this = this
+    _this.areasLoading = true
     areas().then(res => {
       _this.areasLoading = false
       if (res.status === 200 && res.data.code === 200) {
@@ -179,6 +222,7 @@ export default {
         title: _this.$t('error_message_info') + reason.message
       })
     })
+    _this.organizesloading = true
     allOrganizes().then(res => {
       _this.organizesloading = false
       if (res.status === 200 && res.data.code === 200) {
@@ -193,6 +237,19 @@ export default {
       _this.$Modal.error({
         title: _this.$t('error_message_info') + reason.message
       })
+    })
+    _this.$watch('formModel.farmArea', function (newValue, oldValue) {
+      if (newValue) {
+        let cityCode = newValue[0]
+        let cityName = ''
+        _this.areaData.forEach(item => {
+          if (item.value === cityCode) {
+            cityName = item.label
+            return false
+          }
+        })
+        _this.remoteGetWeatherCitys(cityName.substring(0, 2))
+      }
     })
   }
 }

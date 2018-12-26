@@ -51,6 +51,7 @@ export default {
   province: '省',
   city: '市/区',
   county: '县',
+  weather_city: '天气城市',
   owner_user: '所属用户',
   farm_change_owner: '变更所属用户',
   farm_current_owner: '当前所有用户',
