@@ -51,6 +51,7 @@
         <FormItem :label="$t('lnglat')">
           <Input v-model="formModel.longitude" :placeholder="$t('please_input')+$t('longitude')" style="width: 210px"></Input>
           <Input v-model="formModel.latitude" :placeholder="$t('please_input')+$t('latitude')" style="width: 210px"></Input>
+          <p><a href="https://lbs.amap.com/console/show/picker" target="_blank">https://lbs.amap.com/console/show/picker</a></p>
         </FormItem>
         <FormItem :label="$t('website')">
           <Input v-model="formModel.website" :placeholder="$t('please_input')+$t('website')" style="width: 420px"></Input>
