@@ -148,6 +148,14 @@ export default {
 
   no_authorization_required: 'Super admin no authorization required!',
 
+  weather_location: 'Location',
+  weather_weather: 'Weather',
+  weather_tmp: 'Temperature',
+  weather_tmp_fl: 'Somatosensory Temp',
+  weather_pcpn: 'Precipitation',
+  weather_hum: 'Humidity',
+  weather_update_loc: 'Update At',
+
   zhyz_farm: 'Farm Manage',
   zhyz_my_farm: 'My Farm',
   zhyz_equipment_manage: 'Equipment Manage',

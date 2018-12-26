@@ -534,7 +534,6 @@ export default {
         }
       }
       window.localStorage.setItem('page_farm_console_farm_id', params.row.farmId)
-      window.localStorage.setItem('page_farm_console_farm_name', params.row.farmName)
       this.$router.push(route)
     },
     showChangeOwnerModel (params) {

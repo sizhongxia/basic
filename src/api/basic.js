@@ -21,3 +21,14 @@ export const weatherCities = ({ searchValue }) => {
     method: 'post'
   })
 }
+
+export const weatherInfo = ({ cid }) => {
+  const data = {
+    cid
+  }
+  return axios.request({
+    url: 'weather/now',
+    data,
+    method: 'post'
+  })
+}

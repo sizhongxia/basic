@@ -6,7 +6,7 @@
     <Row :gutter="20">
       <i-col :md="24" :lg="24" style="margin-bottom: 18px;">
         <Card shadow>
-          <p>{{ $t('current_farm') }} : {{ farmName }}</p>
+          <p>{{ $t('current_farm') }} : {{ farmObj.farmName }}</p>
         </Card>
       </i-col>
       <i-col :md="24" :lg="10" style="margin-bottom: 18px;">
@@ -35,6 +35,19 @@
               <p slot="extra">{{ 'SN: '+ item.equipmentCode }}</p>
             </Cell>
           </CellGroup>
+        </Card>
+      </i-col>
+      <i-col :md="24" :lg="10" style="margin-bottom: 18px;">
+        <Card shadow>
+          <p><img :src="weather.pic"/></p>
+          <p>{{ $t('weather_location') }} : {{ weather.location }}</p>
+          <p>{{ $t('weather_weather') }} : {{ weather.weather }}</p>
+          <p>{{ $t('weather_tmp') }} : {{ weather.tmp }}</p>
+          <p>{{ $t('weather_tmp_fl') }} : {{ weather.tmpFl }}</p>
+          <p>{{ $t('weather_pcpn') }} : {{ weather.pcpn }}</p>
+          <p>{{ $t('weather_hum') }} : {{ weather.hum }}</p>
+          <p>{{ $t('weather_update_loc') }} : {{ weather.updateLoc }}</p>
+          <Spin size="large" fix v-if="weatherLoading"></Spin>
         </Card>
       </i-col>
     </Row>
@@ -105,19 +118,23 @@
         <Button type="primary" @click="submitEquipmentFormHandle">{{ $t('i.modal.okText') }}</Button>
       </div>
     </Modal>
+    <Spin size="large" fix v-if="loading"></Spin>
   </div>
 </template>
 <script>
 import { farmAllAreas } from '@/api/farmArea'
+import { farmDetail } from '@/api/farm'
 import { farmAllEquipments, upinsertEquipment, equipmentDetail, deleteEquipment } from '@/api/equipment'
 import { allEquipmentTypes } from '@/api/equipmentType'
 import { allEquipmentModels } from '@/api/equipmentModel'
+import { weatherInfo } from '@/api/basic'
 import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
       farmId: '',
-      farmName: '',
+      loading: false,
+      farmObj: {},
       farmAreasLoading: false,
       farmAreas: [],
       farmEquipmentsLoading: false,
@@ -144,7 +161,9 @@ export default {
       types: [],
       modelsLoading: false,
       models: [],
-      equipmentDetailLoading: false
+      equipmentDetailLoading: false,
+      weatherLoading: false,
+      weather: {}
     }
   },
   computed: {
@@ -350,12 +369,39 @@ export default {
           })
         }
       })
+    },
+    getWeatherInfo (cid) {
+      const _this = this
+      _this.weatherLoading = true
+      weatherInfo({ cid }).then(res => {
+        if (res.status === 200 && res.data.code === 200) {
+          _this.weatherLoading = false
+          _this.weather = res.data.data
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
     }
   },
   mounted () {
     const _this = this
     _this.farmId = window.localStorage.getItem('page_farm_console_farm_id')
-    _this.farmName = window.localStorage.getItem('page_farm_console_farm_name')
+    _this.loading = true
+    farmDetail({ resultId: _this.farmId }).then(res => {
+      if (res.status === 200 && res.data.code === 200) {
+        _this.loading = false
+        _this.farmObj = res.data.data
+        _this.getWeatherInfo(_this.farmObj.weatherCityCode)
+      }
+    }).catch(function (reason) {
+      console.error(reason)
+    })
     _this.farmAreasLoading = true
     farmAllAreas({ farmId: _this.farmId }).then(res => {
       _this.farmAreasLoading = false

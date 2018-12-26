@@ -148,6 +148,14 @@ export default {
 
   no_authorization_required: '超级管理员无需授权',
 
+  weather_location: '区域',
+  weather_weather: '天气',
+  weather_tmp: '室外温度',
+  weather_tmp_fl: '体感温度',
+  weather_pcpn: '降水量',
+  weather_hum: '湿度',
+  weather_update_loc: '数据更新时间',
+
   zhyz_farm: '农场管理',
   zhyz_my_farm: '我的农场',
   zhyz_equipment_manage: '物联设备',
