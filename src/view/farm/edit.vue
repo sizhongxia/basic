@@ -17,7 +17,7 @@
           </Select>
         </FormItem>
         <FormItem :label="$t('area')">
-          <Cascader :data="areaData" v-model="formModel.farmArea" trigger="hover" clearable style="width: 420px"></Cascader>
+          <Cascader :data="areaData" :load-data="loadAreaLevelData" v-model="formModel.farmArea" trigger="hover" clearable style="width: 420px"></Cascader>
         </FormItem>
         <FormItem :label="$t('weather_city')">
           <Select
@@ -58,7 +58,7 @@
   </Row>
 </template>
 <script>
-import { areas, weatherCities } from '@/api/basic'
+import { areaLevels, weatherCities } from '@/api/basic'
 import { allOrganizes } from '@/api/organize'
 import { query } from '@/api/user'
 import { upinsertFarm, farmDetail } from '@/api/farm'
@@ -197,13 +197,33 @@ export default {
       }).catch(function (reason) {
         console.error(reason)
       })
+    },
+    loadAreaLevelData (item, callback) {
+      const _this = this
+      item.loading = true
+      areaLevels({ searchValue: item.value }).then(res => {
+        item.loading = false
+        if (res.status === 200 && res.data.code === 200) {
+          item.children = res.data.data
+          callback()
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        item.loading = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
     }
   },
   mounted () {
     this.farmId = window.localStorage.getItem('page_farm_edit_farm_id')
     const _this = this
     _this.areasLoading = true
-    areas().then(res => {
+    areaLevels({ searchValue: '' }).then(res => {
       _this.areasLoading = false
       if (res.status === 200 && res.data.code === 200) {
         _this.areaData = res.data.data
