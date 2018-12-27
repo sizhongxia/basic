@@ -39,8 +39,8 @@
       </i-col>
       <i-col :md="24" :lg="10" style="margin-bottom: 18px;">
         <Card shadow>
+          <p slot="title">{{ $t('weather_info') }} - {{ weather.location }}</p>
           <p><img :src="weather.pic"/></p>
-          <p>{{ $t('weather_location') }} : {{ weather.location }}</p>
           <p>{{ $t('weather_weather') }} : {{ weather.weather }}</p>
           <p>{{ $t('weather_tmp') }} : {{ weather.tmp }}</p>
           <p>{{ $t('weather_tmp_fl') }} : {{ weather.tmpFl }}</p>

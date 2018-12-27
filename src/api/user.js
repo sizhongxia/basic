@@ -20,6 +20,11 @@ export const getUserInfo = () => {
 }
 
 export const logout = () => {
+  window.localStorage.removeItem('page_farm_edit_farm_id')
+  window.localStorage.removeItem('page_farm_area_farm_id')
+  window.localStorage.removeItem('page_farm_area_farm_name')
+  window.localStorage.removeItem('page_farm_picture_farm_id')
+  window.localStorage.removeItem('page_farm_console_farm_id')
   return axios.request({
     url: 'logout',
     method: 'post'

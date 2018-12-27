@@ -59,7 +59,10 @@ export default {
   farm_auth_new_user: 'Auth New User',
   farm_had_auth_users: 'Auth Users',
   farm_console: 'Farm Console',
+  farm_picture: 'Farm Picture',
   farm_picture_upload: 'Upload Farm Picture',
+  farm_picture_manage: 'Farm Picture Manage',
+  farm_picture_update: 'Update Farm Picture',
 
   area_name: 'Farm Area Name',
   area_position: 'Farm Area Position',
@@ -158,6 +161,7 @@ export default {
 
   pic_title: 'Pictrue Title',
 
+  weather_info: 'Weather Info',
   weather_location: 'Location',
   weather_weather: 'Weather',
   weather_tmp: 'Temperature',

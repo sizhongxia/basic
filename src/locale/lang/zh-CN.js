@@ -59,7 +59,10 @@ export default {
   farm_auth_new_user: '授权新用户',
   farm_had_auth_users: '授权用户列表',
   farm_console: '农场控制台',
+  farm_picture: '农场图片',
   farm_picture_upload: '上传农场图片',
+  farm_picture_manage: '农场图片管理',
+  farm_picture_update: '更新农场图片',
 
   area_name: '厂区名称',
   area_position: '厂区位置',
@@ -158,6 +161,7 @@ export default {
 
   pic_title: '图片标题',
 
+  weather_info: '天气信息',
   weather_location: '区域',
   weather_weather: '天气',
   weather_tmp: '室外温度',

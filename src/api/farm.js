@@ -104,3 +104,40 @@ export const savePictures = ({ farmId, farmAreaId, fileList, title, sortNum }) =
     method: 'post'
   })
 }
+
+export const farmPictures = ({ farmId, farmAreaId }) => {
+  const data = {
+    farmId,
+    farmAreaId
+  }
+  return axios.request({
+    url: 'farm/pictures',
+    data,
+    method: 'post'
+  })
+}
+
+export const deleteFarmPicture = ({ picId }) => {
+  const data = {
+    picId
+  }
+  return axios.request({
+    url: 'farm/deletePicture',
+    data,
+    method: 'post'
+  })
+}
+
+export const updateFarmPicture = ({ picId, sortNum, title, farmAreaId }) => {
+  const data = {
+    picId,
+    sortNum,
+    title,
+    farmAreaId
+  }
+  return axios.request({
+    url: 'farm/updatePicture',
+    data,
+    method: 'post'
+  })
+}

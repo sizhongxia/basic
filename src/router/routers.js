@@ -101,6 +101,17 @@ export default [
         component: () => import('@/view/farm/area/index.vue')
       },
       {
+        path: '/farm/picture',
+        name: 'farm_picture',
+        meta: {
+          access: ['super_admin', 'farm_picture'],
+          hideInMenu: true,
+          icon: 'ios-easel',
+          title: '农场图片'
+        },
+        component: () => import('@/view/farm/picture/index.vue')
+      },
+      {
         path: '/farm/console',
         name: 'farm_console',
         meta: {

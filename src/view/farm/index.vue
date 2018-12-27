@@ -252,7 +252,7 @@ export default {
         farmAreaId: '',
         title: '',
         fileList: [],
-        sortNum: 1
+        sortNum: 999
       }
     }
   },
@@ -294,6 +294,8 @@ export default {
                       break
                     case 'farm_picture_upload' : this.showFarmPictrueUploadModel(params)
                       break
+                    case 'farm_picture_manage' : this.openFarmPicturesTab(params)
+                      break
                     case 'delete' : this.handleDelete(params)
                       break
                     case 'farm_change_owner' : this.showChangeOwnerModel(params)
@@ -330,6 +332,11 @@ export default {
                     name: 'farm_picture_upload'
                   }
                 }, this.$t('farm_picture_upload')),
+                h('DropdownItem', {
+                  props: {
+                    name: 'farm_picture_manage'
+                  }
+                }, this.$t('farm_picture_manage')),
                 h('DropdownItem', {
                   props: {
                     name: 'farm_change_owner'
@@ -613,6 +620,16 @@ export default {
       window.localStorage.setItem('page_farm_area_farm_name', params.row.farmName)
       this.$router.push(route)
     },
+    openFarmPicturesTab (params) {
+      const route = {
+        name: 'farm_picture',
+        meta: {
+          title: this.$t('farm_picture')
+        }
+      }
+      window.localStorage.setItem('page_farm_picture_farm_id', params.row.farmId)
+      this.$router.push(route)
+    },
     openFarmConsoleTab (params) {
       const route = {
         name: 'farm_console',
@@ -651,7 +668,7 @@ export default {
       _this.farmPictureFormObj.farmName = params.row.farmName
       _this.farmPictureFormObj.farmAreaId = ''
       _this.farmPictureFormObj.title = ''
-      _this.farmPictureFormObj.sortNum = 1
+      _this.farmPictureFormObj.sortNum = 999
       _this.farmPictureFormObj.fileList = []
       _this.$refs['farmPictureUploadForm'].fileList = []
       _this.farmPictruesModel = true
@@ -849,13 +866,13 @@ export default {
       _this.farmPictureFormObj.fileList = fileList
       _this.farmPicSubmiting = true
       savePictures(_this.farmPictureFormObj).then(res => {
+        _this.farmPicSubmiting = false
         if (res.status === 200 && res.data.code === 200) {
           _this.$Modal.success({
             title: _this.$t('save_success')
           })
           _this.farmPictruesModel = false
         } else {
-          _this.farmPicSubmiting = false
           _this.$Modal.error({
             title: _this.$t('error_message_info') + res.data.message
           })
