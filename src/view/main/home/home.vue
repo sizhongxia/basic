@@ -30,6 +30,19 @@ export default {
     const _this = this
     mapLoader('463486f9226366a6bd043b5000e63180').then(AMap => {
       _this.map = new AMap.Map(document.getElementById('map'), {
+        /**
+         *    幻影黑 dark
+         *    月光银 light
+         *    远山黛 whitesmoke
+         *    草色青 fresh
+         *    雅士灰 grey
+         *    涂鸦 graffiti
+         *    马卡龙 macaron
+         *    靛青蓝 blue
+         *    极夜蓝 darkblue
+         *    酱籽 wine
+         */
+        mapStyle: 'amap://styles/fresh',
         resizeEnable: true,
         zoom: 12
       })
