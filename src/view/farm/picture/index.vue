@@ -27,8 +27,8 @@
         </div>
       </Card>
       <div style="clear:both"></div>
+      <Spin size="large" fix v-if="loading || farmPictureAreasLoading"></Spin>
     </Card>
-    <Spin size="large" fix v-if="loading || farmPictureAreasLoading"></Spin>
     <Modal
       v-model="farmEditPictrueModel"
       scrollable
