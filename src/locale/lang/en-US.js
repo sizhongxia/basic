@@ -59,6 +59,7 @@ export default {
   farm_auth_new_user: 'Auth New User',
   farm_had_auth_users: 'Auth Users',
   farm_console: 'Farm Console',
+  farm_picture_upload: 'Upload Farm Picture',
 
   area_name: 'Farm Area Name',
   area_position: 'Farm Area Position',
@@ -118,8 +119,15 @@ export default {
   search: 'Search',
   please_input: 'Please Input ',
   submit: 'Submit',
+  save: 'Save',
   reset: 'Reset',
   not_change_error_info: 'Not Change',
+  upload_tip: 'Click or drag files here to upload',
+  upload_error: 'Upload Error',
+  upload_error_size: 'Upload file size exceeds limit',
+  upload_error_format: 'Upload file format is not allowed',
+  upload_error_one: 'Upload at least one file',
+  order: 'Order',
 
   normal: 'Normal',
   disabled: 'Disabled',
@@ -147,6 +155,8 @@ export default {
   confirm_close_current_page: 'Confirm Close Current Page?',
 
   no_authorization_required: 'Super admin no authorization required!',
+
+  pic_title: 'Pictrue Title',
 
   weather_location: 'Location',
   weather_weather: 'Weather',

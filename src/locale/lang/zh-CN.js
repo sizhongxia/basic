@@ -59,6 +59,7 @@ export default {
   farm_auth_new_user: '授权新用户',
   farm_had_auth_users: '授权用户列表',
   farm_console: '农场控制台',
+  farm_picture_upload: '上传农场图片',
 
   area_name: '厂区名称',
   area_position: '厂区位置',
@@ -118,8 +119,15 @@ export default {
   search: '搜索',
   please_input: '请输入',
   submit: '提交',
+  save: '保存',
   reset: '重置',
   not_change_error_info: '未修改',
+  upload_tip: '单击或拖动要上传的文件到这里',
+  upload_error: '上传失败',
+  upload_error_size: '上传文件大小超出限制',
+  upload_error_format: '上传文件格式不允许',
+  upload_error_one: '至少上传一个文件',
+  order: '排序',
 
   normal: '正常',
   disabled: '禁用',
@@ -147,6 +155,8 @@ export default {
   confirm_close_current_page: '是否关闭当前页面？',
 
   no_authorization_required: '超级管理员无需授权',
+
+  pic_title: '图片标题',
 
   weather_location: '区域',
   weather_weather: '天气',

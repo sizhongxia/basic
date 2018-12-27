@@ -89,3 +89,18 @@ export const farmAuthUsers = ({ resultId }) => {
     method: 'post'
   })
 }
+
+export const savePictures = ({ farmId, farmAreaId, fileList, title, sortNum }) => {
+  const data = {
+    farmId,
+    farmAreaId,
+    fileList,
+    title,
+    sortNum
+  }
+  return axios.request({
+    url: 'farm/savePictures',
+    data,
+    method: 'post'
+  })
+}

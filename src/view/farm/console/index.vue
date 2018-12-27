@@ -50,6 +50,7 @@
           <Spin size="large" fix v-if="weatherLoading"></Spin>
         </Card>
       </i-col>
+      <Spin size="large" fix v-if="loading"></Spin>
     </Row>
     <Modal
       v-model="equipmentFormModel"
@@ -118,7 +119,6 @@
         <Button type="primary" @click="submitEquipmentFormHandle">{{ $t('i.modal.okText') }}</Button>
       </div>
     </Modal>
-    <Spin size="large" fix v-if="loading"></Spin>
   </div>
 </template>
 <script>

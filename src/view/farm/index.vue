@@ -131,11 +131,71 @@
       <div slot="footer"></div>
       <Spin size="large" fix v-if="farmAuthUsersloading"></Spin>
     </Modal>
+    <Modal
+      v-model="farmPictruesModel"
+      scrollable
+      width="520"
+      mask
+      :mask-closable="false">
+      <p slot="header">
+        <Icon type="ios-image-outline"></Icon>
+        <span>{{ $t('farm_picture_upload') }}</span>
+      </p>
+      <div>
+        <div>
+            <Upload
+              multiple
+              type="drag"
+              accept=".jpg,.png"
+              :format="uploadFormat"
+              :headers="uploadHeaders"
+              :before-upload="uploadFarmPicBeforeHandle"
+              :on-success="uploadFarmPicSuccessHandle"
+              :on-error="uploadFarmPicErrorHandle"
+              :on-format-error="uploadFarmPicErrorFormatHandle"
+              :on-exceeded-size="uploadFarmPicErrorSizeHandle"
+              :on-remove="removeFarmPicHandle"
+              :max-size="4096"
+              ref="farmPictureUploadForm"
+              :action="baseUrl + 'upload'">
+                <div style="padding: 20px 0">
+                  <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                  <p>{{ $t('upload_tip') }}</p>
+                </div>
+            </Upload>
+            <Form :model="farmPictureFormObj" :label-width="140" ref="farmPictureForm">
+              <FormItem :label="$t('farm_name')" prop="farmName" style="margin-bottom: 4px">
+                <p>{{ farmPictureFormObj.farmName }}</p>
+              </FormItem>
+              <FormItem :label="$t('order')" prop="sortNum" style="margin-bottom: 4px">
+                <InputNumber v-model="farmPictureFormObj.sortNum" :min="1" :max="999" :placeholder="$t('please_input')+$t('order')" style="width: 240px"></InputNumber>
+              </FormItem>
+              <FormItem :label="$t('pic_title')" prop="title" style="margin-bottom: 4px">
+                <Input v-model="farmPictureFormObj.title" :placeholder="$t('please_input')+$t('pic_title')" style="width: 240px"></Input>
+              </FormItem>
+              <FormItem :label="$t('farm_area')" style="margin-bottom: 4px">
+                <Select
+                  v-model="farmPictureFormObj.farmAreaId"
+                  clearable
+                  style="width: 240px">
+                  <Option v-for="item in farmPictureAreas" :key="item.areaId" :value="item.areaId">{{ item.areaName }}</Option>
+                </Select>
+              </FormItem>
+            </Form>
+          </div>
+      </div>
+      <div slot="footer" style="text-align:center">
+        <Button type="primary" size="large" :loading="farmPicSubmiting" @click="saveFarmPicHandle">{{ $t('save') }}</Button>
+      </div>
+      <Spin size="large" fix v-if="farmPictrueUploading || farmPictureAreasLoading"></Spin>
+    </Modal>
   </div>
 </template>
 <script>
-import { loadFarms, deleteFarm, farmOwnerInfo, changeFarmOwner, farmAuthUsers } from '@/api/farm'
+import { loadFarms, deleteFarm, farmOwnerInfo, changeFarmOwner, farmAuthUsers, savePictures } from '@/api/farm'
 import { query, authFarmVisit, handleAuthApply } from '@/api/user'
+import { farmAllAreas } from '@/api/farmArea'
+import config from '@/config'
 export default {
   data () {
     return {
@@ -173,7 +233,27 @@ export default {
       hadAuthUserModel: false,
       farmUserTableData: [],
       farmUserDataloading: false,
-      farmAuthUsersloading: false
+      farmAuthUsersloading: false,
+      farmPictruesModel: false,
+      farmPictruesLoading: false,
+      farmPictrueUploading: false,
+      farmPictrues: [],
+      baseUrl: process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro,
+      uploadFormat: ['jpg', 'png'],
+      uploadHeaders: {
+        type: 'farm'
+      },
+      farmPictureAreasLoading: false,
+      farmPictureAreas: [],
+      farmPicSubmiting: false,
+      farmPictureFormObj: {
+        farmId: '',
+        farmName: '',
+        farmAreaId: '',
+        title: '',
+        fileList: [],
+        sortNum: 1
+      }
     }
   },
   computed: {
@@ -212,6 +292,8 @@ export default {
                       break
                     case 'farm_area' : this.openFarmAreasTab(params)
                       break
+                    case 'farm_picture_upload' : this.showFarmPictrueUploadModel(params)
+                      break
                     case 'delete' : this.handleDelete(params)
                       break
                     case 'farm_change_owner' : this.showChangeOwnerModel(params)
@@ -243,6 +325,11 @@ export default {
                     name: 'farm_area'
                   }
                 }, this.$t('farm_area')),
+                h('DropdownItem', {
+                  props: {
+                    name: 'farm_picture_upload'
+                  }
+                }, this.$t('farm_picture_upload')),
                 h('DropdownItem', {
                   props: {
                     name: 'farm_change_owner'
@@ -558,6 +645,33 @@ export default {
         })
       })
     },
+    showFarmPictrueUploadModel (params) {
+      const _this = this
+      _this.farmPictureFormObj.farmId = params.row.farmId
+      _this.farmPictureFormObj.farmName = params.row.farmName
+      _this.farmPictureFormObj.farmAreaId = ''
+      _this.farmPictureFormObj.title = ''
+      _this.farmPictureFormObj.sortNum = 1
+      _this.farmPictureFormObj.fileList = []
+      _this.$refs['farmPictureUploadForm'].fileList = []
+      _this.farmPictruesModel = true
+      _this.farmPictureAreasLoading = true
+      farmAllAreas({ farmId: _this.farmPictureFormObj.farmId }).then(res => {
+        _this.farmPictureAreasLoading = false
+        if (res.status === 200 && res.data.code === 200) {
+          _this.farmPictureAreas = res.data.data
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.farmPictureAreasLoading = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
+    },
     remoteGetUsers (searchValue) {
       const _this = this
       if (searchValue !== '') {
@@ -685,6 +799,72 @@ export default {
             })
           })
         }
+      })
+    },
+    uploadFarmPicBeforeHandle () {
+      this.farmPictrueUploading = true
+    },
+    uploadFarmPicSuccessHandle (response, file, fileList) {
+      this.farmPictureFormObj.fileList = fileList
+      this.farmPictrueUploading = false
+    },
+    uploadFarmPicErrorHandle (file, fileList) {
+      const _this = this
+      _this.farmPictrueUploading = false
+      _this.$Modal.error({
+        title: _this.$t('upload_error')
+      })
+    },
+    uploadFarmPicErrorSizeHandle (file, fileList) {
+      const _this = this
+      _this.farmPictrueUploading = false
+      _this.$Modal.error({
+        title: _this.$t('upload_error_size')
+      })
+    },
+    uploadFarmPicErrorFormatHandle (file, fileList) {
+      const _this = this
+      _this.farmPictrueUploading = false
+      _this.$Modal.error({
+        title: _this.$t('upload_error_format')
+      })
+    },
+    removeFarmPicHandle (file, fileList) {
+      this.farmPictureFormObj.fileList = fileList
+    },
+    saveFarmPicHandle () {
+      const _this = this
+      if (_this.farmPictureFormObj.fileList.length === 0) {
+        _this.$Modal.error({
+          title: _this.$t('upload_error_one')
+        })
+        return
+      }
+      let fileList = []
+      _this.farmPictureFormObj.fileList.forEach((item) => {
+        if (item && item.response) {
+          fileList.push(item.response.data)
+        }
+      })
+      _this.farmPictureFormObj.fileList = fileList
+      _this.farmPicSubmiting = true
+      savePictures(_this.farmPictureFormObj).then(res => {
+        if (res.status === 200 && res.data.code === 200) {
+          _this.$Modal.success({
+            title: _this.$t('save_success')
+          })
+          _this.farmPictruesModel = false
+        } else {
+          _this.farmPicSubmiting = false
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.farmPicSubmiting = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
       })
     }
   },

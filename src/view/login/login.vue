@@ -6,7 +6,7 @@
   <div class="login">
     <div class="login-con">
       <Card icon="log-in" :title="$t('login_card_title')" :bordered="false">
-        <a href="#" slot="extra">
+        <a href="#" slot="extra" style="font-size: 12px">
           <language v-if="$config.useI18n" @on-lang-change="setLocal" style="margin-right: 10px;" :lang="local"/>
         </a>
         <div class="form-con">
