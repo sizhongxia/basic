@@ -61,7 +61,7 @@
     </Row>
     <Modal
       v-model="selectMapLngLatModel"
-      width="520"
+      width="720"
       mask
       :mask-closable="false">
       <p slot="header">
@@ -69,14 +69,11 @@
         <span>{{ $t('select_lng_lat') }}</span>
       </p>
       <div>
-        <div id="farm_add_map" style="height: 320px"></div>
-        <br />
-        <p v-if="longitude && latitude">({{ longitude }}, {{ latitude }})</p>
-        <p v-else>{{ $t('click_select_lng_lat') }}</p>
+        <div id="farm_add_map" style="height: 360px"></div>
         <Spin size="large" fix v-if="mapLoading"></Spin>
       </div>
       <div slot="footer" style="text-align:center">
-        <Button v-if="longitude && latitude" type="primary" size="large" @click="selectMapLngLatHandle">{{ $t('select') }}</Button>
+        <Button v-if="longitude && latitude" type="primary" size="large" @click="selectMapLngLatHandle">{{ $t('select') }} ({{ longitude }}, {{ latitude }})</Button>
       </div>
     </Modal>
   </div>
@@ -280,6 +277,7 @@ export default {
             _this.marker.setPosition([116.406658, 39.91447])
           }
           _this.map.setCenter(_this.marker.getPosition())
+          _this.map.setDefaultCursor('crosshair')
         })
         _this.map.on('zoomend', function () {
           _this.zoom = _this.map.getZoom()
