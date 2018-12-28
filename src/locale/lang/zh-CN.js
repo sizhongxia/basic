@@ -148,6 +148,10 @@ export default {
   error_message_info: '错误提示：',
   save_success: '保存成功',
 
+  select_lng_lat: '选择经纬度',
+  select: '选择',
+  click_select_lng_lat: '点击地图选择经纬度',
+
   not_set: '未设置',
   more_options: '更多操作',
 

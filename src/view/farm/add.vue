@@ -2,70 +2,93 @@
 @import "./add.less";
 </style>
 <template>
-  <Row>
-    <Col span="20" offset="2">
-      <Form ref="formValidate" :model="formModel" :rules="ruleValidate" :label-width="140">
-        <FormItem :label="$t('farm_name')" prop="farmName">
-          <Input v-model="formModel.farmName" :placeholder="$t('please_input')+$t('farm_name')" style="width: 240px"></Input>
-        </FormItem>
-        <FormItem :label="$t('organize')">
-          <Select v-model="formModel.organizeId" clearable filterable style="width: 240px">
-            <Option v-for="item in organizes" :key="item.organizeId" :value="item.organizeId">{{ item.organizeName }}</Option>
-          </Select>
-        </FormItem>
-        <FormItem :label="$t('owner_user')">
-          <Select
-            v-model="formModel.ownerUserId"
-            filterable
-            remote
-            :remote-method="remoteGetUsers"
-            clearable
-            :loading="usersLoading"
-             style="width: 240px">
-            <Option v-for="option in users" :value="option.value" :key="option.value">{{option.label}} ({{option.phoneNo}}, {{option.email}})</Option>
-          </Select>
-        </FormItem>
-        <FormItem :label="$t('area')">
-          <Cascader :data="areaData" :load-data="loadAreaLevelData" v-model="formModel.farmArea" trigger="hover" clearable style="width: 420px"></Cascader>
-        </FormItem>
-        <FormItem :label="$t('weather_city')">
-          <Select
-            v-model="formModel.weatherCityCode"
-            filterable
-            setQuery=""
-            remote
-            :remote-method="remoteGetWeatherCitys"
-            clearable
-            :loading="weatherCitysLoading"
-             style="width: 240px">
-            <Option v-for="option in weatherCitys" :value="option.value" :key="option.value" :label="option.label">
-              <span>{{ option.cityPinyin }}{{ option.provincePinyin }}</span>
-              <span>{{ option.cityName }}</span>
-              <span style="float:right;color:#ccc">{{ option.provinceName }}</span>
-            </Option>
-          </Select>
-        </FormItem>
-        <FormItem :label="$t('address')">
-          <Input v-model="formModel.farmAddress" :placeholder="$t('please_input')+$t('address')" style="width: 420px"></Input>
-        </FormItem>
-        <FormItem :label="$t('lnglat')">
-          <Input v-model="formModel.longitude" :placeholder="$t('please_input')+$t('longitude')" style="width: 210px"></Input>
-          <Input v-model="formModel.latitude" :placeholder="$t('please_input')+$t('latitude')" style="width: 210px"></Input>
-          <p><a href="https://lbs.amap.com/console/show/picker" target="_blank">https://lbs.amap.com/console/show/picker</a></p>
-        </FormItem>
-        <FormItem :label="$t('website')">
-          <Input v-model="formModel.website" :placeholder="$t('please_input')+$t('website')" style="width: 420px"></Input>
-        </FormItem>
-        <FormItem :label="$t('remark')">
-          <Input v-model="formModel.farmRemark" type="textarea" :autosize="{minRows: 2,maxRows: 5}" :placeholder="$t('please_input')+$t('remark')" style="width: 420px"></Input>
-        </FormItem>
-        <FormItem>
-          <Button type="primary" @click="handleSubmit">{{ $t('submit') }}</Button>
-        </FormItem>
-        <Spin size="large" fix v-if="areasLoading || organizesloading || submiting"></Spin>
-      </Form>
-    </Col>
-  </Row>
+  <div>
+    <Row>
+      <Col span="20" offset="2">
+        <Form ref="formValidate" :model="formModel" :rules="ruleValidate" :label-width="140">
+          <FormItem :label="$t('farm_name')" prop="farmName">
+            <Input v-model="formModel.farmName" :placeholder="$t('please_input')+$t('farm_name')" style="width: 240px"></Input>
+          </FormItem>
+          <FormItem :label="$t('organize')">
+            <Select v-model="formModel.organizeId" clearable filterable style="width: 240px">
+              <Option v-for="item in organizes" :key="item.organizeId" :value="item.organizeId">{{ item.organizeName }}</Option>
+            </Select>
+          </FormItem>
+          <FormItem :label="$t('owner_user')">
+            <Select
+              v-model="formModel.ownerUserId"
+              filterable
+              remote
+              :remote-method="remoteGetUsers"
+              clearable
+              :loading="usersLoading"
+              style="width: 240px">
+              <Option v-for="option in users" :value="option.value" :key="option.value">{{option.label}} ({{option.phoneNo}}, {{option.email}})</Option>
+            </Select>
+          </FormItem>
+          <FormItem :label="$t('area')">
+            <Cascader :data="areaData" :load-data="loadAreaLevelData" v-model="formModel.farmArea" trigger="hover" clearable style="width: 420px"></Cascader>
+          </FormItem>
+          <FormItem :label="$t('weather_city')">
+            <Select
+              v-model="formModel.weatherCityCode"
+              filterable
+              setQuery=""
+              remote
+              :remote-method="remoteGetWeatherCitys"
+              clearable
+              :loading="weatherCitysLoading"
+              style="width: 240px">
+              <Option v-for="option in weatherCitys" :value="option.value" :key="option.value" :label="option.label">
+                <span>{{ option.cityPinyin }}{{ option.provincePinyin }}</span>
+                <span>{{ option.cityName }}</span>
+                <span style="float:right;color:#ccc">{{ option.provinceName }}</span>
+              </Option>
+            </Select>
+          </FormItem>
+          <FormItem :label="$t('address')">
+            <Input v-model="formModel.farmAddress" :placeholder="$t('please_input')+$t('address')" style="width: 420px"></Input>
+          </FormItem>
+          <FormItem :label="$t('lnglat')">
+            <Input v-model="formModel.longitude" :placeholder="$t('please_input')+$t('longitude')" style="width: 210px"></Input>
+            <Input v-model="formModel.latitude" :placeholder="$t('please_input')+$t('latitude')" style="width: 210px"></Input>
+            <Button type="text" @click="showSelectMapLngLatModel">{{ $t('select') }}</Button>
+            <p><a href="https://lbs.amap.com/console/show/picker" target="_blank">https://lbs.amap.com/console/show/picker</a></p>
+          </FormItem>
+          <FormItem :label="$t('website')">
+            <Input v-model="formModel.website" :placeholder="$t('please_input')+$t('website')" style="width: 420px"></Input>
+          </FormItem>
+          <FormItem :label="$t('remark')">
+            <Input v-model="formModel.farmRemark" type="textarea" :autosize="{minRows: 2,maxRows: 5}" :placeholder="$t('please_input')+$t('remark')" style="width: 420px"></Input>
+          </FormItem>
+          <FormItem>
+            <Button type="primary" @click="handleSubmit">{{ $t('submit') }}</Button>
+          </FormItem>
+          <Spin size="large" fix v-if="areasLoading || organizesloading || submiting"></Spin>
+        </Form>
+      </Col>
+    </Row>
+    <Modal
+      v-model="selectMapLngLatModel"
+      width="520"
+      mask
+      :mask-closable="false">
+      <p slot="header">
+        <Icon type="ios-image-outline"></Icon>
+        <span>{{ $t('select_lng_lat') }}</span>
+      </p>
+      <div>
+        <div id="farm_add_map" style="height: 320px"></div>
+        <br />
+        <p v-if="longitude && latitude">({{ longitude }}, {{ latitude }})</p>
+        <p v-else>{{ $t('click_select_lng_lat') }}</p>
+        <Spin size="large" fix v-if="mapLoading"></Spin>
+      </div>
+      <div slot="footer" style="text-align:center">
+        <Button v-if="longitude && latitude" type="primary" size="large" @click="selectMapLngLatHandle">{{ $t('select') }}</Button>
+      </div>
+    </Modal>
+  </div>
 </template>
 <script>
 import { areaLevels, weatherCities } from '@/api/basic'
@@ -73,6 +96,7 @@ import { allOrganizes } from '@/api/organize'
 import { query } from '@/api/user'
 import { upinsertFarm } from '@/api/farm'
 import { mapMutations } from 'vuex'
+import { mapLoader } from '@/libs/aMap'
 export default {
   data () {
     return {
@@ -96,7 +120,13 @@ export default {
       users: [],
       submiting: false,
       weatherCitysLoading: false,
-      weatherCitys: []
+      weatherCitys: [],
+      selectMapLngLatModel: false,
+      mapLoading: false,
+      zoom: 4,
+      marker: false,
+      longitude: '',
+      latitude: ''
     }
   },
   computed: {
@@ -223,6 +253,46 @@ export default {
           title: _this.$t('error_message_info') + reason.message
         })
       })
+    },
+    showSelectMapLngLatModel () {
+      const _this = this
+      _this.selectMapLngLatModel = true
+      _this.mapLoading = true
+      mapLoader().then(AMap => {
+        _this.map = new AMap.Map(document.getElementById('farm_add_map'), {
+          mapStyle: 'amap://styles/light',
+          center: [_this.longitude || 117.000923, _this.latitude || 36.675807],
+          resizeEnable: true,
+          zoom: _this.zoom
+        })
+        _this.map.on('click', function (e) {
+          if (!_this.marker) {
+            _this.marker = new AMap.Marker({ map: _this.map })
+          }
+          let lnglat = e.lnglat
+          _this.marker.setPosition([lnglat.getLng(), lnglat.getLat()])
+          _this.map.setCenter([lnglat.getLng(), lnglat.getLat()])
+          _this.longitude = lnglat.getLng()
+          _this.latitude = lnglat.getLat()
+        })
+        _this.map.on('complete', function () {
+          _this.mapLoading = false
+          if (_this.longitude && _this.latitude) {
+            _this.marker = new AMap.Marker({ map: _this.map })
+            _this.marker.setPosition([_this.longitude, _this.latitude])
+          }
+        })
+        _this.map.on('zoomend', function () {
+          _this.zoom = _this.map.getZoom()
+        })
+      })
+    },
+    selectMapLngLatHandle () {
+      const _this = this
+      _this.formModel.longitude = _this.longitude
+      _this.formModel.latitude = _this.latitude
+      _this.selectMapLngLatModel = false
+      _this.map.destroy()
     }
   },
   mounted () {

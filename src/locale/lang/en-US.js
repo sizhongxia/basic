@@ -148,6 +148,10 @@ export default {
   error_message_info: 'Error Info: ',
   save_success: 'Save Success',
 
+  select_lng_lat: 'Select Lng&Lat',
+  select: 'Select',
+  click_select_lng_lat: 'Click Map to Select Lng&Lat',
+
   not_set: 'Not Set',
 
   un_read_msg: 'Un Read Message',

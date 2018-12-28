@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div id="map"></div>
+    <Card shadow>
+      <div id="map"></div>
+    </Card>
     <p>农场现场轮播图</p>
     <p>基本信息：位置\Logo\名称\网站</p>
     <p>温度\湿度\氨气实时数据展示</p>
@@ -28,7 +30,7 @@ export default {
   },
   mounted () {
     const _this = this
-    mapLoader('463486f9226366a6bd043b5000e63180').then(AMap => {
+    mapLoader().then(AMap => {
       _this.map = new AMap.Map(document.getElementById('map'), {
         /**
          *    幻影黑 dark
