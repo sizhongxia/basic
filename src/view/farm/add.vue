@@ -123,7 +123,7 @@ export default {
       weatherCitys: [],
       selectMapLngLatModel: false,
       mapLoading: false,
-      zoom: 4,
+      zoom: 10,
       marker: false,
       longitude: '',
       latitude: ''
@@ -271,16 +271,19 @@ export default {
           }
           let lnglat = e.lnglat
           _this.marker.setPosition([lnglat.getLng(), lnglat.getLat()])
-          _this.map.setCenter([lnglat.getLng(), lnglat.getLat()])
+          _this.map.setCenter( _this.marker.getPosition())
           _this.longitude = lnglat.getLng()
           _this.latitude = lnglat.getLat()
         })
         _this.map.on('complete', function () {
           _this.mapLoading = false
+          _this.marker = new AMap.Marker({ map: _this.map })
           if (_this.longitude && _this.latitude) {
-            _this.marker = new AMap.Marker({ map: _this.map })
             _this.marker.setPosition([_this.longitude, _this.latitude])
+          } else {
+            _this.marker.setPosition([116.406658, 39.91447])
           }
+          _this.map.setCenter( _this.marker.getPosition())
         })
         _this.map.on('zoomend', function () {
           _this.zoom = _this.map.getZoom()
