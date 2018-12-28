@@ -4,8 +4,8 @@ export default {
   close_others: 'Close Others',
 
   login: 'Login',
-  login_card_title: 'Welcome Login',
-  login_tip: 'Login Tip',
+  login_card_title: 'YeeTong SC Platform - Login',
+  login_tip: 'BeiJing <a href=\'https://www.yeetong.cn/\' target=\'_blank\'>YeeTong.CN</a> &copy;2018-2019',
   login_error: 'Login Fail:',
   logout: 'Safe Exit',
 

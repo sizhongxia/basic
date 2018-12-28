@@ -17,6 +17,10 @@
 <script>
 import InforCard from '_c/info-card'
 import { mapLoader } from '@/libs/aMap'
+import echarts from 'echarts/lib/echarts'
+import 'echarts/lib/chart/line'
+import 'echarts/lib/component/tooltip'
+
 export default {
   name: 'home',
   components: {
@@ -57,6 +61,7 @@ export default {
       _this.$nextTick(function () {
       })
     })
+    console.info(echarts)
   }
 }
 </script>

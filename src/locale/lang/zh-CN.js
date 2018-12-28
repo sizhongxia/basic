@@ -4,8 +4,8 @@ export default {
   close_others: '关闭其他',
 
   login: '登陆',
-  login_card_title: '欢迎登陆',
-  login_tip: '登陆提示',
+  login_card_title: '一通无限智慧养殖平台 - 登陆',
+  login_tip: '北京一通无限科技有限公司 &copy;2018-2019',
   login_error: '登陆失败：',
   logout: '安全退出',
 
