@@ -63,6 +63,7 @@ export default {
   farm_picture_upload: '上传农场图片',
   farm_picture_manage: '农场图片管理',
   farm_picture_update: '更新农场图片',
+  reset_qr: '重置二维码',
 
   area_name: '厂区名称',
   area_position: '厂区位置',
@@ -110,6 +111,7 @@ export default {
   table_handle_toggle_state_tip: '确定要切换状态吗？',
   table_handle_reset_pwd_tip: '确定要重置密码吗？',
   table_handle_handle_apply_tip: '确定要提交处理吗？',
+  table_handle_reset_qr_tip: '是否要重置二维码图片？',
 
   record_id: '记录ID',
   detail: '详情',
@@ -137,6 +139,7 @@ export default {
 
   agree: '通过',
   disagree: '不通过',
+  remove_auth: '移除授权',
 
   super_admin: '超级管理员',
   admin: '管理员',
@@ -147,6 +150,7 @@ export default {
   code_500_msg: '请求出现问题',
   error_message_info: '错误提示：',
   save_success: '保存成功',
+  option_success: '操作成功',
 
   select_lng_lat: '选择经纬度',
   select: '选择',

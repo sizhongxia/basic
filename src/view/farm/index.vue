@@ -192,7 +192,7 @@
   </div>
 </template>
 <script>
-import { loadFarms, deleteFarm, farmOwnerInfo, changeFarmOwner, farmAuthUsers, savePictures } from '@/api/farm'
+import { loadFarms, deleteFarm, farmOwnerInfo, changeFarmOwner, farmAuthUsers, savePictures, resetFarmQR } from '@/api/farm'
 import { query, authFarmVisit, handleAuthApply } from '@/api/user'
 import { farmAllAreas } from '@/api/farmArea'
 import config from '@/config'
@@ -298,6 +298,8 @@ export default {
                       break
                     case 'delete' : this.handleDelete(params)
                       break
+                    case 'reset_qr' : this.handleResetQR(params)
+                      break
                     case 'farm_change_owner' : this.showChangeOwnerModel(params)
                       break
                     case 'farm_auth_new_user' : this.showCreateAuthUserModel(params)
@@ -352,6 +354,11 @@ export default {
                     name: 'farm_had_auth_users'
                   }
                 }, this.$t('farm_had_auth_users')),
+                h('DropdownItem', {
+                  props: {
+                    name: 'reset_qr'
+                  }
+                }, this.$t('reset_qr')),
                 h('DropdownItem', {
                   props: {
                     name: 'delete'
@@ -510,11 +517,31 @@ export default {
           }
           const text = row.applyState === 'D' ? this.$t('apply_state_d') : row.applyState === 'Y' ? this.$t('apply_state_y') : this.$t('apply_state_n')
           const color = row.applyState === 'D' ? 'warning' : row.applyState === 'Y' ? 'success' : 'error'
-          return h('Tag', {
-            props: {
-              color: color
-            }
-          }, text)
+          if (row.applyState === 'N') {
+            return h('Tag', {
+              props: {
+                color: color
+              }
+            }, text)
+          }
+          return h('div', [
+            h('Tag', {
+              props: {
+                color: color
+              }
+            }, text),
+            h('Button', {
+              props: {
+                type: 'text',
+                size: 'small'
+              },
+              on: {
+                'click': () => {
+                  this.userFarmApplyHandle(false, params)
+                }
+              }
+            }, this.$t('remove_auth'))
+          ])
         }
       }]
       // ,
@@ -569,6 +596,32 @@ export default {
             _this.$Modal.remove()
             if (res.status === 200 && res.data.code === 200) {
               _this.load()
+            } else {
+              _this.$Modal.error({
+                title: _this.$t('error_message_info') + res.data.message
+              })
+            }
+          }).catch(function (reason) {
+            _this.$Modal.remove()
+            _this.$Modal.error({
+              title: _this.$t('error_message_info') + reason.message
+            })
+          })
+        }
+      })
+    },
+    handleResetQR (params) {
+      const _this = this
+      _this.$Modal.confirm({
+        title: _this.$t('table_handle_reset_qr_tip'),
+        loading: true,
+        onOk: () => {
+          resetFarmQR({ farmId: params.row.farmId }).then(res => {
+            _this.$Modal.remove()
+            if (res.status === 200 && res.data.code === 200) {
+              _this.$Modal.success({
+                title: _this.$t('option_success')
+              })
             } else {
               _this.$Modal.error({
                 title: _this.$t('error_message_info') + res.data.message

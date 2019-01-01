@@ -7,6 +7,8 @@
       <i-col :md="24" :lg="24" style="margin-bottom: 18px;">
         <Card shadow>
           <p>{{ $t('current_farm') }} : {{ farmObj.farmName }}</p>
+          <p><img style="float:right;width:80px;height:80px" :src="farmObj.qrCodeUrl"/></p>
+          <div style="clear:both"></div>
         </Card>
       </i-col>
       <i-col :md="24" :lg="10" style="margin-bottom: 18px;">

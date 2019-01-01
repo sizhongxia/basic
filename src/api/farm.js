@@ -141,3 +141,14 @@ export const updateFarmPicture = ({ picId, sortNum, title, farmAreaId }) => {
     method: 'post'
   })
 }
+
+export const resetFarmQR = ({ farmId }) => {
+  const data = {
+    farmId
+  }
+  return axios.request({
+    url: 'farm/refreshQr',
+    data,
+    method: 'post'
+  })
+}

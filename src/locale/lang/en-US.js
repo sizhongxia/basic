@@ -63,6 +63,7 @@ export default {
   farm_picture_upload: 'Upload Farm Picture',
   farm_picture_manage: 'Farm Picture Manage',
   farm_picture_update: 'Update Farm Picture',
+  reset_qr: 'Reset QR',
 
   area_name: 'Farm Area Name',
   area_position: 'Farm Area Position',
@@ -110,6 +111,7 @@ export default {
   table_handle_toggle_state_tip: 'Toggle State?',
   table_handle_reset_pwd_tip: 'Reset Password?',
   table_handle_handle_apply_tip: 'Handle Apply?',
+  table_handle_reset_qr_tip: 'Reset QR?',
 
   record_id: 'Record ID',
   detail: 'Detail',
@@ -137,6 +139,7 @@ export default {
 
   agree: 'Agree',
   disagree: 'Disagree',
+  remove_auth: 'Remove Auth',
 
   super_admin: 'Super Admin',
   admin: 'Admin',
@@ -147,6 +150,7 @@ export default {
   code_500_msg: 'Go Wrong',
   error_message_info: 'Error Info: ',
   save_success: 'Save Success',
+  option_success: 'Option Success',
 
   select_lng_lat: 'Select Lng&Lat',
   select: 'Select',
