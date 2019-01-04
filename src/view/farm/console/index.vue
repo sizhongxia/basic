@@ -88,6 +88,16 @@
             </FormItem>
           </Col>
           <Col span="12">
+            <FormItem :label="$t('equipment_dtu_id')" prop="equipmentDtuId">
+                <Input v-model="equipmentFormObj.equipmentDtuId" :placeholder="$t('please_input')+$t('equipment_dtu_id')"/>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('equipment_485_addr')" prop="equipment485Addr">
+                <Input v-model="equipmentFormObj.equipment485Addr" :placeholder="$t('please_input')+$t('equipment_485_addr')"/>
+            </FormItem>
+          </Col>
+          <Col span="12">
             <FormItem :label="$t('equipment_type')" prop="typeId">
               <Select v-model="equipmentFormObj.typeId" clearable @on-change="loadEquipmentModels">
                 <Option v-for="item in types" :key="item.typeId" :value="item.typeId">{{ item.typeName }}</Option>
@@ -210,6 +220,8 @@ export default {
       this.equipmentFormObj.equipmentName = ''
       this.equipmentFormObj.equipmentCode = ''
       this.equipmentFormObj.equipmentSn = ''
+      this.equipmentFormObj.equipmentDtuId = ''
+      this.equipmentFormObj.equipment485Addr = ''
       this.equipmentFormObj.farmAreaId = ''
       this.equipmentFormObj.typeId = ''
       this.equipmentFormObj.typeName = ''

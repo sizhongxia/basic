@@ -447,7 +447,7 @@ export default {
       },
       {
         title: this.$t('record_id'),
-        key: 'userId',
+        key: 'resId',
         width: 120,
         tooltip: true
       },
@@ -850,7 +850,7 @@ export default {
         title: _this.$t('table_handle_handle_apply_tip'),
         loading: true,
         onOk: () => {
-          handleAuthApply({ farmId: params.row.farmId, userId: params.row.userId, applyState: type ? 'Y' : 'N' }).then(res => {
+          handleAuthApply({ resId: params.row.resId, applyState: type ? 'Y' : 'N' }).then(res => {
             _this.$Modal.remove()
             if (res.status === 200 && res.data.code === 200) {
               _this.$Modal.success({
