@@ -50,7 +50,7 @@ export const deleteEquipment = ({ resultId }) => {
   })
 }
 
-export const upinsertEquipment = ({ equipmentId, farmId, farmAreaId, equipmentName, equipmentCode, equipmentSn, modelId, typeId, operator, remark }) => {
+export const upinsertEquipment = ({ equipmentId, farmId, farmAreaId, equipmentName, equipmentCode, equipmentSn, equipmentDtuId, equipment485Addr, modelId, typeId, operator, remark }) => {
   const data = {
     equipmentId,
     farmId,
@@ -58,6 +58,8 @@ export const upinsertEquipment = ({ equipmentId, farmId, farmAreaId, equipmentNa
     equipmentName,
     equipmentCode,
     equipmentSn,
+    equipmentDtuId,
+    equipment485Addr,
     modelId,
     typeId,
     operator,

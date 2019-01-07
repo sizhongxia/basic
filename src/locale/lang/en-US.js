@@ -80,6 +80,8 @@ export default {
   equipment_name: 'Equipment Name',
   equipment_code: 'Equipment Code',
   equipment_sn: 'Equipment Sn',
+  equipment_dtu_id: 'DTU Module ID',
+  equipment_485_addr: '485 Addr',
   operator: 'Operator',
   equipment_manage: 'Equipment Manage',
   equipment_manage_note: 'Note: The equipment is maintained in the farm console.',

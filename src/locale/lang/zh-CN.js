@@ -80,6 +80,8 @@ export default {
   equipment_name: '设备名称',
   equipment_code: '设备编码',
   equipment_sn: '设备序列号',
+  equipment_dtu_id: 'DTU模块ID',
+  equipment_485_addr: '485地址',
   operator: '操作人',
   equipment_manage: '设备管理',
   equipment_manage_note: '注：设备在农场控制台中进行维护。',
