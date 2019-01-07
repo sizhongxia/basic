@@ -55,6 +55,9 @@
             <Button type="text" @click="showSelectMapLngLatModel">{{ $t('select') }}</Button>
             <p><a href="https://lbs.amap.com/console/show/picker" target="_blank">https://lbs.amap.com/console/show/picker</a></p>
           </FormItem>
+          <FormItem :label="$t('acreage')">
+            <Input v-model="formModel.acreage" :placeholder="$t('please_input')+$t('acreage')" style="width: 420px"></Input>
+          </FormItem>
           <FormItem :label="$t('website')">
             <Input v-model="formModel.website" :placeholder="$t('please_input')+$t('website')" style="width: 420px"></Input>
           </FormItem>
@@ -107,7 +110,8 @@ export default {
         longitude: '',
         latitude: '',
         website: '',
-        farmRemark: ''
+        farmRemark: '',
+        acreage: ''
       },
       areasLoading: false,
       areaData: [],
@@ -159,7 +163,8 @@ export default {
                 longitude: '',
                 latitude: '',
                 website: '',
-                farmRemark: ''
+                farmRemark: '',
+                acreage: ''
               }
               this.$Modal.confirm({
                 title: _this.$t('save_success') + ',' + _this.$t('confirm_close_current_page'),

@@ -137,10 +137,9 @@ export const authFarmVisit = ({ farmId, userId, identity, applyRemark }) => {
   })
 }
 
-export const handleAuthApply = ({ farmId, userId, applyState }) => {
+export const handleAuthApply = ({ resId, applyState }) => {
   const data = {
-    farmId,
-    userId,
+    resId,
     applyState
   }
   return axios.request({

@@ -41,6 +41,7 @@ export default {
   lnglat: '经纬度(高德)',
   longitude: '经度',
   latitude: '纬度',
+  acreage: '面积',
   identity: '身份/角色',
   apply_at: '申请日期',
   apply_remark: '申请描述',

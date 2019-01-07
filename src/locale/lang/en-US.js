@@ -41,6 +41,7 @@ export default {
   lnglat: 'LngLat(AMap)',
   longitude: 'Longitude',
   latitude: 'Latitude',
+  acreage: 'Acreage',
   identity: 'Identity',
   apply_at: 'Apply At',
   apply_remark: 'Apply Remark',
