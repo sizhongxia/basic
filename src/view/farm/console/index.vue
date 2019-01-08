@@ -33,8 +33,8 @@
             <Cell v-for="item in farmEquipments" v-bind:key="item.equipmentId" :name="item.equipmentId">
               <Icon type="ios-pulse-outline" slot="icon" />
               {{ item.equipmentName }}
-              <p slot="label">{{ $t('equipment_code') + ' : '+ item.equipmentSn }} <Divider type="vertical" /> {{ item.typeName }} <Divider type="vertical" /> {{ item.modelName }}</p>
-              <p slot="extra">{{ 'SN: '+ item.equipmentCode }}</p>
+              <p slot="label">{{ $t('equipment_code') + ' : '+ item.equipmentCode }} <Divider type="vertical" /> {{ item.typeName }} <Divider type="vertical" /> {{ item.modelName }}</p>
+              <p slot="extra">{{ 'SN: '+ item.equipmentSn }}</p>
             </Cell>
           </CellGroup>
         </Card>
