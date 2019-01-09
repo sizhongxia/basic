@@ -34,7 +34,7 @@
               <Icon type="ios-pulse-outline" slot="icon" />
               {{ item.equipmentName }}
               <p slot="label">{{ $t('equipment_code') + ' : '+ item.equipmentCode }} <Divider type="vertical" /> {{ item.typeName }} <Divider type="vertical" /> {{ item.modelName }}</p>
-              <p slot="extra">{{ 'SN: '+ item.equipmentSn }}</p>
+              <p slot="extra">{{ item.equipmentSn }}</p>
             </Cell>
           </CellGroup>
         </Card>
