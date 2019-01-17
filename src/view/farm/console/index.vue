@@ -26,7 +26,7 @@
       </i-col>
       <i-col :md="24" :lg="14" style="margin-bottom: 18px;">
         <Card shadow>
-          <p slot="title">{{ $t('equipment') }} ({{ farmEquipments.length }})</p>
+          <p slot="title">{{ $t('collect_equipment') }} ({{ farmEquipments.length }})</p>
           <a href="#" slot="extra" @click.prevent="showCreateEquipmentModel">{{ $t('create') }}</a>
           <CellGroup @on-click="showEditEquipmentModel">
             <Cell v-if="farmEquipments.length === 0">{{ $t('i.table.noDataText') }}</Cell>
@@ -50,6 +50,19 @@
           <p>{{ $t('weather_hum') }} : {{ weather.hum }}</p>
           <p>{{ $t('weather_update_loc') }} : {{ weather.updateLoc }}</p>
           <Spin size="large" fix v-if="weatherLoading"></Spin>
+        </Card>
+      </i-col>
+      <i-col :md="24" :lg="14" style="margin-bottom: 18px;">
+        <Card shadow>
+          <p slot="title">{{ $t('video_equipment') }} ({{ farmCameras.length }})</p>
+          <a href="#" slot="extra" @click.prevent="showCreateCameraModel">{{ $t('create') }}</a>
+          <CellGroup @on-click="showEditCameraModel">
+            <Cell v-if="farmCameras.length === 0">{{ $t('i.table.noDataText') }}</Cell>
+            <Cell v-for="item in farmCameras" v-bind:key="item.cameraId" :name="item.cameraId">
+              <Icon type="ios-pulse-outline" slot="icon" />
+              {{ item.cameraName }}
+            </Cell>
+          </CellGroup>
         </Card>
       </i-col>
       <Spin size="large" fix v-if="loading"></Spin>
@@ -131,12 +144,126 @@
         <Button type="primary" @click="submitEquipmentFormHandle">{{ $t('i.modal.okText') }}</Button>
       </div>
     </Modal>
+    <Modal
+      v-model="cameraFormModel"
+      :title="cameraFormObj.cameraId === '' ? $t('create') : $t('update')"
+      scrollable
+      width="720"
+      mask
+      :mask-closable="false"
+      class-name="vertical-center-modal"
+      :closable="false">
+      <Form :model="cameraFormObj" :label-width="120" :rules="cameraFormRuleValidate" ref="cameraForm">
+        <Row style="padding-right: 60px;">
+          <Col span="12">
+            <FormItem :label="$t('camera_id')" prop="cameraId">
+              <Input v-model="cameraFormObj.cameraId" disabled />
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('farm_area')" prop="farmAreaId">
+              <Select v-model="cameraFormObj.farmAreaId" clearable filterable>
+                <Option v-for="item in farmAreas" :key="item.areaId" :value="item.areaId">{{ item.areaName }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('camera_name')" prop="cameraName">
+              <Input v-model="cameraFormObj.cameraName" :placeholder="$t('please_input')+$t('camera_name')"/>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('camera_rtsp_url')" prop="rtspUrl">
+              <Input v-model="cameraFormObj.rtspUrl" :placeholder="$t('please_input')+$t('camera_rtsp_url')"/>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('camera_push_rtmp_url')" prop="pushRtmpUrl">
+              <Input v-model="cameraFormObj.pushRtmpUrl" :placeholder="$t('please_input')+$t('camera_push_rtmp_url')"/>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('camera_play_rtmp_url')" prop="playRtmpUrl">
+              <Input v-model="cameraFormObj.playRtmpUrl" :placeholder="$t('please_input')+$t('camera_play_rtmp_url')"/>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('camera_play_hls_url')" prop="playHlsUrl">
+              <Input v-model="cameraFormObj.playHlsUrl" :placeholder="$t('please_input')+$t('camera_play_hls_url')"/>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('camera_play_flv_url')" prop="playFlvUrl">
+                <Input v-model="cameraFormObj.playFlvUrl" :placeholder="$t('please_input')+$t('camera_play_flv_url')"/>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('camera_deploy_time')" prop="deployTime">
+              <Input v-model="cameraFormObj.deployTime" :placeholder="$t('please_input')+$t('camera_deploy_time')"/>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('camera_brand_name')" prop="brandName">
+              <Input v-model="cameraFormObj.brandName" :placeholder="$t('please_input')+$t('camera_brand_name')"/>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('camera_type')" prop="type">
+              <Select v-model="cameraFormObj.type" clearable filterable>
+                <Option v-for="item in farmCameraTypes" :key="item.value" :value="item.value">{{ item.name }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('camera_voperation')" prop="voperation">
+              <Select v-model="cameraFormObj.voperations" multiple>
+                <Option v-for="item in voperations" :value="item.value" :key="item.value">{{ item.name }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('camera_push_flow_mode')" prop="pushFlowMode">
+              <Select v-model="cameraFormObj.pushFlowMode" clearable filterable>
+                <Option v-for="item in farmCameraPushFlowModes" :key="item.value" :value="item.value">{{ item.name }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('camera_ip')" prop="ip">
+              <Input v-model="cameraFormObj.ip" :placeholder="$t('please_input')+$t('camera_ip')"/>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('camera_port')" prop="port">
+              <Input v-model="cameraFormObj.port" :placeholder="$t('please_input')+$t('camera_port')"/>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('camera_user_name')" prop="userName">
+              <Input v-model="cameraFormObj.userName" :placeholder="$t('please_input')+$t('camera_user_name')"/>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('camera_password')" prop="password">
+              <Input v-model="cameraFormObj.password" :placeholder="$t('please_input')+$t('camera_password')"/>
+            </FormItem>
+          </Col>
+        </Row>
+      </Form>
+      <Spin size="large" fix v-if="cameraFormSubmiting || cameraDetailLoading"></Spin>
+      <div slot="footer">
+        <Button v-if="cameraFormObj.cameraId != ''" type="error" @click="deleteCameraHandle">{{ $t('delete') }}</Button>
+        <Button type="text" @click="closeCameraFormHandle">{{ $t('i.modal.cancelText') }}</Button>
+        <Button type="primary" @click="submitCameraFormHandle">{{ $t('i.modal.okText') }}</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 <script>
 import { farmAllAreas } from '@/api/farmArea'
 import { farmDetail } from '@/api/farm'
 import { farmAllEquipments, upinsertEquipment, equipmentDetail, deleteEquipment } from '@/api/equipment'
+import { farmAllCameras, upinsertCamera, cameraDetail, deleteCamera } from '@/api/camera'
 import { allEquipmentTypes } from '@/api/equipmentType'
 import { allEquipmentModels } from '@/api/equipmentModel'
 import { weatherInfo } from '@/api/basic'
@@ -168,6 +295,66 @@ export default {
         farmAreaName: '',
         operator: '',
         remark: ''
+      },
+      farmCamerasLoading: false,
+      cameraFormModel: false,
+      cameraFormSubmiting: false,
+      cameraDetailLoading: false,
+      farmCameras: [],
+      farmCameraTypes: [{
+        value: '1',
+        name: '球机'
+      }, {
+        value: '2',
+        name: '枪机'
+      }],
+      farmCameraPushFlowModes: [{
+        value: '0',
+        name: '呼叫'
+      }, {
+        value: '1',
+        name: '长期'
+      }],
+      voperations: [{
+        value: '1',
+        name: '变焦'
+      }, {
+        value: '2',
+        name: '旋转'
+      }, {
+        value: '3',
+        name: '焦点'
+      }, {
+        value: '4',
+        name: '光圈'
+      }],
+      cameraFormObj: {
+        cameraId: '',
+        cameraName: '',
+        farmId: '',
+        farmName: '',
+        farmAreaId: '',
+        farmAreaName: '',
+        rtspUrl: '',
+        pushRtmpUrl: '',
+        playRtmpUrl: '',
+        playHlsUrl: '',
+        playFlvUrl: '',
+        deployTime: '',
+        brandName: '',
+        type: '',
+        voperation: '',
+        voperations: [],
+        pushFlowMode: '',
+        ip: '',
+        port: '',
+        userName: '',
+        password: '',
+        state: '',
+        lastTime: '',
+        onvifStatus: '',
+        createAt: '',
+        updateAt: ''
       },
       typesLoading: false,
       types: [],
@@ -204,6 +391,15 @@ export default {
         modelId: [{
           required: true,
           message: this.$t('i.select.placeholder') + this.$t('equipment_model'),
+          trigger: 'blur'
+        }]
+      }
+    },
+    cameraFormRuleValidate () {
+      return {
+        cameraName: [{
+          required: true,
+          message: this.$t('please_input') + this.$t('camera_name'),
           trigger: 'blur'
         }]
       }
@@ -248,8 +444,34 @@ export default {
         })
       })
     },
+    showCreateCameraModel () {
+      this.$refs['cameraForm'].resetFields()
+      this.cameraFormObj.farmId = this.farmId
+      this.cameraFormObj.cameraId = ''
+      this.cameraFormObj.cameraName = ''
+      this.cameraFormObj.farmAreaId = ''
+      this.cameraFormObj.rtspUrl = ''
+      this.cameraFormObj.pushRtmpUrl = ''
+      this.cameraFormObj.playRtmpUrl = ''
+      this.cameraFormObj.playHlsUrl = ''
+      this.cameraFormObj.playFlvUrl = ''
+      this.cameraFormObj.deployTime = ''
+      this.cameraFormObj.brandName = ''
+      this.cameraFormObj.type = ''
+      this.cameraFormObj.voperation = ''
+      this.cameraFormObj.voperations = []
+      this.cameraFormObj.pushFlowMode = ''
+      this.cameraFormObj.ip = ''
+      this.cameraFormObj.port = ''
+      this.cameraFormObj.userName = ''
+      this.cameraFormObj.password = ''
+      this.cameraFormModel = true
+    },
     closeEquipmentFormHandle () {
       this.equipmentFormModel = false
+    },
+    closeCameraFormHandle () {
+      this.cameraFormModel = false
     },
     submitEquipmentFormHandle () {
       const _this = this
@@ -269,6 +491,31 @@ export default {
           }).catch(function (reason) {
             _this.equipmentFormSubmiting = false
             _this.closeEquipmentFormHandle()
+            _this.$Modal.error({
+              title: _this.$t('error_message_info') + reason.message
+            })
+          })
+        }
+      })
+    },
+    submitCameraFormHandle () {
+      const _this = this
+      _this.$refs['cameraForm'].validate((valid) => {
+        if (valid) {
+          _this.cameraFormSubmiting = true
+          upinsertCamera(_this.cameraFormObj).then(res => {
+            _this.cameraFormSubmiting = false
+            if (res.status === 200 && res.data.code === 200) {
+              _this.loadAllFarmCameras()
+              _this.closeCameraFormHandle()
+            } else {
+              _this.$Modal.error({
+                title: _this.$t('error_message_info') + res.data.message
+              })
+            }
+          }).catch(function (reason) {
+            _this.cameraFormSubmiting = false
+            _this.closeCameraFormHandle()
             _this.$Modal.error({
               title: _this.$t('error_message_info') + reason.message
             })
@@ -318,6 +565,25 @@ export default {
         })
       })
     },
+    loadAllFarmCameras () {
+      const _this = this
+      _this.farmCamerasLoading = true
+      farmAllCameras({ farmId: _this.farmId }).then(res => {
+        _this.farmCamerasLoading = false
+        if (res.status === 200 && res.data.code === 200) {
+          _this.farmCameras = res.data.data
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.farmCamerasLoading = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
+    },
     showEditEquipmentModel (resultId) {
       if (!resultId) {
         return
@@ -359,6 +625,30 @@ export default {
         })
       })
     },
+    showEditCameraModel (resultId) {
+      if (!resultId) {
+        return
+      }
+      const _this = this
+      _this.cameraDetailLoading = true
+      _this.cameraFormObj = {}
+      cameraDetail({ resultId }).then(res => {
+        _this.cameraDetailLoading = false
+        if (res.status === 200 && res.data.code === 200) {
+          _this.cameraFormObj = res.data.data
+          _this.cameraFormModel = true
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.cameraDetailLoading = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
+    },
     deleteEquipmentHandle () {
       const _this = this
       _this.$Modal.confirm({
@@ -371,6 +661,31 @@ export default {
               _this.equipmentFormModel = false
               _this.$Modal.remove()
               _this.loadAllFarmEquipments()
+            } else {
+              _this.$Modal.error({
+                title: _this.$t('error_message_info') + res.data.message
+              })
+            }
+          }).catch(function (reason) {
+            _this.$Modal.error({
+              title: _this.$t('error_message_info') + reason.message
+            })
+          })
+        }
+      })
+    },
+    deleteCameraHandle () {
+      const _this = this
+      _this.$Modal.confirm({
+        title: _this.$t('table_handle_delete_tip'),
+        loading: true,
+        onOk: () => {
+          deleteCamera({ resultId: _this.cameraFormObj.cameraId }).then(res => {
+            if (res.status === 200 && res.data.code === 200) {
+              _this.cameraFormObj = {}
+              _this.cameraFormModel = false
+              _this.$Modal.remove()
+              _this.loadAllFarmCameras()
             } else {
               _this.$Modal.error({
                 title: _this.$t('error_message_info') + res.data.message
@@ -433,6 +748,7 @@ export default {
       })
     })
     _this.loadAllFarmEquipments()
+    _this.loadAllFarmCameras()
   }
 }
 </script>

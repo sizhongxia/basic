@@ -86,6 +86,27 @@ export default {
   equipment_manage: 'Equipment Manage',
   equipment_manage_note: 'Note: The equipment is maintained in the farm console.',
 
+  collect_equipment: 'Collect Equipment',
+  video_equipment: 'Video Equipment',
+
+  camera_id: 'Camera Id',
+  camera_name: 'Camera Name',
+  camera_rtsp_url: 'Rtsp Url',
+  camera_push_rtmp_url: 'Push Rtmp Url',
+  camera_play_rtmp_url: 'RTMP Play Url',
+  camera_play_hls_url: 'HLS Play Url',
+  camera_play_flv_url: 'FLV Play Url',
+  camera_cover_url: 'Cover Picture',
+  camera_deploy_time: 'Deploy Time',
+  camera_brand_name: 'Brand',
+  camera_type: 'Type',
+  camera_voperation: 'Voperation',
+  camera_push_flow_mode: 'Push Flow Mode',
+  camera_ip: 'IP',
+  camera_port: 'Port',
+  camera_user_name: 'UserName',
+  camera_password: 'Password',
+
   equipment_type: 'Equipment Type',
   equipment_type_name: 'Equipment Type Name',
 

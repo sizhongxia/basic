@@ -86,6 +86,27 @@ export default {
   equipment_manage: '设备管理',
   equipment_manage_note: '注：设备在农场控制台中进行维护。',
 
+  collect_equipment: '采集设备',
+  video_equipment: '视频设备',
+
+  camera_id: '摄像头ID',
+  camera_name: '摄像头名称',
+  camera_rtsp_url: '拉流地址',
+  camera_push_rtmp_url: '推流地址',
+  camera_play_rtmp_url: 'RTMP播放地址',
+  camera_play_hls_url: 'HLS播放地址',
+  camera_play_flv_url: 'FLV播放地址',
+  camera_cover_url: '封面图片地址',
+  camera_deploy_time: '部署安装时间',
+  camera_brand_name: '品牌名称',
+  camera_type: '摄像机类型',
+  camera_voperation: '支持操作',
+  camera_push_flow_mode: '推流方式',
+  camera_ip: 'IP地址',
+  camera_port: '端口号',
+  camera_user_name: '用户名',
+  camera_password: '密码',
+
   equipment_type: '设备类型',
   equipment_type_name: '设备类型名称',
 
