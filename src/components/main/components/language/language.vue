@@ -21,12 +21,10 @@ export default {
   data () {
     return {
       langList: {
-        'zh-CN': '切换语言',
-        'en-US': 'Switch Language'
+        'zh-CN': '切换语言'
       },
       localList: {
-        'zh-CN': '中文简体',
-        'en-US': 'English'
+        'zh-CN': '中文简体'
       }
     }
   },

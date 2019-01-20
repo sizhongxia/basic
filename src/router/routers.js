@@ -40,7 +40,7 @@ export default [
         path: '/home',
         name: 'home',
         meta: {
-          title: '首页',
+          title: '控制台',
           notCache: true,
           icon: 'ios-speedometer'
         },
@@ -61,6 +61,7 @@ export default [
       {
         path: '/farm/manage',
         name: 'farm_manage',
+        notCache: true,
         meta: {
           access: ['super_admin', 'farm_manage'],
           icon: 'logo-buffer',
@@ -71,6 +72,7 @@ export default [
       {
         path: '/farm/add',
         name: 'farm_add',
+        notCache: true,
         meta: {
           access: ['super_admin', 'farm_add'],
           icon: 'ios-easel',
@@ -81,6 +83,7 @@ export default [
       {
         path: '/farm/edit',
         name: 'farm_edit',
+        notCache: true,
         meta: {
           access: ['super_admin', 'farm_edit'],
           hideInMenu: true,
@@ -92,6 +95,7 @@ export default [
       {
         path: '/farm/area',
         name: 'farm_area',
+        notCache: true,
         meta: {
           access: ['super_admin', 'farm_area'],
           hideInMenu: true,
@@ -103,6 +107,7 @@ export default [
       {
         path: '/farm/picture',
         name: 'farm_picture',
+        notCache: true,
         meta: {
           access: ['super_admin', 'farm_picture'],
           hideInMenu: true,
@@ -114,6 +119,7 @@ export default [
       {
         path: '/farm/console',
         name: 'farm_console',
+        notCache: true,
         meta: {
           access: ['super_admin', 'farm_console'],
           hideInMenu: true,
@@ -127,6 +133,7 @@ export default [
   {
     path: '/equipment',
     name: 'equipment', // 设备管理
+    notCache: true,
     meta: {
       access: ['super_admin', 'equipment'],
       title: '设备',
@@ -137,6 +144,7 @@ export default [
       {
         path: '/equipment/manage',
         name: 'equipment_manage',
+        notCache: true,
         meta: {
           access: ['super_admin', 'equipment_manage'],
           icon: 'ios-settings',
@@ -147,6 +155,7 @@ export default [
       {
         path: '/equipment/model',
         name: 'equipment_model',
+        notCache: true,
         meta: {
           access: ['super_admin', 'equipment_model'],
           icon: 'ios-settings',
@@ -157,6 +166,7 @@ export default [
       {
         path: '/equipment/type',
         name: 'equipment_type',
+        notCache: true,
         meta: {
           access: ['super_admin', 'equipment_type'],
           icon: 'ios-settings',
@@ -169,6 +179,7 @@ export default [
   {
     path: '/user',
     name: 'user', // 用户管理
+    notCache: true,
     meta: {
       access: ['super_admin', 'user'],
       title: '用户',
@@ -179,6 +190,7 @@ export default [
       {
         path: '/user/manage',
         name: 'user_manage',
+        notCache: true,
         meta: {
           access: ['super_admin', 'user_manage'],
           icon: 'md-people',
@@ -189,6 +201,7 @@ export default [
       {
         path: '/user/organize/manage',
         name: 'organize_manage',
+        notCache: true,
         meta: {
           access: ['super_admin', 'organize_manage'],
           icon: 'logo-codepen',
@@ -201,6 +214,7 @@ export default [
   {
     path: '/zhyz/farm',
     name: 'zhyz_farm', // 我的农场管理
+    notCache: true,
     meta: {
       access: ['super_admin', 'zhyz_farm'],
       title: '农场管理',
@@ -211,6 +225,7 @@ export default [
       {
         path: '/zhyz/myfarm',
         name: 'zhyz_my_farm',
+        notCache: true,
         meta: {
           access: ['super_admin', 'zhyz_my_farm'],
           icon: 'md-people',
@@ -221,6 +236,7 @@ export default [
       {
         path: '/zhyz/equipment/manage',
         name: 'zhyz_equipment_manage',
+        notCache: true,
         meta: {
           access: ['super_admin', 'zhyz_equipment_manage'],
           icon: 'logo-codepen',
