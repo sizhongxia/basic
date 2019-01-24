@@ -4,7 +4,7 @@
       <slot name="left-title"></slot>
       <draggable class="drop-box1" :class="dropConClass.left" :options="options" :value="list1" @input="handleListChange($event, 'left')" @end="handleEnd($event, 'left')">
         <div class="drag-list-item" v-for="(itemLeft, index) in list1" :key="`drag_li1_${index}`">
-          <slot name="left" :itemLeft="itemLeft">{{itemLeft}}</slot>
+          <slot name="left" :itemLeft="itemLeft">{{ itemLeft }}</slot>
         </div>
       </draggable>
     </div>
@@ -12,7 +12,7 @@
       <slot name="right-title"></slot>
       <draggable class="drop-box2" :class="dropConClass.right" :options="options" :value="list2" @input="handleListChange($event, 'right')" @end="handleEnd($event, 'right')">
         <div class="drag-list-item" v-for="(itemRight, index) in list2" :key="`drag_li2_${index}`">
-          <slot name="right" :itemRight="itemRight">{{itemRight}}</slot>
+          <slot name="right" :itemRight="itemRight">{{ itemRight }}</slot>
         </div>
       </draggable>
     </div>

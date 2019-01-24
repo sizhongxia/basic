@@ -1,35 +1,26 @@
 <template>
   <div>
-    <Card shadow>
-      <div id="map"></div>
-    </Card>
-    <p>农场现场轮播图</p>
-    <p>基本信息：位置\Logo\名称\网站</p>
-    <p>温度\湿度\氨气实时数据展示</p>
-    <p>设备在线\离线数量统计</p>
-    <p>接入摄像头统计</p>
-    <p>禽畜种类\性别\疫苗接种\产蛋统计</p>
-    <p>最近一次投食记录</p>
-    <p>最近一次巡检记录</p>
+    <div id="map" :style="'width: 100%;height:' + height + 'px'"></div>
   </div>
 </template>
 
 <script>
-import InforCard from '_c/info-card'
+// import InforCard from '_c/info-card'
 import { mapLoader } from '@/libs/aMap'
-import echarts from 'echarts/lib/echarts'
-import 'echarts/lib/chart/line'
-import 'echarts/lib/component/tooltip'
+// import echarts from 'echarts/lib/echarts'
+// import 'echarts/lib/chart/line'
+// import 'echarts/lib/component/tooltip'
 
 export default {
   name: 'home',
-  components: {
-    InforCard
-  },
+  // components: {
+  //   InforCard
+  // },
   data () {
     return {
       map: null,
-      marker: null
+      marker: null,
+      height: 200
     }
   },
   mounted () {
@@ -50,7 +41,7 @@ export default {
          */
         mapStyle: 'amap://styles/fresh',
         resizeEnable: true,
-        zoom: 12
+        zoom: 10
       })
       _this.map.on('click', function (e) {
         if (!_this.marker) {
@@ -61,17 +52,17 @@ export default {
       _this.$nextTick(function () {
       })
     })
-    console.info(echarts)
+    // console.info(echarts)
+    _this.height = window.document.body.offsetHeight - 140
+    var ctimer = false
+    window.addEventListener('resize', () => {
+      if (ctimer) {
+        window.clearTimeout(ctimer)
+      }
+      ctimer = window.setTimeout(() => {
+        _this.height = window.document.body.offsetHeight - 140
+      }, 100)
+    })
   }
 }
 </script>
-
-<style lang="less">
-#map {
-  width: 100%;
-  height: 400px;
-}
-.count-style{
-  font-size: 50px;
-}
-</style>

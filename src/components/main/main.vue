@@ -12,16 +12,15 @@
     <Layout>
       <Header class="header-con">
         <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
-          <user :user-avator="userAvator" :user-name="userName"/>
-          <language v-if="$config.useI18n" @on-lang-change="setLocal" style="margin-right: 10px;" :lang="local"/>
-          <error-store v-if="$config.plugin['error-store'] && $config.plugin['error-store'].showInHeader" :has-read="hasReadErrorPage" :count="errorCount"></error-store>
+          <user :user-avator="userAvator"/>
+          <fullscreen v-model="isFullscreen" style="margin-right: 10px;"/>
         </header-bar>
       </Header>
       <Content class="main-content-con">
         <Layout class="main-layout-con">
-          <!-- <div class="tag-nav-wrapper">
+          <div class="tag-nav-wrapper">
             <tags-nav :value="$route" @input="handleClick" :list="tagNavList" @on-close="handleCloseTag"/>
-          </div> -->
+          </div>
           <Content class="content-wrapper">
             <keep-alive :include="cacheList">
               <router-view/>
@@ -36,11 +35,13 @@
 <script>
 import SideMenu from './components/side-menu'
 import HeaderBar from './components/header-bar'
+import TagsNav from './components/tags-nav'
 import User from './components/user'
 import ABackTop from './components/a-back-top'
+import Fullscreen from './components/fullscreen'
 import Language from './components/language'
 import ErrorStore from './components/error-store'
-import { mapMutations, mapGetters } from 'vuex'
+import { mapMutations, mapActions, mapGetters } from 'vuex'
 import { getNewTagList, getNextRoute, routeEqual } from '@/libs/util'
 import routers from '@/router/routers'
 import minLogo from '@/assets/images/logo-min.png'
@@ -52,6 +53,8 @@ export default {
     SideMenu,
     HeaderBar,
     Language,
+    TagsNav,
+    Fullscreen,
     ErrorStore,
     User,
     ABackTop
@@ -60,7 +63,8 @@ export default {
     return {
       collapsed: false,
       minLogo,
-      maxLogo
+      maxLogo,
+      isFullscreen: false
     }
   },
   computed: {
@@ -72,9 +76,6 @@ export default {
     },
     tagRouter () {
       return this.$store.state.app.tagRouter
-    },
-    userName () {
-      return this.$store.state.user.userName
     },
     userAvator () {
       return this.$store.state.user.avatorImgPath
@@ -90,15 +91,21 @@ export default {
     },
     hasReadErrorPage () {
       return this.$store.state.app.hasReadErrorPage
+    },
+    unreadCount () {
+      return this.$store.state.user.unreadCount
     }
   },
   methods: {
     ...mapMutations([
       'setBreadCrumb',
-      // 'setTagNavList',
+      'setTagNavList',
       'addTag',
       'setLocal',
       'setHomeRoute'
+    ]),
+    ...mapActions([
+      'handleLogin'
     ]),
     turnToPage (route) {
       let { name, params, query } = {}
@@ -130,7 +137,7 @@ export default {
           this.$router.push(nextRoute)
         }
       }
-      // this.setTagNavList(res)
+      this.setTagNavList(res)
     },
     handleClick (item) {
       this.turnToPage(item)
@@ -144,7 +151,7 @@ export default {
         type: 'push'
       })
       this.setBreadCrumb(newRoute)
-      // this.setTagNavList(getNewTagList(this.tagNavList, newRoute))
+      this.setTagNavList(getNewTagList(this.tagNavList, newRoute))
       this.$refs.sideMenu.updateOpenName(newRoute.name)
     }
   },
@@ -152,7 +159,7 @@ export default {
     /**
      * @description 初始化设置面包屑导航和标签导航
      */
-    // this.setTagNavList()
+    this.setTagNavList()
     this.setHomeRoute(routers)
     this.addTag({
       route: this.$store.state.app.homeRoute

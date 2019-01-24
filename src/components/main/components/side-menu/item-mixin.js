@@ -2,7 +2,7 @@ export default {
   props: {
     parentItem: {
       type: Object,
-      default: () => { }
+      default: () => {}
     },
     theme: String,
     iconSize: Number

@@ -148,28 +148,28 @@
       v-model="cameraFormModel"
       :title="cameraFormObj.cameraId === '' ? $t('create') : $t('update')"
       scrollable
-      width="720"
+      width="960"
       mask
       :mask-closable="false"
       class-name="vertical-center-modal"
       :closable="false">
       <Form :model="cameraFormObj" :label-width="120" :rules="cameraFormRuleValidate" ref="cameraForm">
         <Row style="padding-right: 60px;">
-          <Col span="12">
+          <Col span="8">
             <FormItem :label="$t('camera_id')" prop="cameraId">
               <Input v-model="cameraFormObj.cameraId" disabled />
             </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="8">
+            <FormItem :label="$t('camera_name')" prop="cameraName">
+              <Input v-model="cameraFormObj.cameraName" :placeholder="$t('please_input')+$t('camera_name')"/>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem :label="$t('farm_area')" prop="farmAreaId">
               <Select v-model="cameraFormObj.farmAreaId" clearable filterable>
                 <Option v-for="item in farmAreas" :key="item.areaId" :value="item.areaId">{{ item.areaName }}</Option>
               </Select>
-            </FormItem>
-          </Col>
-          <Col span="12">
-            <FormItem :label="$t('camera_name')" prop="cameraName">
-              <Input v-model="cameraFormObj.cameraName" :placeholder="$t('please_input')+$t('camera_name')"/>
             </FormItem>
           </Col>
           <Col span="12">
@@ -198,52 +198,52 @@
             </FormItem>
           </Col>
           <Col span="12">
-            <FormItem :label="$t('camera_deploy_time')" prop="deployTime">
-              <Input v-model="cameraFormObj.deployTime" :placeholder="$t('please_input')+$t('camera_deploy_time')"/>
-            </FormItem>
-          </Col>
-          <Col span="12">
-            <FormItem :label="$t('camera_brand_name')" prop="brandName">
-              <Input v-model="cameraFormObj.brandName" :placeholder="$t('please_input')+$t('camera_brand_name')"/>
-            </FormItem>
-          </Col>
-          <Col span="12">
-            <FormItem :label="$t('camera_type')" prop="type">
-              <Select v-model="cameraFormObj.type" clearable filterable>
-                <Option v-for="item in farmCameraTypes" :key="item.value" :value="item.value">{{ item.name }}</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="12">
             <FormItem :label="$t('camera_voperation')" prop="voperation">
               <Select v-model="cameraFormObj.voperations" multiple>
                 <Option v-for="item in voperations" :value="item.value" :key="item.value">{{ item.name }}</Option>
               </Select>
             </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="8">
+            <FormItem :label="$t('camera_deploy_time')" prop="deployTime">
+              <Input v-model="cameraFormObj.deployTime" :placeholder="'格式:yyyy-MM-dd'"/>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem :label="$t('camera_brand_name')" prop="brandName">
+              <Input v-model="cameraFormObj.brandName" :placeholder="$t('please_input')+$t('camera_brand_name')"/>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem :label="$t('camera_type')" prop="type">
+              <Select v-model="cameraFormObj.type" clearable filterable>
+                <Option v-for="item in farmCameraTypes" :key="item.value" :value="item.value">{{ item.name }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem :label="$t('camera_push_flow_mode')" prop="pushFlowMode">
               <Select v-model="cameraFormObj.pushFlowMode" clearable filterable>
                 <Option v-for="item in farmCameraPushFlowModes" :key="item.value" :value="item.value">{{ item.name }}</Option>
               </Select>
             </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="8">
             <FormItem :label="$t('camera_ip')" prop="ip">
               <Input v-model="cameraFormObj.ip" :placeholder="$t('please_input')+$t('camera_ip')"/>
             </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="8">
             <FormItem :label="$t('camera_port')" prop="port">
               <Input v-model="cameraFormObj.port" :placeholder="$t('please_input')+$t('camera_port')"/>
             </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="8">
             <FormItem :label="$t('camera_user_name')" prop="userName">
               <Input v-model="cameraFormObj.userName" :placeholder="$t('please_input')+$t('camera_user_name')"/>
             </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="8">
             <FormItem :label="$t('camera_password')" prop="password">
               <Input v-model="cameraFormObj.password" :placeholder="$t('please_input')+$t('camera_password')"/>
             </FormItem>
@@ -482,7 +482,12 @@ export default {
             _this.equipmentFormSubmiting = false
             if (res.status === 200 && res.data.code === 200) {
               _this.loadAllFarmEquipments()
-              _this.closeEquipmentFormHandle()
+              if (!_this.equipmentFormObj.equipmentId) {
+                _this.closeEquipmentFormHandle()
+              }
+              _this.$Modal.success({
+                title: '保存成功'
+              })
             } else {
               _this.$Modal.error({
                 title: _this.$t('error_message_info') + res.data.message
@@ -507,7 +512,12 @@ export default {
             _this.cameraFormSubmiting = false
             if (res.status === 200 && res.data.code === 200) {
               _this.loadAllFarmCameras()
-              _this.closeCameraFormHandle()
+              if (!_this.cameraFormObj.cameraId) {
+                _this.closeCameraFormHandle()
+              }
+              _this.$Modal.success({
+                title: '保存成功'
+              })
             } else {
               _this.$Modal.error({
                 title: _this.$t('error_message_info') + res.data.message

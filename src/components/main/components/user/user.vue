@@ -1,13 +1,12 @@
 <template>
   <div class="user-avator-dropdown">
-    <Dropdown trigger="click" @on-click="handleClick">
+    <Dropdown @on-click="handleClick">
       <Badge>
         <Avatar :src="userAvator"/>
       </Badge>
-      <span>{{ userName }}</span>
       <Icon :size="18" type="md-arrow-dropdown"></Icon>
       <DropdownMenu slot="list">
-        <DropdownItem name="logout">{{$t('logout')}}</DropdownItem>
+        <DropdownItem name="logout">退出登录</DropdownItem>
       </DropdownMenu>
     </Dropdown>
   </div>
@@ -19,10 +18,6 @@ import { mapActions } from 'vuex'
 export default {
   name: 'User',
   props: {
-    userName: {
-      type: String,
-      default: ''
-    },
     userAvator: {
       type: String,
       default: ''

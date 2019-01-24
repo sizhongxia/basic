@@ -2,11 +2,11 @@
   <div>
     <Dropdown trigger="click" @on-click="selectLang">
       <a href="javascript:void(0)">
-       {{ title }}
+        {{ title }}
         <Icon :size="18" type="md-arrow-dropdown" />
       </a>
       <DropdownMenu slot="list">
-        <DropdownItem v-for="(value, key) in localList" :name="key" :key="`lang-${key}`">{{value}}</DropdownItem>
+        <DropdownItem v-for="(value, key) in localList" :name="key" :key="`lang-${key}`">{{ value }}</DropdownItem>
       </DropdownMenu>
     </Dropdown>
   </div>
@@ -21,10 +21,14 @@ export default {
   data () {
     return {
       langList: {
-        'zh-CN': '切换语言'
+        'zh-CN': '语言',
+        'zh-TW': '語言',
+        'en-US': 'Lang'
       },
       localList: {
-        'zh-CN': '中文简体'
+        'zh-CN': '中文简体',
+        'zh-TW': '中文繁体',
+        'en-US': 'English'
       }
     }
   },

@@ -136,7 +136,7 @@ export default [
     notCache: true,
     meta: {
       access: ['super_admin', 'equipment'],
-      title: '设备',
+      title: '设备管理',
       icon: 'ios-settings-outline'
     },
     component: Main,
@@ -188,17 +188,6 @@ export default [
     component: Main,
     children: [
       {
-        path: '/business/certification',
-        name: 'business_certification',
-        notCache: true,
-        meta: {
-          access: ['super_admin', 'business_certification'],
-          icon: 'md-arrow-dropright',
-          title: '实名认证管理'
-        },
-        component: () => import('@/view/user/index.vue')
-      },
-      {
         path: '/business/product',
         name: 'business_product',
         notCache: true,
@@ -246,10 +235,10 @@ export default [
   },
   {
     path: '/order',
-    name: 'order', // 订单系统管理
+    name: 'order_sys', // 订单系统管理
     notCache: true,
     meta: {
-      access: ['super_admin', 'order'],
+      access: ['super_admin', 'order_sys'],
       title: '商城系统',
       icon: 'ios-cart-outline'
     },
@@ -298,6 +287,17 @@ export default [
           access: ['super_admin', 'user_manage'],
           icon: 'md-arrow-dropright',
           title: '用户管理'
+        },
+        component: () => import('@/view/user/index.vue')
+      },
+      {
+        path: '/user/certification',
+        name: 'user_certification',
+        notCache: true,
+        meta: {
+          access: ['super_admin', 'user_certification'],
+          icon: 'md-arrow-dropright',
+          title: '认证管理'
         },
         component: () => import('@/view/user/index.vue')
       },

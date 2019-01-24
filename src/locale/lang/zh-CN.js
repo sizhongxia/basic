@@ -4,7 +4,7 @@ export default {
   close_others: '关闭其他',
 
   login: '登陆',
-  login_card_title: '一通无限智慧养殖平台 - 登陆',
+  login_card_title: '小黄犁管家中心 - 登陆',
   login_tip: '北京一通无限科技有限公司 &copy;2018-2019',
   login_error: '登陆失败：',
   logout: '安全退出',
@@ -16,6 +16,7 @@ export default {
 
   user: '用户',
   user_manage: '用户管理',
+  user_certification: '用户认证',
   user_name: '用户名称',
   phone_no: '手机号',
   email: '电子邮箱',
@@ -119,13 +120,12 @@ export default {
   organize_name: '组织名称',
 
   business: '业务管理',
-  business_certification: '用户实名认证',
   business_order: '订单管理',
   business_product: '产品管理',
   business_solution: '解决方案管理',
   business_knowledges: '知识库管理',
 
-  order: '订单系统',
+  order_sys: '订单系统',
   order_manage: '订单管理',
   order_activity: '活动管理',
 

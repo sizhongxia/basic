@@ -2,11 +2,11 @@ export default {
   /**
    * @description 配置显示在浏览器标签的title
    */
-  title: '智能运维管理后台',
+  title: '小黄犁管家中心',
   /**
    * @description token在Cookie中存储的天数，默认1天
    */
-  cookieExpires: 7,
+  cookieExpires: 2,
   /**
    * @description 是否使用国际化，默认为false
    *              如果不使用，则需要在路由中给需要在菜单中展示的路由设置meta: { title: 'xxx' }

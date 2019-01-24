@@ -6,14 +6,13 @@
           <Icon :size="18" type="ios-close-circle-outline" />
         </Button>
         <DropdownMenu slot="list">
-          <DropdownItem name="close-all">{{ $t('close_all') }}</DropdownItem>
-          <DropdownItem name="close-others">{{ $t('close_others') }}</DropdownItem>
+          <DropdownItem name="close-all">关闭所有</DropdownItem>
+          <DropdownItem name="close-others">关闭其他</DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </div>
     <ul v-show="visible" :style="{left: contextMenuLeft + 'px', top: contextMenuTop + 'px'}" class="contextmenu">
-      <li @click="handleTagsOption('all')">{{ $t('close_all') }}</li>
-      <li @click="handleTagsOption('other')">{{ $t('close_others') }}</li>
+      <li v-for="(item, key) of menuList" @click="handleTagsOption(key)" :key="key">{{item}}</li>
     </ul>
     <div class="btn-con left-btn">
       <Button type="text" @click="handleScroll(240)">
@@ -40,7 +39,7 @@
             :closable="item.name !== $config.homeName"
             :color="isCurrentTag(item) ? 'primary' : 'default'"
             @contextmenu.prevent.native="contextMenu(item, $event)"
-          >{{showTitleInside(item)}}</Tag>
+          >{{ showTitleInside(item) }}</Tag>
         </transition-group>
       </div>
     </div>
@@ -68,7 +67,11 @@ export default {
       outerPadding: 4,
       contextMenuLeft: 0,
       contextMenuTop: 0,
-      visible: false
+      visible: false,
+      menuList: {
+        others: '关闭其他',
+        all: '关闭所有'
+      }
     }
   },
   computed: {

@@ -1,6 +1,8 @@
 import {
   getBreadCrumbList,
+  setTagNavListInLocalstorage,
   getMenuByRouter,
+  getTagNavListFromLocalstorage,
   getHomeRoute,
   getNextRoute,
   routeHasExist,
@@ -43,20 +45,20 @@ export default {
     setHomeRoute (state, routes) {
       state.homeRoute = getHomeRoute(routes, homeName)
     },
-    // setTagNavList (state, list) {
-    //   let tagList = []
-    //   if (list) {
-    //     tagList = [...list]
-    //   } else tagList = getTagNavListFromLocalstorage() || []
-    //   if (tagList[0] && tagList[0].name !== homeName) tagList.shift()
-    //   let homeTagIndex = tagList.findIndex(item => item.name === homeName)
-    //   if (homeTagIndex > 0) {
-    //     let homeTag = tagList.splice(homeTagIndex, 1)[0]
-    //     tagList.unshift(homeTag)
-    //   }
-    //   state.tagNavList = tagList
-    //   setTagNavListInLocalstorage([...tagList])
-    // },
+    setTagNavList (state, list) {
+      let tagList = []
+      if (list) {
+        tagList = [...list]
+      } else tagList = getTagNavListFromLocalstorage() || []
+      if (tagList[0] && tagList[0].name !== homeName) tagList.shift()
+      let homeTagIndex = tagList.findIndex(item => item.name === homeName)
+      if (homeTagIndex > 0) {
+        let homeTag = tagList.splice(homeTagIndex, 1)[0]
+        tagList.unshift(homeTag)
+      }
+      state.tagNavList = tagList
+      setTagNavListInLocalstorage([...tagList])
+    },
     closeTag (state, route) {
       let tag = state.tagNavList.filter(item => routeEqual(item, route))
       route = tag[0] ? tag[0] : null
@@ -79,7 +81,7 @@ export default {
           if (router.name === homeName) state.tagNavList.unshift(router)
           else state.tagNavList.splice(1, 0, router)
         }
-        // setTagNavListInLocalstorage([...state.tagNavList])
+        setTagNavListInLocalstorage([...state.tagNavList])
       }
     },
     setLocal (state, lang) {
