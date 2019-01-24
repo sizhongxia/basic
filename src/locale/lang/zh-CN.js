@@ -118,6 +118,20 @@ export default {
   organize_manage: '组织管理',
   organize_name: '组织名称',
 
+  business: '业务管理',
+  business_certification: '用户实名认证',
+  business_order: '订单管理',
+  business_product: '产品管理',
+  business_solution: '解决方案管理',
+  business_knowledges: '知识库管理',
+
+  order: '订单系统',
+  order_manage: '订单管理',
+  order_activity: '活动管理',
+
+  system: '系统',
+  system_func: '系统应用',
+
   search_by_keyword: '请输入关键字搜索',
   search_by_keyword_organize_name: '输入组织名称检索',
   search_by_keyword_user_name: '输入用户名称检索',

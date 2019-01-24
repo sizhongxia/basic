@@ -42,7 +42,7 @@ export default [
         meta: {
           title: '控制台',
           notCache: true,
-          icon: 'ios-speedometer'
+          icon: 'ios-speedometer-outline'
         },
         component: () => import('@/view/main/home')
       }
@@ -54,9 +54,9 @@ export default [
     meta: {
       access: ['super_admin', 'farm'],
       title: '农场管理',
-      icon: 'ios-globe'
+      icon: 'ios-navigate-outline'
     },
-    component: Main, // 一级目录必须使用Main组件作为component
+    component: Main,
     children: [
       {
         path: '/farm/manage',
@@ -64,7 +64,7 @@ export default [
         notCache: true,
         meta: {
           access: ['super_admin', 'farm_manage'],
-          icon: 'logo-buffer',
+          icon: 'md-arrow-dropright',
           title: '农场管理'
         },
         component: () => import('@/view/farm/index.vue')
@@ -75,7 +75,7 @@ export default [
         notCache: true,
         meta: {
           access: ['super_admin', 'farm_add'],
-          icon: 'ios-easel',
+          icon: 'md-arrow-dropright',
           title: '新增农场'
         },
         component: () => import('@/view/farm/add.vue')
@@ -87,7 +87,7 @@ export default [
         meta: {
           access: ['super_admin', 'farm_edit'],
           hideInMenu: true,
-          icon: 'ios-easel',
+          icon: 'md-arrow-dropright',
           title: '修改农场'
         },
         component: () => import('@/view/farm/edit.vue')
@@ -99,7 +99,7 @@ export default [
         meta: {
           access: ['super_admin', 'farm_area'],
           hideInMenu: true,
-          icon: 'ios-easel',
+          icon: 'md-arrow-dropright',
           title: '农场厂区'
         },
         component: () => import('@/view/farm/area/index.vue')
@@ -111,7 +111,7 @@ export default [
         meta: {
           access: ['super_admin', 'farm_picture'],
           hideInMenu: true,
-          icon: 'ios-easel',
+          icon: 'md-arrow-dropright',
           title: '农场图片'
         },
         component: () => import('@/view/farm/picture/index.vue')
@@ -123,7 +123,7 @@ export default [
         meta: {
           access: ['super_admin', 'farm_console'],
           hideInMenu: true,
-          icon: 'ios-easel',
+          icon: 'md-arrow-dropright',
           title: '农场控制台'
         },
         component: () => import('@/view/farm/console/index.vue')
@@ -137,9 +137,9 @@ export default [
     meta: {
       access: ['super_admin', 'equipment'],
       title: '设备',
-      icon: 'ios-settings'
+      icon: 'ios-settings-outline'
     },
-    component: Main, // 一级目录必须使用Main组件作为component
+    component: Main,
     children: [
       {
         path: '/equipment/manage',
@@ -147,7 +147,7 @@ export default [
         notCache: true,
         meta: {
           access: ['super_admin', 'equipment_manage'],
-          icon: 'ios-settings',
+          icon: 'md-arrow-dropright',
           title: '设备管理'
         },
         component: () => import('@/view/equipment/index.vue')
@@ -158,7 +158,7 @@ export default [
         notCache: true,
         meta: {
           access: ['super_admin', 'equipment_model'],
-          icon: 'ios-settings',
+          icon: 'md-arrow-dropright',
           title: '设备型号'
         },
         component: () => import('@/view/equipment/model/index.vue')
@@ -169,7 +169,7 @@ export default [
         notCache: true,
         meta: {
           access: ['super_admin', 'equipment_type'],
-          icon: 'ios-settings',
+          icon: 'md-arrow-dropright',
           title: '设备类型'
         },
         component: () => import('@/view/equipment/type/index.vue')
@@ -177,15 +177,118 @@ export default [
     ]
   },
   {
+    path: '/business',
+    name: 'business', // 业务管理
+    notCache: true,
+    meta: {
+      access: ['super_admin', 'business'],
+      title: '业务管理',
+      icon: 'ios-color-filter-outline'
+    },
+    component: Main,
+    children: [
+      {
+        path: '/business/certification',
+        name: 'business_certification',
+        notCache: true,
+        meta: {
+          access: ['super_admin', 'business_certification'],
+          icon: 'md-arrow-dropright',
+          title: '实名认证管理'
+        },
+        component: () => import('@/view/user/index.vue')
+      },
+      {
+        path: '/business/product',
+        name: 'business_product',
+        notCache: true,
+        meta: {
+          access: ['super_admin', 'business_product'],
+          icon: 'md-arrow-dropright',
+          title: '产品管理'
+        },
+        component: () => import('@/view/user/index.vue')
+      },
+      {
+        path: '/business/news',
+        name: 'business_news',
+        notCache: true,
+        meta: {
+          access: ['super_admin', 'business_news'],
+          icon: 'md-arrow-dropright',
+          title: '资讯管理'
+        },
+        component: () => import('@/view/user/index.vue')
+      },
+      {
+        path: '/business/solution',
+        name: 'business_solution',
+        notCache: true,
+        meta: {
+          access: ['super_admin', 'business_solution'],
+          icon: 'md-arrow-dropright',
+          title: '解决方案管理'
+        },
+        component: () => import('@/view/user/index.vue')
+      },
+      {
+        path: '/business/knowledges',
+        name: 'business_knowledges',
+        notCache: true,
+        meta: {
+          access: ['super_admin', 'business_knowledges'],
+          icon: 'md-arrow-dropright',
+          title: '知识库管理'
+        },
+        component: () => import('@/view/user/index.vue')
+      }
+    ]
+  },
+  {
+    path: '/order',
+    name: 'order', // 订单系统管理
+    notCache: true,
+    meta: {
+      access: ['super_admin', 'order'],
+      title: '商城系统',
+      icon: 'ios-cart-outline'
+    },
+    component: Main,
+    children: [
+      {
+        path: '/order/manage',
+        name: 'order_manage',
+        notCache: true,
+        meta: {
+          access: ['super_admin', 'order_manage'],
+          icon: 'md-arrow-dropright',
+          title: '订单管理'
+        },
+        component: () => import('@/view/user/index.vue')
+      },
+      {
+        path: '/order/activity',
+        name: 'order_activity',
+        notCache: true,
+        meta: {
+          access: ['super_admin', 'order_activity'],
+          icon: 'md-arrow-dropright',
+          title: '活动管理'
+        },
+        component: () => import('@/view/user/index.vue')
+      }
+    ]
+  },
+  {
     path: '/user',
-    name: 'user', // 用户管理
+    name: 'user', // 用户&权限
     notCache: true,
     meta: {
       access: ['super_admin', 'user'],
-      title: '用户',
-      icon: 'md-people'
+      title: '用户&权限',
+      icon: 'ios-unlock-outline'
     },
-    component: Main, // 一级目录必须使用Main组件作为component
+    component: Main,
     children: [
       {
         path: '/user/manage',
@@ -193,7 +296,7 @@ export default [
         notCache: true,
         meta: {
           access: ['super_admin', 'user_manage'],
-          icon: 'md-people',
+          icon: 'md-arrow-dropright',
           title: '用户管理'
         },
         component: () => import('@/view/user/index.vue')
@@ -204,7 +307,7 @@ export default [
         notCache: true,
         meta: {
           access: ['super_admin', 'organize_manage'],
-          icon: 'logo-codepen',
+          icon: 'md-arrow-dropright',
           title: '组织管理'
         },
         component: () => import('@/view/organize/index.vue')
@@ -212,37 +315,37 @@ export default [
     ]
   },
   {
-    path: '/zhyz/farm',
-    name: 'zhyz_farm', // 我的农场管理
+    path: '/system',
+    name: 'system', // 系统管理
     notCache: true,
     meta: {
-      access: ['super_admin', 'zhyz_farm'],
-      title: '农场管理',
-      icon: 'md-people'
+      access: ['super_admin', 'system'],
+      title: '系统管理',
+      icon: 'ios-appstore-outline'
     },
-    component: Main, // 一级目录必须使用Main组件作为component
+    component: Main,
     children: [
       {
-        path: '/zhyz/myfarm',
-        name: 'zhyz_my_farm',
+        path: '/system/func',
+        name: 'system_func',
         notCache: true,
         meta: {
-          access: ['super_admin', 'zhyz_my_farm'],
-          icon: 'md-people',
-          title: '我的农场'
+          access: ['super_admin', 'system_func'],
+          icon: 'md-arrow-dropright',
+          title: '系统应用'
         },
-        component: () => import('@/view/basic.vue')
+        component: () => import('@/view/user/index.vue')
       },
       {
-        path: '/zhyz/equipment/manage',
-        name: 'zhyz_equipment_manage',
+        path: '/system/dict',
+        name: 'system_dict',
         notCache: true,
         meta: {
-          access: ['super_admin', 'zhyz_equipment_manage'],
-          icon: 'logo-codepen',
-          title: '物联设备'
+          access: ['super_admin', 'system_dict'],
+          icon: 'md-arrow-dropright',
+          title: '系统字典'
         },
-        component: () => import('@/view/basic.vue')
+        component: () => import('@/view/user/index.vue')
       }
     ]
   },
