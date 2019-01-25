@@ -260,13 +260,12 @@ export default {
         title: ' ',
         key: 'action',
         fixed: 'left',
-        width: 240,
+        width: 280,
         render: (h, params) => {
           return h('div', [
             h('Button', {
               props: {
-                type: 'text',
-                size: 'small'
+                type: 'text'
               },
               on: {
                 'click': () => {
@@ -276,8 +275,7 @@ export default {
             }, '农场管理'),
             h('Button', {
               props: {
-                type: 'text',
-                size: 'small'
+                type: 'text'
               },
               on: {
                 'click': () => {
@@ -287,8 +285,7 @@ export default {
             }, '修改'),
             h('Button', {
               props: {
-                type: 'text',
-                size: 'small'
+                type: 'text'
               },
               on: {
                 'click': () => {
@@ -298,8 +295,7 @@ export default {
             }, '厂区管理'),
             h('Button', {
               props: {
-                type: 'text',
-                size: 'small'
+                type: 'text'
               },
               on: {
                 'click': () => {
@@ -333,8 +329,7 @@ export default {
             }, [
               h('Button', {
                 props: {
-                  type: 'text',
-                  size: 'small'
+                  type: 'text'
                 }
               }, '更多操作'),
               h('DropdownMenu', {

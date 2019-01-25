@@ -207,7 +207,7 @@ export default [
           icon: 'md-arrow-dropright',
           title: '产品管理'
         },
-        component: () => import('@/view/user/index.vue')
+        component: () => import('@/view/basic.vue')
       },
       {
         path: '/business/news',
@@ -218,7 +218,7 @@ export default [
           icon: 'md-arrow-dropright',
           title: '资讯管理'
         },
-        component: () => import('@/view/user/index.vue')
+        component: () => import('@/view/basic.vue')
       },
       {
         path: '/business/solution',
@@ -229,7 +229,7 @@ export default [
           icon: 'md-arrow-dropright',
           title: '解决方案管理'
         },
-        component: () => import('@/view/user/index.vue')
+        component: () => import('@/view/basic.vue')
       },
       {
         path: '/business/knowledges',
@@ -240,7 +240,7 @@ export default [
           icon: 'md-arrow-dropright',
           title: '知识库管理'
         },
-        component: () => import('@/view/user/index.vue')
+        component: () => import('@/view/basic.vue')
       }
     ]
   },
@@ -264,7 +264,7 @@ export default [
           icon: 'md-arrow-dropright',
           title: '订单管理'
         },
-        component: () => import('@/view/user/index.vue')
+        component: () => import('@/view/basic.vue')
       },
       {
         path: '/order/activity',
@@ -275,7 +275,7 @@ export default [
           icon: 'md-arrow-dropright',
           title: '活动管理'
         },
-        component: () => import('@/view/user/index.vue')
+        component: () => import('@/view/basic.vue')
       }
     ]
   },
@@ -285,8 +285,8 @@ export default [
     notCache: true,
     meta: {
       access: ['super_admin', 'user'],
-      title: '用户&权限',
-      icon: 'ios-unlock-outline'
+      title: '用户管理',
+      icon: 'ios-person-outline'
     },
     component: Main,
     children: [
@@ -310,7 +310,7 @@ export default [
           icon: 'md-arrow-dropright',
           title: '认证管理'
         },
-        component: () => import('@/view/user/index.vue')
+        component: () => import('@/view/basic.vue')
       },
       {
         path: '/user/organize/manage',
@@ -345,7 +345,7 @@ export default [
           icon: 'md-arrow-dropright',
           title: '系统应用'
         },
-        component: () => import('@/view/user/index.vue')
+        component: () => import('@/view/basic.vue')
       },
       {
         path: '/system/dict',
@@ -356,7 +356,7 @@ export default [
           icon: 'md-arrow-dropright',
           title: '系统字典'
         },
-        component: () => import('@/view/user/index.vue')
+        component: () => import('@/view/basic.vue')
       }
     ]
   },

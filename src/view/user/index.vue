@@ -188,9 +188,7 @@ export default {
           return h('div', [
             h('Button', {
               props: {
-                type: 'text',
-                size: 'small',
-                icon: 'ios-create-outline'
+                type: 'text'
               },
               on: {
                 'click': () => {
@@ -213,8 +211,6 @@ export default {
               h('Button', {
                 props: {
                   type: 'text',
-                  size: 'small',
-                  icon: 'ios-swap',
                   loading: this.deleting
                 }
               }, '切换状态')
@@ -234,17 +230,13 @@ export default {
               h('Button', {
                 props: {
                   type: 'text',
-                  size: 'small',
-                  icon: 'ios-unlock-outline',
                   loading: this.resetpwding
                 }
               }, '重设密码')
             ]),
             h('Button', {
               props: {
-                type: 'text',
-                size: 'small',
-                icon: 'ios-bulb-outline'
+                type: 'text'
               },
               on: {
                 'click': () => {
@@ -254,9 +246,7 @@ export default {
             }, this.$t('user_identity')),
             h('Button', {
               props: {
-                type: 'text',
-                size: 'small',
-                icon: 'md-heart-outline'
+                type: 'text'
               },
               on: {
                 'click': () => {
@@ -266,9 +256,7 @@ export default {
             }, this.$t('user_auth_farms')),
             h('Button', {
               props: {
-                type: 'text',
-                size: 'small',
-                icon: 'ios-globe-outline'
+                type: 'text'
               },
               on: {
                 'click': () => {

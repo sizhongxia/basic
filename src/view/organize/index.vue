@@ -24,16 +24,6 @@
       <Page :total="total" :current="current" :page-size="size" @on-change="changePage" @on-page-size-change="changePageSize" show-sizer show-total show-elevator></Page>
     </div>
     <Modal
-      v-model="detailModel"
-      :title="$t('detail')"
-      @on-ok="detailModelOkHandle"
-      scrollable
-      width="620"
-      mask
-      :mask-closable="false">
-      <p>{{ $t('organize_name') }}: {{formObj.organizeName}}</p>
-    </Modal>
-    <Modal
       v-model="baseFormModel"
       :title="formObj.organizeId === '' ? $t('create') : $t('update')"
       scrollable
@@ -69,7 +59,6 @@ export default {
         organizeName: ''
       },
       baseFormModel: false,
-      detailModel: false,
       deleting: false,
       current: 1,
       searchValue: '',
@@ -80,59 +69,15 @@ export default {
   computed: {
     columns () {
       return [{
-        type: 'index',
-        width: 60,
-        align: 'center'
-      },
-      {
-        title: this.$t('record_id'),
-        key: 'organizeId',
-        sortable: 'custom',
-        width: 120,
-        tooltip: true
-      },
-      {
-        title: this.$t('organize_name'),
-        key: 'organizeName',
-        sortable: 'custom',
-        width: 200,
-        tooltip: true
-      },
-      {
-        title: this.$t('create_at'),
-        sortable: 'custom',
-        width: 210,
-        key: 'createAt'
-      },
-      {
-        title: this.$t('update_at'),
-        sortable: 'custom',
-        width: 210,
-        key: 'updateAt'
-      },
-      {
-        title: this.$t('action'),
+        title: ' ',
         key: 'action',
-        width: 240,
+        width: 180,
+        fixed: 'left',
         render: (h, params) => {
           return h('div', [
             h('Button', {
               props: {
-                type: 'text',
-                size: 'small',
-                icon: 'ios-paper-outline'
-              },
-              on: {
-                'click': () => {
-                  this.showDetailModel(params)
-                }
-              }
-            }, this.$t('detail')),
-            h('Button', {
-              props: {
-                type: 'text',
-                size: 'small',
-                icon: 'ios-create-outline'
+                type: 'text'
               },
               on: {
                 'click': () => {
@@ -142,6 +87,7 @@ export default {
             }, this.$t('edit')),
             h('Poptip', {
               props: {
+                transfer: true,
                 confirm: true,
                 title: this.$t('table_handle_delete_tip')
               },
@@ -154,14 +100,29 @@ export default {
               h('Button', {
                 props: {
                   type: 'text',
-                  size: 'small',
-                  icon: 'ios-trash-outline',
                   loading: this.deleting
                 }
               }, this.$t('delete'))
             ])
           ])
         }
+      }, {
+        type: 'index',
+        width: 60,
+        align: 'center'
+      },
+      {
+        title: this.$t('organize_name'),
+        key: 'organizeName',
+        sortable: 'custom',
+        minWidth: 200,
+        tooltip: true
+      },
+      {
+        title: this.$t('create_at'),
+        sortable: 'custom',
+        width: 210,
+        key: 'createAt'
       }]
     },
     ruleValidate () {
@@ -274,13 +235,6 @@ export default {
       this.formObj.organizeId = ''
       this.formObj.organizeName = ''
       this.baseFormModel = false
-    },
-    showDetailModel (params) {
-      this.detailModel = true
-      this.formObj.organizeName = params.row.organizeName
-    },
-    detailModelOkHandle () {
-      this.detailModel = false
     }
   },
   mounted () {

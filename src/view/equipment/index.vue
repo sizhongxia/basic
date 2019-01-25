@@ -15,7 +15,7 @@
       <Input clearable :placeholder="$t('search_by_keyword_equipment_name')" class="search-input" v-model="name"/>
       <Input clearable :placeholder="$t('search_by_keyword_equipment_code')" class="search-input" v-model="code"/>
       <Input clearable :placeholder="$t('search_by_keyword_equipment_sn')" class="search-input" v-model="sn"/>
-      <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="search"/>&nbsp;&nbsp;{{ $t('search') }}</Button>
+      <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="ios-search-outline"/> {{ $t('search') }}</Button>
       <p style="margin-top: 14px;font-size: 12px;">{{ $t('equipment_manage_note') }}</p>
     </Card>
     <Table
@@ -39,6 +39,7 @@
       width="820"
       mask
       :mask-closable="false"
+      :footer-hide="true"
       class-name="vertical-center-modal">
       <p slot="header">
         <Icon type="md-arrow-dropright" />

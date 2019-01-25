@@ -87,15 +87,13 @@ export default {
       return [{
         title: ' ',
         key: 'action',
-        width: 240,
+        width: 180,
         fixed: 'left',
         render: (h, params) => {
           return h('div', [
             h('Button', {
               props: {
-                type: 'text',
-                size: 'small',
-                icon: 'ios-create-outline'
+                type: 'text'
               },
               on: {
                 'click': () => {
@@ -118,8 +116,6 @@ export default {
               h('Button', {
                 props: {
                   type: 'text',
-                  size: 'small',
-                  icon: 'ios-trash-outline',
                   loading: this.deleting
                 }
               }, this.$t('delete'))
