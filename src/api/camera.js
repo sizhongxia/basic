@@ -1,7 +1,8 @@
 import axios from '@/libs/api.request'
 
-export const loadCameras = ({ page, size, orderField, orderType }) => {
+export const loadCameras = ({ name, page, size, orderField, orderType }) => {
   const data = {
+    name,
     page,
     size,
     orderField,

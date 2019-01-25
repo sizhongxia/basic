@@ -148,9 +148,20 @@ export default [
         meta: {
           access: ['super_admin', 'equipment_manage'],
           icon: 'md-arrow-dropright',
-          title: '设备管理'
+          title: '采集设备管理'
         },
         component: () => import('@/view/equipment/index.vue')
+      },
+      {
+        path: '/equipment/video',
+        name: 'video_manage',
+        notCache: true,
+        meta: {
+          access: ['super_admin', 'video_manage'],
+          icon: 'md-arrow-dropright',
+          title: '视频设备管理'
+        },
+        component: () => import('@/view/equipment/camera/index.vue')
       },
       {
         path: '/equipment/model',

@@ -15,8 +15,6 @@
       :data="tableData"
       :loading="loading"
       :columns="columns"
-      size="small"
-      :height="tableHeight"
       :highlight-row="true"
       editable
       @on-sort-change="handleSortChange"
@@ -24,16 +22,6 @@
     <div class="page">
       <Page :total="total" :current="current" :page-size="size" @on-change="changePage" @on-page-size-change="changePageSize" show-sizer show-total show-elevator></Page>
     </div>
-    <Modal
-      v-model="detailModel"
-      :title="$t('detail')"
-      @on-ok="detailModelOkHandle"
-      scrollable
-      width="620"
-      mask
-      :mask-closable="false">
-      <p>{{ $t('equipment_type_name') }}: {{formObj.typeName}}</p>
-    </Modal>
     <Modal
       v-model="baseFormModel"
       :title="formObj.typeId === '' ? $t('create') : $t('update')"
@@ -61,7 +49,6 @@ export default {
   data () {
     return {
       tableData: [],
-      tableHeight: 100,
       total: 0,
       size: 10,
       loading: false,
@@ -71,7 +58,6 @@ export default {
         typeName: ''
       },
       baseFormModel: false,
-      detailModel: false,
       deleting: false,
       current: 1,
       searchValue: '',
@@ -82,54 +68,12 @@ export default {
   computed: {
     columns () {
       return [{
-        type: 'index',
-        width: 60,
-        align: 'center'
-      },
-      {
-        title: this.$t('record_id'),
-        key: 'typeId',
-        sortable: 'custom',
-        width: 120,
-        tooltip: true
-      },
-      {
-        title: this.$t('equipment_type_name'),
-        key: 'typeName',
-        sortable: 'custom',
-        width: 200,
-        tooltip: true
-      },
-      {
-        title: this.$t('create_at'),
-        sortable: 'custom',
-        width: 210,
-        key: 'createAt'
-      },
-      {
-        title: this.$t('update_at'),
-        sortable: 'custom',
-        width: 210,
-        key: 'updateAt'
-      },
-      {
-        title: this.$t('action'),
+        title: ' ',
         key: 'action',
         width: 240,
+        fixed: 'left',
         render: (h, params) => {
           return h('div', [
-            h('Button', {
-              props: {
-                type: 'text',
-                size: 'small',
-                icon: 'ios-paper-outline'
-              },
-              on: {
-                'click': () => {
-                  this.showDetailModel(params)
-                }
-              }
-            }, this.$t('detail')),
             h('Button', {
               props: {
                 type: 'text',
@@ -144,6 +88,7 @@ export default {
             }, this.$t('edit')),
             h('Poptip', {
               props: {
+                transfer: true,
                 confirm: true,
                 title: this.$t('table_handle_delete_tip')
               },
@@ -164,6 +109,21 @@ export default {
             ])
           ])
         }
+      }, {
+        type: 'index',
+        width: 60,
+        align: 'center'
+      }, {
+        title: this.$t('equipment_type_name'),
+        key: 'typeName',
+        sortable: 'custom',
+        minWidth: 200,
+        tooltip: true
+      }, {
+        title: this.$t('create_at'),
+        sortable: 'custom',
+        width: 210,
+        key: 'createAt'
       }]
     },
     ruleValidate () {
@@ -278,27 +238,10 @@ export default {
       this.formObj.typeId = ''
       this.formObj.typeName = ''
       this.baseFormModel = false
-    },
-    showDetailModel (params) {
-      this.detailModel = true
-      this.formObj.typeName = params.row.typeName
-    },
-    detailModelOkHandle () {
-      this.detailModel = false
     }
   },
   mounted () {
     const _this = this
-    _this.tableHeight = window.document.body.offsetHeight - 350
-    var ctimer = false
-    window.addEventListener('resize', () => {
-      if (ctimer) {
-        window.clearTimeout(ctimer)
-      }
-      ctimer = window.setTimeout(() => {
-        _this.tableHeight = window.document.body.offsetHeight - 350
-      }, 100)
-    })
     _this.load()
   }
 }
