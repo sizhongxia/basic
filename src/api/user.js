@@ -26,9 +26,10 @@ export const logout = () => {
   })
 }
 
-export const loadUsers = ({ searchValue, page, size, orderField, orderType }) => {
+export const loadUsers = ({ searchValue, searchUserIndentity, page, size, orderField, orderType }) => {
   const data = {
     searchValue,
+    searchUserIndentity,
     page,
     size,
     orderField,
@@ -52,14 +53,7 @@ export const toggleStateUser = ({ resultId }) => {
   })
 }
 
-export const upinsertUser = ({ userId, userName, phoneNo, email, organizeId }) => {
-  const data = {
-    userId,
-    userName,
-    phoneNo,
-    email,
-    organizeId
-  }
+export const upinsertUser = (data) => {
   return axios.request({
     url: 'user/upinsert',
     data,

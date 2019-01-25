@@ -30,25 +30,26 @@
       mask
       :mask-closable="false">
       <p slot="header">
-          <Icon type="ios-bulb-outline"></Icon>
+          <Icon type="md-arrow-dropright" />
           <span>{{ $t('farm_change_owner') }}</span>
       </p>
       <div>
         <div>
           <Form :model="farmOwnerFormObj" :label-width="140" ref="farmOwnerForm">
-            <FormItem :label="$t('farm_current_owner')">
+            <FormItem label="当前所有者">
               {{ farmOwnerFormObj.ownerUserName }} ({{ farmOwnerFormObj.ownerUserPhone }})
             </FormItem>
-            <FormItem :label="$t('new_farm_owner')">
+            <FormItem label="新所有者">
               <Select
                 v-model="farmOwnerFormObj.newOwnerUserId"
                 filterable
+                placeholder="请输入新所有者账号名或手机号"
                 remote
                 :remote-method="remoteGetUsers"
                 clearable
                 :loading="usersLoading"
                 style="width: 240px">
-                <Option v-for="option in users" :value="option.value" :key="option.value">{{option.label}} ({{option.phoneNo}}, {{option.email}})</Option>
+                <Option v-for="option in users" :value="option.value" :key="option.value">{{option.label}}({{option.phoneNo}})</Option>
               </Select>
             </FormItem>
           </Form>
@@ -66,7 +67,7 @@
       mask
       :mask-closable="false">
       <p slot="header">
-          <Icon type="ios-bulb-outline"></Icon>
+          <Icon type="md-arrow-dropright" />
           <span>{{ $t('farm_auth_new_user') }}</span>
       </p>
       <div>
@@ -111,7 +112,7 @@
       mask
       :mask-closable="false">
       <p slot="header">
-          <Icon type="md-heart-outline"></Icon>
+          <Icon type="md-arrow-dropright" />
           <span>{{ $t('farm_had_auth_users') }}</span>
       </p>
       <div>
@@ -122,7 +123,6 @@
           :data="farmUserTableData"
           :loading="farmUserDataloading"
           :columns="farmUserColumns"
-          size="small"
           :height="260"
           :highlight-row="true"
         ></Table>
@@ -137,7 +137,7 @@
       mask
       :mask-closable="false">
       <p slot="header">
-        <Icon type="ios-image-outline"></Icon>
+        <Icon type="md-arrow-dropright" />
         <span>{{ $t('farm_picture_upload') }}</span>
       </p>
       <div>
@@ -257,15 +257,10 @@ export default {
   computed: {
     columns () {
       return [{
-        type: 'index',
-        width: 60,
-        align: 'center'
-      },
-      {
-        title: this.$t('action'),
+        title: ' ',
         key: 'action',
-        align: 'center',
-        width: 190,
+        fixed: 'left',
+        width: 240,
         render: (h, params) => {
           return h('div', [
             h('Button', {
@@ -278,18 +273,48 @@ export default {
                   this.openFarmConsoleTab(params)
                 }
               }
-            }, this.$t('farm_console')),
+            }, '农场管理'),
+            h('Button', {
+              props: {
+                type: 'text',
+                size: 'small'
+              },
+              on: {
+                'click': () => {
+                  this.openEditFormTab(params)
+                }
+              }
+            }, '修改'),
+            h('Button', {
+              props: {
+                type: 'text',
+                size: 'small'
+              },
+              on: {
+                'click': () => {
+                  this.openFarmAreasTab(params)
+                }
+              }
+            }, '厂区管理'),
+            h('Button', {
+              props: {
+                type: 'text',
+                size: 'small'
+              },
+              on: {
+                'click': () => {
+                  this.showChangeOwnerModel(params)
+                }
+              }
+            }, '变更所有者'),
             h('Dropdown', {
               props: {
-                trigger: 'click'
+                transfer: true,
+                trigger: 'hover'
               },
               on: {
                 'on-click': (name) => {
                   switch (name) {
-                    case 'edit' : this.openEditFormTab(params)
-                      break
-                    case 'farm_area' : this.openFarmAreasTab(params)
-                      break
                     case 'farm_picture_upload' : this.showFarmPictrueUploadModel(params)
                       break
                     case 'farm_picture_manage' : this.openFarmPicturesTab(params)
@@ -297,8 +322,6 @@ export default {
                     case 'delete' : this.handleDelete(params)
                       break
                     case 'reset_qr' : this.handleResetQR(params)
-                      break
-                    case 'farm_change_owner' : this.showChangeOwnerModel(params)
                       break
                     case 'farm_auth_new_user' : this.showCreateAuthUserModel(params)
                       break
@@ -313,20 +336,10 @@ export default {
                   type: 'text',
                   size: 'small'
                 }
-              }, this.$t('more_options')),
+              }, '更多操作'),
               h('DropdownMenu', {
                 slot: 'list'
               }, [
-                h('DropdownItem', {
-                  props: {
-                    name: 'edit'
-                  }
-                }, this.$t('edit')),
-                h('DropdownItem', {
-                  props: {
-                    name: 'farm_area'
-                  }
-                }, this.$t('farm_area')),
                 h('DropdownItem', {
                   props: {
                     name: 'farm_picture_upload'
@@ -339,14 +352,9 @@ export default {
                 }, this.$t('farm_picture_manage')),
                 h('DropdownItem', {
                   props: {
-                    name: 'farm_change_owner'
-                  }
-                }, this.$t('farm_change_owner')),
-                h('DropdownItem', {
-                  props: {
                     name: 'farm_auth_new_user'
                   }
-                }, this.$t('farm_auth_new_user')),
+                }, '授权新访问者'),
                 h('DropdownItem', {
                   props: {
                     name: 'farm_had_auth_users'
@@ -356,7 +364,7 @@ export default {
                   props: {
                     name: 'reset_qr'
                   }
-                }, this.$t('reset_qr')),
+                }, '重新生成二维码'),
                 h('DropdownItem', {
                   props: {
                     name: 'delete'
@@ -366,75 +374,58 @@ export default {
                     style: {
                       color: '#ed4014'
                     }
-                  }, this.$t('delete'))
+                  }, '删除农场记录')
                 ])
               ])
             ])
           ])
         }
-      },
-      {
-        title: this.$t('record_id'),
-        key: 'farmId',
-        sortable: 'custom',
-        width: 120,
-        tooltip: true
-      },
-      {
-        title: this.$t('farm_code'),
-        key: 'farmCode',
-        sortable: 'custom',
-        width: 180,
-        tooltip: true
-      },
-      {
+      }, {
+        type: 'index',
+        width: 60,
+        align: 'center'
+      }, {
         title: this.$t('farm_name'),
         key: 'farmName',
         sortable: 'custom',
-        width: 200,
+        minWidth: 200,
         tooltip: true
-      },
-      {
+      }, {
+        title: this.$t('farm_code'),
+        key: 'farmCode',
+        sortable: 'custom',
+        minWidth: 180,
+        tooltip: true
+      }, {
         title: this.$t('province'),
         key: 'provinceName',
-        width: 120,
+        minWidth: 120,
         tooltip: true
-      },
-      {
+      }, {
         title: this.$t('city'),
         key: 'cityName',
-        width: 120,
+        minWidth: 120,
         tooltip: true
-      },
-      {
+      }, {
         title: this.$t('county'),
         key: 'countyName',
-        width: 120,
+        minWidth: 120,
         tooltip: true
-      },
-      {
+      }, {
         title: this.$t('weather_city'),
         key: 'weatherCityName',
-        width: 100,
+        minWidth: 100,
         tooltip: true
-      },
-      {
+      }, {
         title: this.$t('address'),
         key: 'address',
-        width: 240,
+        minWidth: 220,
         tooltip: true
-      },
-      {
+      }, {
         title: this.$t('create_at'),
         sortable: 'custom',
         width: 210,
         key: 'createAt'
-      },
-      {
-        title: this.$t('update_at'),
-        sortable: 'custom',
-        width: 210,
-        key: 'updateAt'
       }]
     },
     farmUserColumns () {

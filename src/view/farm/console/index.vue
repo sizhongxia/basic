@@ -71,7 +71,7 @@
       v-model="equipmentFormModel"
       :title="equipmentFormObj.equipmentId === '' ? $t('create') : $t('update')"
       scrollable
-      width="720"
+      width="980"
       mask
       :mask-closable="false"
       class-name="vertical-center-modal"
@@ -148,7 +148,7 @@
       v-model="cameraFormModel"
       :title="cameraFormObj.cameraId === '' ? $t('create') : $t('update')"
       scrollable
-      width="960"
+      width="980"
       mask
       :mask-closable="false"
       class-name="vertical-center-modal"

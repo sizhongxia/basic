@@ -1,5 +1,13 @@
 <style lang="less">
 @import "./index.less";
+.vertical-center-modal{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .ivu-modal{
+      top: 0;
+  }
+}
 </style>
 <template>
   <div>
@@ -17,15 +25,87 @@
       :data="tableData"
       :loading="loading"
       :columns="columns"
-      size="small"
-      :height="tableHeight"
       :highlight-row="true"
       editable
       @on-sort-change="handleSortChange"
+      @on-row-dblclick="showDetail"
     ></Table>
     <div class="page">
       <Page :total="total" :current="current" :page-size="size" @on-change="changePage" @on-page-size-change="changePageSize" show-sizer show-total show-elevator></Page>
     </div>
+    <Modal
+      v-model="detailModel"
+      scrollable
+      width="820"
+      mask
+      :mask-closable="false"
+      class-name="vertical-center-modal">
+      <p slot="header">
+        <Icon type="md-arrow-dropright" />
+        <span>设备详情</span>
+      </p>
+      <div>
+        <Form :model="equipment" :label-width="120">
+          <Row style="padding-right: 60px;">
+            <Col span="12">
+              <FormItem label="设备名称">
+                <Input :readonly="true" v-model="equipment.equipmentName"/>
+              </FormItem>
+            </Col>
+            <Col span="12">
+              <FormItem label="设备序列号">
+                <Input :readonly="true" v-model="equipment.equipmentSn"/>
+              </FormItem>
+            </Col>
+            <Col span="12">
+              <FormItem label="设备编码">
+                <Input :readonly="true" v-model="equipment.equipmentCode"/>
+              </FormItem>
+            </Col>
+            <Col span="12">
+              <FormItem label="设备类型">
+                <Input :readonly="true" v-model="equipment.typeName"/>
+              </FormItem>
+            </Col>
+            <Col span="12">
+              <FormItem label="设备型号">
+                <Input :readonly="true" v-model="equipment.modelName"/>
+              </FormItem>
+            </Col>
+            <Col span="12">
+              <FormItem label="最后操作人">
+                <Input :readonly="true" v-model="equipment.operator"/>
+              </FormItem>
+            </Col>
+            <Col span="12">
+              <FormItem label="设备通讯标识">
+                <Input :readonly="true" v-model="equipment.equipmentDtuId"/>
+              </FormItem>
+            </Col>
+            <Col span="12">
+              <FormItem label="设备通讯地址">
+                <Input :readonly="true" v-model="equipment.equipment485Addr"/>
+              </FormItem>
+            </Col>
+            <Col span="24">
+              <FormItem label="设备备注">
+                <Input type="textarea" :readonly="true" v-model="equipment.remark"/>
+              </FormItem>
+            </Col>
+            <Col span="12">
+              <FormItem label="设备创建时间">
+                <Input :readonly="true" v-model="equipment.createAt"/>
+              </FormItem>
+            </Col>
+            <Col span="12">
+              <FormItem label="设备修改时间">
+                <Input :readonly="true" v-model="equipment.updateAt"/>
+              </FormItem>
+            </Col>
+          </Row>
+        </Form>
+      </div>
+    </Modal>
   </div>
 </template>
 <script>
@@ -34,14 +114,15 @@ export default {
   data () {
     return {
       tableData: [],
-      tableHeight: 100,
       total: 0,
       size: 10,
       loading: false,
       current: 1,
       name: '',
       code: '',
-      sn: ''
+      sn: '',
+      equipment: {},
+      detailModel: false
     }
   },
   computed: {
@@ -50,58 +131,34 @@ export default {
         type: 'index',
         width: 60,
         align: 'center'
-      },
-      {
-        title: this.$t('record_id'),
-        key: 'equipmentId',
-        sortable: 'custom',
-        width: 120,
-        tooltip: true
-      },
-      {
+      }, {
         title: this.$t('equipment_name'),
         key: 'equipmentName',
-        width: 160,
+        minWidth: 160,
         sortable: 'custom',
         tooltip: true
-      },
-      {
+      }, {
         title: this.$t('equipment_code'),
         key: 'equipmentCode',
         sortable: 'custom',
-        width: 160,
+        minWidth: 160,
         tooltip: true
-      },
-      {
+      }, {
         title: this.$t('equipment_sn'),
         key: 'equipmentSn',
         sortable: 'custom',
-        width: 160,
+        minWidth: 160,
         tooltip: true
-      },
-      {
+      }, {
         title: this.$t('operator'),
         key: 'operator',
         width: 160,
         tooltip: true
-      },
-      {
-        title: this.$t('remark'),
-        key: 'remark',
-        width: 210,
-        tooltip: true
-      },
-      {
+      }, {
         title: this.$t('create_at'),
         sortable: 'custom',
         width: 210,
         key: 'createAt'
-      },
-      {
-        title: this.$t('update_at'),
-        sortable: 'custom',
-        width: 210,
-        key: 'updateAt'
       }]
     }
   },
@@ -148,20 +205,15 @@ export default {
       this.orderField = e.key
       this.orderType = e.order
       this.load()
+    },
+    showDetail (e) {
+      console.info(e)
+      this.equipment = e
+      this.detailModel = true
     }
   },
   mounted () {
     const _this = this
-    _this.tableHeight = window.document.body.offsetHeight - 330
-    var ctimer = false
-    window.addEventListener('resize', () => {
-      if (ctimer) {
-        window.clearTimeout(ctimer)
-      }
-      ctimer = window.setTimeout(() => {
-        _this.tableHeight = window.document.body.offsetHeight - 330
-      }, 100)
-    })
     _this.load()
   }
 }

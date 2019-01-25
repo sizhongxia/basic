@@ -65,7 +65,7 @@ export default [
         meta: {
           access: ['super_admin', 'farm_manage'],
           icon: 'md-arrow-dropright',
-          title: '农场管理'
+          title: '农场列表'
         },
         component: () => import('@/view/farm/index.vue')
       },
@@ -124,7 +124,7 @@ export default [
           access: ['super_admin', 'farm_console'],
           hideInMenu: true,
           icon: 'md-arrow-dropright',
-          title: '农场控制台'
+          title: '农场管理'
         },
         component: () => import('@/view/farm/console/index.vue')
       }

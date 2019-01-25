@@ -4,7 +4,12 @@
 <template>
   <div>
     <Card class="search-con" shadow>
-      <Input clearable :placeholder="$t('search_by_keyword_user_name')" class="search-input" v-model="searchValue"/>
+      <Input clearable placeholder="请输入登录账号查询" class="search-input" v-model="searchValue"/>
+      <Select clearable v-model="searchUserIndentity" style="width:200px;margin-left:4px;" placeholder="请选择一个身份">
+        <Option value="super_admin" key="super_admin">超级管理员</Option>
+        <Option value="admin" key="admin">运维管理员</Option>
+        <Option value="customer" key="customer">客户</Option>
+      </Select>
       <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="search"/>&nbsp;&nbsp;{{ $t('search') }}</Button>
     </Card>
     <Button type="primary" icon="ios-add-circle-outline" style="margin-bottom: 18px" @click="showCreateForm">{{ $t('create') }}</Button>
@@ -15,8 +20,7 @@
       :data="tableData"
       :loading="loading"
       :columns="columns"
-      size="small"
-      :height="tableHeight"
+      size="default"
       :highlight-row="true"
       @on-sort-change="handleSortChange"
     ></Table>
@@ -24,34 +28,23 @@
       <Page :total="total" :current="current" :page-size="size" @on-change="changePage" @on-page-size-change="changePageSize" show-sizer show-total show-elevator></Page>
     </div>
     <Modal
-      v-model="detailModel"
-      :title="$t('detail')"
-      @on-ok="detailModelOkHandle"
-      scrollable
-      width="620"
-      mask
-      :mask-closable="false">
-      <p>{{ $t('user_name') }}: {{formObj.userName}}</p>
-      <p>{{ $t('phone_no') }}: {{formObj.phoneNo}}</p>
-      <p>{{ $t('email') }}: {{formObj.email}}</p>
-    </Modal>
-    <Modal
       v-model="baseFormModel"
       :title="formObj.userId === '' ? $t('create') : $t('update')"
       scrollable
-      width="620"
       mask
-      :mask-closable="false"
-      :closable="false">
+      :mask-closable="false">
       <Form :model="formObj" :label-width="120" :rules="ruleValidate" ref="baseForm">
-        <FormItem :label="$t('user_name')" prop="userName">
-            <Input v-model="formObj.userName" :disabled="formObj.userId !== ''" :placeholder="$t('please_input')+$t('user_name')"/>
+        <FormItem label="登录账号" prop="userName">
+            <Input v-model="formObj.userName" :disabled="formObj.userId !== ''" placeholder="请输入登录账号"/>
         </FormItem>
         <FormItem :label="$t('phone_no')" prop="phoneNo">
             <Input v-model="formObj.phoneNo" :placeholder="$t('please_input')+$t('phone_no')"/>
         </FormItem>
         <FormItem :label="$t('email')" prop="email">
             <Input v-model="formObj.email" :placeholder="$t('please_input')+$t('email')"/>
+        </FormItem>
+        <FormItem label="可创建农场数量" prop="maxFarmNum">
+            <InputNumber style="width:100%" :max="999" :min="1" v-model="formObj.maxFarmNum" placeholder="请输入可创建农场数量"/>
         </FormItem>
         <FormItem :label="$t('organize')">
           <Select v-model="formObj.organizeId" clearable filterable>
@@ -72,7 +65,7 @@
       mask
       :mask-closable="false">
       <p slot="header">
-          <Icon type="ios-bulb-outline"></Icon>
+          <Icon type="md-arrow-dropright" />
           <span>{{ $t('user_identity') }}</span>
       </p>
       <div>
@@ -85,7 +78,7 @@
                   <span>{{ $t('super_admin') }}</span>
                 </Checkbox>
                 <Checkbox label="admin">
-                  <span>{{ $t('admin') }}</span>
+                  <span>运维管理员</span>
                 </Checkbox>
                 <Checkbox label="customer">
                   <span>{{ $t('customer') }}</span>
@@ -105,7 +98,7 @@
       mask
       :mask-closable="false">
       <p slot="header">
-          <Icon type="md-heart-outline"></Icon>
+          <Icon type="md-arrow-dropright" />
           <span>{{ $t('user_auth_farms') }}</span>
       </p>
       <div>
@@ -116,7 +109,6 @@
           :data="userFarmTableData"
           :loading="userFarmDataloading"
           :columns="userFarmColumns"
-          size="small"
           :height="260"
           :highlight-row="true"
         ></Table>
@@ -132,7 +124,7 @@
       :mask-closable="false"
       class-name="vertical-center-modal">
       <p slot="header">
-        <Icon type="ios-globe-outline"></Icon>
+        <Icon type="md-arrow-dropright" />
         <span>{{ $t('user_auth_menus') }}</span>
       </p>
       <Tree :data="authMenus" show-checkbox @on-check-change="changeUserMenuAuthHandle" :check-strictly="true" :empty-text="noUserMenuAuth"></Tree>
@@ -147,7 +139,6 @@ export default {
   data () {
     return {
       tableData: [],
-      tableHeight: 100,
       total: 0,
       size: 10,
       userFarmTableData: [],
@@ -161,6 +152,7 @@ export default {
         userName: '',
         phoneNo: '',
         email: '',
+        maxFarmNum: 1,
         organizeId: ''
       },
       identityloading: false,
@@ -171,12 +163,12 @@ export default {
       },
       userAuthFarmsloading: false,
       baseFormModel: false,
-      detailModel: false,
       userIdentityModel: false,
       userAuthFarmModel: false,
       deleting: false,
       resetpwding: false,
       current: 1,
+      searchUserIndentity: '',
       searchValue: '',
       orderField: '',
       orderType: '',
@@ -188,84 +180,12 @@ export default {
   computed: {
     columns () {
       return [{
-        type: 'index',
-        width: 60,
-        align: 'center'
-      },
-      {
-        title: this.$t('record_id'),
-        key: 'userId',
-        sortable: 'custom',
-        width: 120,
-        tooltip: true
-      },
-      {
-        title: this.$t('user_name'),
-        key: 'userName',
-        sortable: 'custom',
-        width: 120,
-        tooltip: true
-      },
-      {
-        title: this.$t('phone_no'),
-        key: 'phoneNo',
-        sortable: 'custom',
-        width: 140,
-        tooltip: true
-      },
-      {
-        title: this.$t('email'),
-        key: 'email',
-        sortable: 'custom',
-        width: 220,
-        tooltip: true
-      },
-      {
-        title: this.$t('account_state'),
-        key: 'accountState',
-        width: 120,
-        sortable: 'custom',
-        render: (h, params) => {
-          const row = params.row
-          const color = row.accountState === 0 ? 'success' : 'warning'
-          const text = row.accountState === 0 ? this.$t('normal') : this.$t('disabled')
-          return h('Tag', {
-            props: {
-              color: color
-            }
-          }, text)
-        }
-      },
-      {
-        title: this.$t('create_at'),
-        sortable: 'custom',
-        width: 210,
-        key: 'createAt'
-      },
-      {
-        title: this.$t('update_at'),
-        sortable: 'custom',
-        width: 210,
-        key: 'updateAt'
-      },
-      {
-        title: this.$t('action'),
+        title: ' ',
         key: 'action',
         width: 280,
+        fixed: 'left',
         render: (h, params) => {
           return h('div', [
-            h('Button', {
-              props: {
-                type: 'text',
-                size: 'small',
-                icon: 'ios-paper-outline'
-              },
-              on: {
-                'click': () => {
-                  this.showDetailModel(params)
-                }
-              }
-            }, this.$t('detail')),
             h('Button', {
               props: {
                 type: 'text',
@@ -277,11 +197,12 @@ export default {
                   this.showEditForm(params)
                 }
               }
-            }, this.$t('edit')),
+            }, '编辑'),
             h('Poptip', {
               props: {
                 confirm: true,
-                title: this.$t('table_handle_toggle_state_tip')
+                transfer: true,
+                title: '是否要更改用户状态(禁用/启用)？'
               },
               on: {
                 'on-ok': () => {
@@ -296,12 +217,13 @@ export default {
                   icon: 'ios-swap',
                   loading: this.deleting
                 }
-              }, this.$t('toggle_state'))
+              }, '切换状态')
             ]),
             h('Poptip', {
               props: {
                 confirm: true,
-                title: this.$t('table_handle_reset_pwd_tip')
+                transfer: true,
+                title: '是否要重设用户密码？'
               },
               on: {
                 'on-ok': () => {
@@ -316,7 +238,7 @@ export default {
                   icon: 'ios-unlock-outline',
                   loading: this.resetpwding
                 }
-              }, this.$t('reset_pwd'))
+              }, '重设密码')
             ]),
             h('Button', {
               props: {
@@ -356,6 +278,55 @@ export default {
             }, this.$t('user_auth_menus'))
           ])
         }
+      }, {
+        type: 'index',
+        key: 'index',
+        width: 60,
+        align: 'center'
+      },
+      {
+        title: '登录账号',
+        key: 'userName',
+        sortable: 'custom',
+        minWidth: 120,
+        tooltip: true
+      },
+      {
+        title: this.$t('phone_no'),
+        key: 'phoneNo',
+        sortable: 'custom',
+        minWidth: 140,
+        tooltip: true
+      },
+      {
+        title: this.$t('email'),
+        key: 'email',
+        sortable: 'custom',
+        minWidth: 220,
+        tooltip: true
+      },
+      {
+        title: '最大农场数量',
+        key: 'maxFarmNum',
+        sortable: 'custom',
+        minWidth: 140,
+        align: 'center'
+      },
+      {
+        title: this.$t('account_state'),
+        key: 'accountState',
+        minWidth: 120,
+        sortable: 'custom',
+        render: (h, params) => {
+          const row = params.row
+          const color = row.accountState === 0 ? 'success' : 'warning'
+          const text = row.accountState === 0 ? this.$t('normal') : this.$t('disabled')
+          return h('Tag', {
+            props: {
+              color: color
+            }
+          }, text)
+        }
       }]
     },
     userFarmColumns () {
@@ -373,19 +344,19 @@ export default {
       {
         title: this.$t('farm_name'),
         key: 'farmName',
-        width: 220,
+        minWidth: 220,
         tooltip: true
       },
       {
         title: this.$t('farm_code'),
         key: 'farmCode',
-        width: 190,
+        minWidth: 190,
         tooltip: true
       },
       {
         title: this.$t('identity'),
         key: 'identity',
-        width: 150,
+        minWidth: 150,
         tooltip: true
       },
       {
@@ -416,13 +387,13 @@ export default {
         tooltip: true
       },
       {
-        title: this.$t('handle_at'),
+        title: '处理时间',
         key: 'handleAt',
-        width: 150,
+        width: 180,
         tooltip: true
       },
       {
-        title: this.$t('handle_user_id'),
+        title: '处理人ID',
         key: 'handleUserId',
         width: 120,
         tooltip: true
@@ -432,17 +403,12 @@ export default {
       return {
         userName: [{
           required: true,
-          message: this.$t('please_input') + this.$t('user_name'),
+          message: '请输入登录账号',
           trigger: 'blur'
         }],
         phoneNo: [{
           required: true,
           message: this.$t('please_input') + this.$t('phone_no'),
-          trigger: 'blur'
-        }],
-        email: [{
-          required: true,
-          message: this.$t('please_input') + this.$t('email'),
           trigger: 'blur'
         }]
       }
@@ -454,14 +420,15 @@ export default {
   },
   methods: {
     load () {
-      this.loading = true
-      let searchValue = this.searchValue
-      let size = this.size
-      let page = this.current
-      let orderField = this.orderField
-      let orderType = this.orderType
       const _this = this
-      loadUsers({ searchValue, page, size, orderField, orderType }).then(res => {
+      _this.loading = true
+      let searchValue = _this.searchValue
+      let searchUserIndentity = _this.searchUserIndentity
+      let size = _this.size
+      let page = _this.current
+      let orderField = _this.orderField
+      let orderType = _this.orderType
+      loadUsers({ searchValue, searchUserIndentity, page, size, orderField, orderType }).then(res => {
         _this.loading = false
         if (res.status === 200 && res.data.code === 200) {
           let data = res.data.data
@@ -636,6 +603,7 @@ export default {
       this.load()
     },
     handleSortChange (e) {
+      console.info(e)
       this.orderField = e.key
       this.orderType = e.order
       this.load()
@@ -672,6 +640,7 @@ export default {
       this.formObj.userName = params.row.userName
       this.formObj.phoneNo = params.row.phoneNo
       this.formObj.email = params.row.email
+      this.formObj.maxFarmNum = params.row.maxFarmNum
       this.formObj.organizeId = params.row.organizeId
       this.organizesloading = true
       this.baseFormModel = true
@@ -700,8 +669,10 @@ export default {
           upinsertUser(_this.formObj).then(res => {
             _this.submiting = false
             if (res.status === 200 && res.data.code === 200) {
-              _this.closeBaseFormHandle()
               _this.load()
+              if (!_this.formObj.userId) {
+                _this.closeBaseFormHandle()
+              }
             } else {
               _this.$Modal.error({
                 title: _this.$t('error_message_info') + res.data.message
@@ -724,30 +695,10 @@ export default {
       this.formObj.email = ''
       this.formObj.organizeId = ''
       this.baseFormModel = false
-    },
-    showDetailModel (params) {
-      this.detailModel = true
-      // 请求
-      this.formObj.userName = params.row.userName
-      this.formObj.phoneNo = params.row.phoneNo
-      this.formObj.email = params.row.email
-    },
-    detailModelOkHandle () {
-      this.detailModel = false
     }
   },
   mounted () {
     const _this = this
-    _this.tableHeight = window.document.body.offsetHeight - 350
-    var ctimer = false
-    window.addEventListener('resize', () => {
-      if (ctimer) {
-        window.clearTimeout(ctimer)
-      }
-      ctimer = window.setTimeout(() => {
-        _this.tableHeight = window.document.body.offsetHeight - 350
-      }, 100)
-    })
     _this.load()
   }
 }

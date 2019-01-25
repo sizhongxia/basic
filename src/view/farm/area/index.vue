@@ -16,8 +16,6 @@
       :data="tableData"
       :loading="loading"
       :columns="columns"
-      size="small"
-      :height="tableHeight"
       :highlight-row="true"
       editable
       @on-sort-change="handleSortChange"
@@ -74,7 +72,6 @@ export default {
       farmId: '',
       farmName: '',
       tableData: [],
-      tableHeight: 100,
       total: 0,
       size: 10,
       loading: false,
@@ -98,59 +95,10 @@ export default {
   computed: {
     columns () {
       return [{
-        type: 'index',
-        width: 60,
-        align: 'center'
-      },
-      {
-        title: this.$t('record_id'),
-        key: 'areaId',
-        sortable: 'custom',
-        width: 120,
-        tooltip: true
-      },
-      {
-        title: this.$t('area_name'),
-        key: 'areaName',
-        sortable: 'custom',
-        width: 200,
-        tooltip: true
-      },
-      {
-        title: this.$t('area_acreage'),
-        key: 'acreage',
-        sortable: 'custom',
-        width: 180,
-        tooltip: true
-      },
-      {
-        title: this.$t('area_position'),
-        key: 'areaPosition',
-        width: 220,
-        tooltip: true
-      },
-      {
-        title: this.$t('area_describe'),
-        key: 'areaDescribe',
-        width: 360,
-        tooltip: true
-      },
-      {
-        title: this.$t('create_at'),
-        sortable: 'custom',
-        width: 210,
-        key: 'createAt'
-      },
-      {
-        title: this.$t('update_at'),
-        sortable: 'custom',
-        width: 210,
-        key: 'updateAt'
-      },
-      {
-        title: this.$t('action'),
+        title: ' ',
         key: 'action',
         width: 240,
+        fixed: 'left',
         render: (h, params) => {
           return h('div', [
             h('Button', {
@@ -179,6 +127,7 @@ export default {
             }, this.$t('edit')),
             h('Poptip', {
               props: {
+                transfer: true,
                 confirm: true,
                 title: this.$t('table_handle_delete_tip')
               },
@@ -199,6 +148,42 @@ export default {
             ])
           ])
         }
+      }, {
+        type: 'index',
+        width: 60,
+        align: 'center'
+      },
+      {
+        title: this.$t('area_name'),
+        key: 'areaName',
+        sortable: 'custom',
+        minWidth: 200,
+        tooltip: true
+      },
+      {
+        title: this.$t('area_acreage'),
+        key: 'acreage',
+        sortable: 'custom',
+        minWidth: 120,
+        tooltip: true
+      },
+      {
+        title: this.$t('area_position'),
+        key: 'areaPosition',
+        minWidth: 220,
+        tooltip: true
+      },
+      {
+        title: this.$t('area_describe'),
+        key: 'areaDescribe',
+        minWidth: 360,
+        tooltip: true
+      },
+      {
+        title: this.$t('create_at'),
+        sortable: 'custom',
+        width: 210,
+        key: 'createAt'
       }]
     },
     ruleValidate () {
@@ -343,16 +328,6 @@ export default {
     const _this = this
     _this.farmId = window.localStorage.getItem('page_farm_area_farm_id')
     _this.farmName = window.localStorage.getItem('page_farm_area_farm_name')
-    _this.tableHeight = window.document.body.offsetHeight - 400
-    var ctimer = false
-    window.addEventListener('resize', () => {
-      if (ctimer) {
-        window.clearTimeout(ctimer)
-      }
-      ctimer = window.setTimeout(() => {
-        _this.tableHeight = window.document.body.offsetHeight - 400
-      }, 100)
-    })
     _this.load()
   }
 }

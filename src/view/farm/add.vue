@@ -14,16 +14,17 @@
               <Option v-for="item in organizes" :key="item.organizeId" :value="item.organizeId">{{ item.organizeName }}</Option>
             </Select>
           </FormItem>
-          <FormItem :label="$t('owner_user')">
+          <FormItem label="所有者">
             <Select
               v-model="formModel.ownerUserId"
               filterable
               remote
               :remote-method="remoteGetUsers"
+              placeholder="请输入所有者账号名或手机号"
               clearable
               :loading="usersLoading"
               style="width: 240px">
-              <Option v-for="option in users" :value="option.value" :key="option.value">{{option.label}} ({{option.phoneNo}}, {{option.email}})</Option>
+              <Option v-for="option in users" :value="option.value" :key="option.value">{{option.label}}({{option.phoneNo}})</Option>
             </Select>
           </FormItem>
           <FormItem :label="$t('area')">
