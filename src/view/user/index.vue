@@ -253,17 +253,17 @@ export default {
                   this.showUserAuthFarmModel(params)
                 }
               }
-            }, this.$t('user_auth_farms')),
-            h('Button', {
-              props: {
-                type: 'text'
-              },
-              on: {
-                'click': () => {
-                  this.showUserAuthMenuModel(params)
-                }
-              }
-            }, this.$t('user_auth_menus'))
+            }, this.$t('user_auth_farms'))
+            // h('Button', {
+            //   props: {
+            //     type: 'text'
+            //   },
+            //   on: {
+            //     'click': () => {
+            //       this.showUserAuthMenuModel(params)
+            //     }
+            //   }
+            // }, this.$t('user_auth_menus'))
           ])
         }
       }, {

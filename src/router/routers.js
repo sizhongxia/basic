@@ -356,7 +356,7 @@ export default [
           icon: 'md-arrow-dropright',
           title: '系统字典'
         },
-        component: () => import('@/view/basic.vue')
+        component: () => import('@/view/system/dict/index.vue')
       }
     ]
   },
