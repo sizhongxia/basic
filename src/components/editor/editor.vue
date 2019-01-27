@@ -22,7 +22,7 @@ export default {
       type: String,
       default: 'html',
       validator: (val) => {
-        return oneOf(val, ['html', 'text'])
+        return oneOf(val, ['html'])
       }
     },
     /**
@@ -52,6 +52,21 @@ export default {
   },
   mounted () {
     this.editor = new Editor(`#${this.editorId}`)
+    this.editor.customConfig.menus = [
+      'head',
+      'bold',
+      'fontSize',
+      'italic',
+      'underline',
+      'strikeThrough',
+      'link',
+      'list',
+      'justify',
+      'quote',
+      'image',
+      'undo',
+      'redo'
+    ]
     this.editor.customConfig.onchange = (html) => {
       let text = this.editor.txt.text()
       if (this.cache) localStorage.editorCache = html

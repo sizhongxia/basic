@@ -4,7 +4,7 @@
 <template>
   <div>
     <Card class="search-con" shadow>
-      <Input clearable placeholder="请输入新闻标题检索" class="search-input" v-model="title"/>
+      <Input clearable placeholder="按新闻标题检索" class="search-input" v-model="title"/>
       <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="search"/>&nbsp;&nbsp;{{ $t('search') }}</Button>
     </Card>
     <Button type="primary" icon="ios-add-circle-outline" style="margin-bottom: 18px" @click="showCreateForm">{{ $t('create') }}</Button>
@@ -25,18 +25,33 @@
     </div>
     <Modal
       v-model="baseFormModel"
-      :title="formObj.organizeId === '' ? $t('create') : $t('update')"
+      :title="formObj.uniqueId === '' ? $t('create') : $t('update')"
       scrollable
-      width="620"
+      width="820"
       mask
       :mask-closable="false"
       :closable="false">
-      <Form :model="formObj" :label-width="80" :rules="ruleValidate" ref="baseForm">
-        <FormItem :label="$t('organize_name')" prop="organizeName">
-            <Input v-model="formObj.organizeName" :placeholder="$t('please_input')+$t('organize_name')"/>
+      <Form :model="formObj" :label-width="120" :rules="ruleValidate" ref="baseForm">
+        <FormItem label="新闻标题" prop="newsTitle">
+          <Input v-model="formObj.newsTitle" placeholder="请输入新闻标题"/>
+        </FormItem>
+        <FormItem label="新闻关键词" prop="newsKeywords">
+          <Input v-model="formObj.newsKeywords" placeholder="请输入新闻关键词"/>
+        </FormItem>
+        <FormItem label="新闻封面图地址" prop="newsCoverPic">
+          <Input v-model="formObj.newsCoverPic" placeholder="请输入新闻封面图地址"/>
+        </FormItem>
+        <FormItem label="新闻摘要" prop="newsAbstract">
+          <Input type="textarea" :autosize="{minRows: 2,maxRows: 5}" v-model="formObj.newsAbstract" placeholder="请输入新闻摘要"/>
+        </FormItem>
+        <FormItem label="新闻内容" prop="newsContent">
+          <editor ref="editor" @on-change="handleNewsContentChange"/>
+        </FormItem>
+        <FormItem label="新闻来源" prop="newsOrigin">
+          <Input v-model="formObj.newsOrigin" placeholder="请输入新闻来源"/>
         </FormItem>
       </Form>
-      <Spin size="large" fix v-if="submiting"></Spin>
+      <Spin size="large" fix v-if="loadingItem || submiting"></Spin>
       <div slot="footer">
         <Button type="text" @click="closeBaseFormHandle">{{ $t('i.modal.cancelText') }}</Button>
         <Button type="primary" @click="submitBaseFormHandle">{{ $t('i.modal.okText') }}</Button>
@@ -45,7 +60,8 @@
   </div>
 </template>
 <script>
-import { loadNews } from '@/api/yeetong/news'
+import { loadNews, newsDetail, upinsertNews, releaseNews, outlineNews, deleteNews } from '@/api/yeetong/news'
+import Editor from '_c/editor'
 export default {
   data () {
     return {
@@ -54,24 +70,39 @@ export default {
       size: 10,
       loading: false,
       submiting: false,
+      loadingItem: false,
       formObj: {
-        organizeId: '',
-        organizeName: ''
+        uniqueId: '',
+        newsTitle: '',
+        releaseState: '',
+        releaseTime: '',
+        newsOrigin: '',
+        newsCoverPic: '',
+        newsAbstract: '',
+        newsKeywords: '',
+        newsContent: '',
+        createTime: '',
+        updateTime: ''
       },
       baseFormModel: false,
       deleting: false,
+      relasesHandleing: false,
+      outlineHandleing: false,
       current: 1,
       title: '',
       orderField: '',
       orderType: ''
     }
   },
+  components: {
+    Editor
+  },
   computed: {
     columns () {
       return [{
         title: ' ',
         key: 'action',
-        width: 180,
+        width: 260,
         fixed: 'left',
         render: (h, params) => {
           return h('div', [
@@ -85,6 +116,44 @@ export default {
                 }
               }
             }, this.$t('edit')),
+            h('Poptip', {
+              props: {
+                transfer: true,
+                confirm: true,
+                title: '是否要发布当前文章'
+              },
+              on: {
+                'on-ok': () => {
+                  this.handleRelease(params)
+                }
+              }
+            }, [
+              h('Button', {
+                props: {
+                  type: 'text',
+                  loading: this.relasesHandleing
+                }
+              }, '发布')
+            ]),
+            h('Poptip', {
+              props: {
+                transfer: true,
+                confirm: true,
+                title: '是否要下线当前文章'
+              },
+              on: {
+                'on-ok': () => {
+                  this.handleOutLine(params)
+                }
+              }
+            }, [
+              h('Button', {
+                props: {
+                  type: 'text',
+                  loading: this.outlineHandleing
+                }
+              }, '下线')
+            ]),
             h('Poptip', {
               props: {
                 transfer: true,
@@ -112,11 +181,16 @@ export default {
         align: 'center'
       },
       {
+        title: '权值排序',
+        sortable: 'custom',
+        key: 'sortNum',
+        width: 120
+      },
+      {
         title: '标题',
         key: 'newsTitle',
         width: 200,
         tooltip: true
-        // https://www.yeetong.cn/news/5c13c3b066779372ce86d686
       },
       {
         title: '关键词',
@@ -163,7 +237,7 @@ export default {
     },
     ruleValidate () {
       return {
-        organizeName: [{
+        newsTitle: [{
           required: true,
           message: this.$t('please_input') + this.$t('organize_name'),
           trigger: 'blur'
@@ -200,7 +274,7 @@ export default {
     handleDelete (params) {
       const _this = this
       _this.deleting = true
-      deleteOrganize({ resultId: params.row.organizeId }).then(res => {
+      deleteNews({ resultId: params.row.uniqueId }).then(res => {
         _this.deleting = false
         if (res.status === 200 && res.data.code === 200) {
           this.load()
@@ -211,6 +285,44 @@ export default {
         }
       }).catch(function (reason) {
         _this.deleting = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
+    },
+    handleRelease (params) {
+      const _this = this
+      _this.relasesHandleing = true
+      releaseNews({ resultId: params.row.uniqueId }).then(res => {
+        _this.relasesHandleing = false
+        if (res.status === 200 && res.data.code === 200) {
+          this.load()
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.relasesHandleing = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
+    },
+    handleOutLine (params) {
+      const _this = this
+      _this.outlineHandleing = true
+      outlineNews({ resultId: params.row.uniqueId }).then(res => {
+        _this.outlineHandleing = false
+        if (res.status === 200 && res.data.code === 200) {
+          this.load()
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.outlineHandleing = false
         _this.$Modal.error({
           title: _this.$t('error_message_info') + reason.message
         })
@@ -233,21 +345,37 @@ export default {
       this.load()
     },
     showCreateForm () {
-      this.formObj.organizeId = ''
-      this.formObj.organizeName = ''
+      this.formObj.uniqueId = ''
+      this.formObj.newsTitle = ''
       this.baseFormModel = true
     },
     showEditForm (params) {
-      this.formObj.organizeId = params.row.organizeId
-      this.formObj.organizeName = params.row.organizeName
-      this.baseFormModel = true
+      const _this = this
+      _this.baseFormModel = true
+      _this.loadingItem = false
+      newsDetail({ resultId: params.row.uniqueId }).then(res => {
+        _this.loadingItem = false
+        if (res.status === 200 && res.data.code === 200) {
+          _this.formObj = res.data.data
+          _this.$refs.editor.setHtml(_this.formObj.newsContent)
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.loadingItem = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
     },
     submitBaseFormHandle () {
       const _this = this
       _this.$refs['baseForm'].validate((valid) => {
         if (valid) {
           _this.submiting = true
-          upinsertOrganize(_this.formObj).then(res => {
+          upinsertNews(_this.formObj).then(res => {
             _this.submiting = false
             if (res.status === 200 && res.data.code === 200) {
               _this.closeBaseFormHandle()
@@ -268,9 +396,23 @@ export default {
       })
     },
     closeBaseFormHandle () {
-      this.formObj.organizeId = ''
-      this.formObj.organizeName = ''
+      this.formObj.uniqueId = ''
+      this.formObj.newsTitle = ''
+      this.formObj.uniqueId = ''
+      this.formObj.newsTitle = ''
+      this.formObj.releaseState = ''
+      this.formObj.releaseTime = ''
+      this.formObj.newsOrigin = ''
+      this.formObj.newsCoverPic = ''
+      this.formObj.newsAbstract = ''
+      this.formObj.newsKeywords = ''
+      this.formObj.newsContent = ''
+      this.formObj.createTime = ''
+      this.formObj.updateTime = ''
       this.baseFormModel = false
+    },
+    handleNewsContentChange (html) {
+      this.formObj.newsContent = html
     }
   },
   mounted () {
