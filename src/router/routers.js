@@ -348,6 +348,17 @@ export default [
         component: () => import('@/view/basic.vue')
       },
       {
+        path: '/system/picture',
+        name: 'system_picture',
+        notCache: true,
+        meta: {
+          access: ['super_admin', 'system_picture'],
+          icon: 'md-arrow-dropright',
+          title: '图片素材'
+        },
+        component: () => import('@/view/system/picture/index.vue')
+      },
+      {
         path: '/system/dict',
         name: 'system_dict',
         notCache: true,

@@ -396,7 +396,6 @@ export default {
       const _this = this
       _this.dictItemModel = true
       _this.loadDictItems(param.row.dictCode)
-      
     },
     loadDictItems (code) {
       const _this = this

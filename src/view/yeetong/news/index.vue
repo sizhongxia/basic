@@ -60,7 +60,7 @@
   </div>
 </template>
 <script>
-import { loadNews, newsDetail, upinsertNews, releaseNews, outlineNews, deleteNews } from '@/api/yeetong/news'
+import { loadNews, newsDetail, upinsertNews, releaseNews, outlineNews, deleteNews, newsToUp, newsToDown } from '@/api/yeetong/news'
 import Editor from '_c/editor'
 export default {
   data () {
@@ -134,6 +134,42 @@ export default {
                   loading: this.relasesHandleing
                 }
               }, '发布')
+            ]),
+            h('Poptip', {
+              props: {
+                transfer: true,
+                confirm: true,
+                title: '是否要提高新闻排序权重'
+              },
+              on: {
+                'on-ok': () => {
+                  this.handleNewsToUpSort(params)
+                }
+              }
+            }, [
+              h('Button', {
+                props: {
+                  type: 'text'
+                }
+              }, '升序')
+            ]),
+            h('Poptip', {
+              props: {
+                transfer: true,
+                confirm: true,
+                title: '是否要降低新闻排序权重'
+              },
+              on: {
+                'on-ok': () => {
+                  this.handleNewsToDownSort(params)
+                }
+              }
+            }, [
+              h('Button', {
+                props: {
+                  type: 'text'
+                }
+              }, '降序')
             ]),
             h('Poptip', {
               props: {
@@ -239,7 +275,27 @@ export default {
       return {
         newsTitle: [{
           required: true,
-          message: this.$t('please_input') + this.$t('organize_name'),
+          message: '请输入新闻标题',
+          trigger: 'blur'
+        }],
+        newsKeywords: [{
+          required: true,
+          message: '请输入新闻关键词',
+          trigger: 'blur'
+        }],
+        newsCoverPic: [{
+          required: true,
+          message: '请输入新闻封面图地址',
+          trigger: 'blur'
+        }],
+        newsAbstract: [{
+          required: true,
+          message: '请输入新闻摘要',
+          trigger: 'blur'
+        }],
+        newsContent: [{
+          required: true,
+          message: '请输入新闻内容',
           trigger: 'blur'
         }]
       }
@@ -277,7 +333,7 @@ export default {
       deleteNews({ resultId: params.row.uniqueId }).then(res => {
         _this.deleting = false
         if (res.status === 200 && res.data.code === 200) {
-          this.load()
+          _this.load()
         } else {
           _this.$Modal.error({
             title: _this.$t('error_message_info') + res.data.message
@@ -296,7 +352,7 @@ export default {
       releaseNews({ resultId: params.row.uniqueId }).then(res => {
         _this.relasesHandleing = false
         if (res.status === 200 && res.data.code === 200) {
-          this.load()
+          _this.load()
         } else {
           _this.$Modal.error({
             title: _this.$t('error_message_info') + res.data.message
@@ -315,7 +371,7 @@ export default {
       outlineNews({ resultId: params.row.uniqueId }).then(res => {
         _this.outlineHandleing = false
         if (res.status === 200 && res.data.code === 200) {
-          this.load()
+          _this.load()
         } else {
           _this.$Modal.error({
             title: _this.$t('error_message_info') + res.data.message
@@ -323,6 +379,38 @@ export default {
         }
       }).catch(function (reason) {
         _this.outlineHandleing = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
+    },
+    handleNewsToUpSort (params) {
+      const _this = this
+      newsToUp({ resultId: params.row.uniqueId }).then(res => {
+        if (res.status === 200 && res.data.code === 200) {
+          _this.load()
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
+    },
+    handleNewsToDownSort (params) {
+      const _this = this
+      newsToDown({ resultId: params.row.uniqueId }).then(res => {
+        if (res.status === 200 && res.data.code === 200) {
+          _this.load()
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
         _this.$Modal.error({
           title: _this.$t('error_message_info') + reason.message
         })
@@ -347,6 +435,7 @@ export default {
     showCreateForm () {
       this.formObj.uniqueId = ''
       this.formObj.newsTitle = ''
+      this.$refs.editor.setHtml('')
       this.baseFormModel = true
     },
     showEditForm (params) {
