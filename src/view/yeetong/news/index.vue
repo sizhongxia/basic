@@ -39,7 +39,9 @@
           <Input v-model="formObj.newsKeywords" placeholder="请输入新闻关键词"/>
         </FormItem>
         <FormItem label="新闻封面图地址" prop="newsCoverPic">
-          <Input v-model="formObj.newsCoverPic" placeholder="请输入新闻封面图地址"/>
+          <Input v-model="formObj.newsCoverPic" placeholder="请输入新闻封面图地址">
+            <Button slot="append" @click="uploadNewsCoverPic" icon="ios-cloud-upload-outline">上传</Button>
+          </Input>
         </FormItem>
         <FormItem label="新闻摘要" prop="newsAbstract">
           <Input type="textarea" :autosize="{minRows: 2,maxRows: 5}" v-model="formObj.newsAbstract" placeholder="请输入新闻摘要"/>
@@ -502,6 +504,12 @@ export default {
     },
     handleNewsContentChange (html) {
       this.formObj.newsContent = html
+    },
+    uploadNewsCoverPic () {
+      this.$Modal.error({
+        title: '暂不支持单独上传，请到‘图片素材’中拷贝图片地址。'
+      })
+      // 方案，弹出上传框
     }
   },
   mounted () {

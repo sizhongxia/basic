@@ -293,6 +293,16 @@ export default {
                 }
               }
             }, '图库'),
+            h('Button', {
+              props: {
+                type: 'text'
+              },
+              on: {
+                'click': () => {
+                  this.showPicManageModel(params)
+                }
+              }
+            }, '文档'),
             h('Poptip', {
               props: {
                 transfer: true,
