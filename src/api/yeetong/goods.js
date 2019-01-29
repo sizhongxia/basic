@@ -63,3 +63,25 @@ export const deleteGoods = ({ resultId }) => {
     method: 'post'
   })
 }
+
+export const goodsPictures = ({ resultId }) => {
+  const data = {
+    resultId
+  }
+  return axios.request({
+    url: 'yt/goods/pictures',
+    data,
+    method: 'post'
+  })
+}
+
+export const deleteGoodsPicture = ({ resultId }) => {
+  const data = {
+    resultId
+  }
+  return axios.request({
+    url: 'yt/goods/deletePicture',
+    data,
+    method: 'post'
+  })
+}

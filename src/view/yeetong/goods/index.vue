@@ -1,5 +1,8 @@
 <style lang="less">
 @import "./index.less";
+.picModelStyle {
+  display: inline-block;width: 144px;height: 144px;text-align: center;line-height: 144px;border: 1px solid transparent;border-radius: 6px;overflow: hidden;background: #fff;position: relative;box-shadow: 0 1px 1px rgba(0,0,0,.2);margin-right: 8px;
+}
 </style>
 <template>
   <div>
@@ -116,7 +119,6 @@
                 :on-exceeded-size="uploadPicErrorSizeHandle"
                 :max-size="4096"
                 :show-upload-list="false"
-                ref="farmPictureUploadForm"
                 :action="baseUrl + 'upload'">
                 <Button icon="ios-cloud-upload-outline">选择封面图片</Button>
               </Upload>
@@ -135,6 +137,13 @@
       <img :src="picModelPicUrl" v-if="picModelPicUrl" style="width: 100%">
       <div slot="footer"></div>
     </Modal>
+    <Modal v-model="picModelWithDelVisible">
+      <img :src="currentGoodsPicture.picUrl" v-if="currentGoodsPicture.picId" style="max-width: 100%">
+      <div slot="footer" style="text-align:center">
+        <Button type="error" style="width: 120px" v-if="currentGoodsPicture.picId" @click="deleteGoodsPicture">删除</Button>
+      </div>
+      <Spin size="large" fix v-if="deleting"></Spin>
+    </Modal>
     <Modal
       v-model="detailContentFormModel"
       title="修改商品详情内容"
@@ -152,10 +161,41 @@
         <Button type="primary" @click="submitDetailContentFormHandle">保存</Button>
       </div>
     </Modal>
+    <Modal v-model="picManageModel"
+      title="商品图库"
+      width="820"
+      mask
+      :mask-closable="false"
+      :closable="true">
+      <div style="width:100%;height:420px;overflow: auto;text-align: left;">
+        <div v-for="picItem in goodsPictureList" :key='picItem.picId' class="picModelStyle">
+          <img @click="showBigPictureModelWithCanDel(picItem)" :src="picItem.picUrl" style="vertical-align: top;border-style: none;width:100%;height:100%;">
+        </div>
+      </div>
+      <div slot="footer">
+        <Upload
+          type="select"
+          accept=".jpg,.png"
+          :multiple="true"
+          :format="uploadFormat"
+          :headers="uploadGoodsHeaders"
+          :before-upload="uploadPicBeforeHandle"
+          :on-success="uploadGoodsPicSuccessHandle"
+          :on-error="uploadPicErrorHandle"
+          :on-format-error="uploadPicErrorFormatHandle"
+          :on-exceeded-size="uploadPicErrorSizeHandle"
+          :max-size="4096"
+          :show-upload-list="false"
+          :action="baseUrl + 'upload-goods'">
+          <Button icon="ios-cloud-upload-outline">上传新图片</Button>
+        </Upload>
+      </div>
+      <Spin size="large" fix v-if="pictrueUploading || loadingPics"></Spin>
+    </Modal>
   </div>
 </template>
 <script>
-import { loadGoods, upinsertGoods, goodsDetail, goodsDetailContent, updateGoodsDetailContent, deleteGoods } from '@/api/yeetong/goods'
+import { loadGoods, upinsertGoods, goodsDetail, goodsDetailContent, updateGoodsDetailContent, deleteGoods, goodsPictures, deleteGoodsPicture } from '@/api/yeetong/goods'
 import config from '@/config'
 import Editor from '_c/editor'
 export default {
@@ -168,6 +208,9 @@ export default {
       uploadFormat: ['jpg', 'png'],
       uploadHeaders: {
         type: 'material_imgs'
+      },
+      uploadGoodsHeaders: {
+        goodsId: ''
       },
       pictrueUploading: false,
       loading: false,
@@ -200,7 +243,12 @@ export default {
       goodsName: '',
       current: 1,
       orderField: '',
-      orderType: ''
+      orderType: '',
+      picManageModel: false,
+      loadingPics: false,
+      goodsPictureList: [],
+      currentGoodsPicture: {},
+      picModelWithDelVisible: false
     }
   },
   components: {
@@ -234,7 +282,17 @@ export default {
                   this.showDetailContentForm(params)
                 }
               }
-            }, '商品详情页'),
+            }, '详情页'),
+            h('Button', {
+              props: {
+                type: 'text'
+              },
+              on: {
+                'click': () => {
+                  this.showPicManageModel(params)
+                }
+              }
+            }, '图库'),
             h('Poptip', {
               props: {
                 transfer: true,
@@ -394,6 +452,10 @@ export default {
     uploadPicSuccessHandle (response, file, fileList) {
       this.formObj.goodsCoverPic = file.response.data
       this.pictrueUploading = false
+    },
+    uploadGoodsPicSuccessHandle (response, file, fileList) {
+      this.pictrueUploading = false
+      this.loadGoodsPics()
     },
     uploadPicErrorHandle (file, fileList) {
       const _this = this
@@ -557,6 +619,10 @@ export default {
       this.picModelVisible = true
       this.picModelPicUrl = pic
     },
+    showBigPictureModelWithCanDel (item) {
+      this.currentGoodsPicture = item
+      this.picModelWithDelVisible = true
+    },
     handleDetailContentChange (html) {
       this.detailContentFormObj.goodsDetailContent = html
     },
@@ -566,6 +632,52 @@ export default {
       _this.detailContentFormObj.goodsId = ''
       _this.detailContentFormObj.goodsDetailContent = ''
       _this.$refs.editor.setHtml('')
+    },
+    loadGoodsPics (goodsId) {
+      const _this = this
+      _this.loadingPics = true
+      goodsPictures({ resultId: _this.uploadGoodsHeaders.goodsId }).then(res => {
+        _this.loadingPics = false
+        if (res.status === 200 && res.data.code === 200) {
+          _this.goodsPictureList = res.data.data
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.loadingPics = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
+    },
+    showPicManageModel (params) {
+      const _this = this
+      _this.picManageModel = true
+      _this.uploadGoodsHeaders.goodsId = params.row.goodsId
+      _this.loadGoodsPics()
+    },
+    deleteGoodsPicture () {
+      const _this = this
+      _this.deleting = true
+      deleteGoodsPicture({ resultId: this.currentGoodsPicture.picId }).then(res => {
+        _this.deleting = false
+        if (res.status === 200 && res.data.code === 200) {
+          _this.currentGoodsPicture = {}
+          _this.picModelWithDelVisible = false
+          _this.loadGoodsPics()
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.deleting = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
     }
   },
   mounted () {
