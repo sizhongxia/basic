@@ -199,17 +199,6 @@ export default [
     component: Main,
     children: [
       {
-        path: '/business/product',
-        name: 'business_product',
-        notCache: true,
-        meta: {
-          access: ['super_admin', 'business_product'],
-          icon: 'md-arrow-dropright',
-          title: '产品管理'
-        },
-        component: () => import('@/view/basic.vue')
-      },
-      {
         path: '/business/news',
         name: 'business_news',
         notCache: true,
@@ -255,6 +244,17 @@ export default [
     },
     component: Main,
     children: [
+      {
+        path: '/order/goods',
+        name: 'order_goods',
+        notCache: true,
+        meta: {
+          access: ['super_admin', 'order_goods'],
+          icon: 'md-arrow-dropright',
+          title: '商品管理'
+        },
+        component: () => import('@/view/yeetong/goods/index.vue')
+      },
       {
         path: '/order/manage',
         name: 'order_manage',
