@@ -345,7 +345,7 @@ export default [
           icon: 'md-arrow-dropright',
           title: '系统应用'
         },
-        component: () => import('@/view/basic.vue')
+        component: () => import('@/view/system/func/index.vue')
       },
       {
         path: '/system/picture',

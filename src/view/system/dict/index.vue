@@ -228,8 +228,9 @@ export default {
       }, {
         title: ' ',
         key: 'action',
-        width: 80,
+        width: 120,
         fixed: 'right',
+        align: 'center',
         render: (h, params) => {
           return h('div', [
             h('Poptip', {
@@ -246,7 +247,7 @@ export default {
             }, [
               h('Button', {
                 props: {
-                  type: 'text',
+                  type: 'error',
                   loading: this.deleting
                 }
               }, this.$t('delete'))

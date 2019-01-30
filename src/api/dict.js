@@ -55,6 +55,7 @@ export const upinsertDict = (data) => {
     method: 'post'
   })
 }
+
 export const upinsertItem = (data) => {
   return axios.request({
     url: 'system/dict/upinsertItem',
