@@ -36,7 +36,7 @@
           <Input v-model="formObj.newsTitle" placeholder="请输入新闻标题"/>
         </FormItem>
         <FormItem label="新闻关键词" prop="newsKeywords">
-          <Input v-model="formObj.newsKeywords" placeholder="请输入新闻关键词"/>
+          <Input v-model="formObj.newsKeywords" placeholder="请输入新闻关键词, 多个关键词以英文逗号分隔"/>
         </FormItem>
         <FormItem label="新闻封面图地址" prop="newsCoverPic">
           <Input v-model="formObj.newsCoverPic" placeholder="请输入新闻封面图地址">
@@ -474,7 +474,7 @@ export default {
     showEditForm (params) {
       const _this = this
       _this.baseFormModel = true
-      _this.loadingItem = false
+      _this.loadingItem = true
       newsDetail({ resultId: params.row.uniqueId }).then(res => {
         _this.loadingItem = false
         if (res.status === 200 && res.data.code === 200) {
@@ -532,6 +532,7 @@ export default {
       this.formObj.createTime = ''
       this.formObj.updateTime = ''
       this.baseFormModel = false
+      this.$refs['baseForm'].resetFields()
     },
     handleNewsContentChange (html) {
       this.formObj.newsContent = html

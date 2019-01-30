@@ -299,7 +299,7 @@ export default {
               },
               on: {
                 'click': () => {
-                  this.showPicManageModel(params)
+                  this.showDocManageModel(params)
                 }
               }
             }, '文档'),
@@ -667,6 +667,12 @@ export default {
       _this.picManageModel = true
       _this.uploadGoodsHeaders.goodsId = params.row.goodsId
       _this.loadGoodsPics()
+    },
+    showDocManageModel (params) {
+      const _this = this
+      _this.$Modal.error({
+        title: '待开发'
+      })
     },
     deleteGoodsPicture () {
       const _this = this
