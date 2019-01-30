@@ -5,9 +5,9 @@
   <div>
     <Card class="search-con" shadow>
       <Input clearable placeholder="按新闻标题检索" class="search-input" v-model="title"/>
-      <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="search"/>&nbsp;&nbsp;{{ $t('search') }}</Button>
+      <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="search"/>&nbsp;&nbsp;检索</Button>
     </Card>
-    <Button type="primary" icon="ios-add-circle-outline" style="margin-bottom: 18px" @click="showCreateForm">{{ $t('create') }}</Button>
+    <Button type="primary" icon="ios-add-circle-outline" style="margin-bottom: 18px" @click="showCreateForm">新增新闻资讯</Button>
     <Table
       :border="false"
       :stripe="true"
@@ -27,7 +27,7 @@
       v-model="baseFormModel"
       :title="formObj.uniqueId === '' ? $t('create') : $t('update')"
       scrollable
-      width="820"
+      :width="980"
       mask
       :mask-closable="false"
       :closable="false">

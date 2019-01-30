@@ -218,7 +218,7 @@ export default [
           icon: 'md-arrow-dropright',
           title: '解决方案管理'
         },
-        component: () => import('@/view/basic.vue')
+        component: () => import('@/view/yeetong/solution/index.vue')
       },
       {
         path: '/business/knowledges',
