@@ -205,7 +205,7 @@ export default [
         meta: {
           access: ['super_admin', 'business_news'],
           icon: 'md-arrow-dropright',
-          title: '资讯管理'
+          title: '新闻资讯管理'
         },
         component: () => import('@/view/yeetong/news/index.vue')
       },
@@ -227,7 +227,7 @@ export default [
         meta: {
           access: ['super_admin', 'business_knowledges'],
           icon: 'md-arrow-dropright',
-          title: '知识库管理'
+          title: '知识百科管理'
         },
         component: () => import('@/view/basic.vue')
       }
