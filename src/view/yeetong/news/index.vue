@@ -59,11 +59,35 @@
         <Button type="primary" @click="submitBaseFormHandle">{{ $t('i.modal.okText') }}</Button>
       </div>
     </Modal>
+    <Modal v-model="uploadNewsCoverPicModel">
+      <Upload
+        type="drag"
+        accept=".jpg,.png"
+        :multiple="false"
+        :format="uploadFormat"
+        :headers="uploadHeaders"
+        :before-upload="uploadPicBeforeHandle"
+        :on-success="uploadPicSuccessHandle"
+        :on-error="uploadPicErrorHandle"
+        :on-format-error="uploadPicErrorFormatHandle"
+        :on-exceeded-size="uploadPicErrorSizeHandle"
+        :max-size="4096"
+        :show-upload-list="false"
+        :action="baseUrl + 'upload'">
+        <div style="padding: 20px 0">
+            <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+            <p>单击或拖动文件到此处上传</p>
+        </div>
+        <Spin size="large" fix v-if="pictrueUploading"></Spin>
+      </Upload>
+      <div slot="footer" style="display: none;"></div>
+    </Modal>
   </div>
 </template>
 <script>
 import { loadNews, newsDetail, upinsertNews, releaseNews, outlineNews, deleteNews, newsToUp, newsToDown } from '@/api/yeetong/news'
 import Editor from '_c/editor'
+import config from '@/config'
 export default {
   data () {
     return {
@@ -93,7 +117,14 @@ export default {
       current: 1,
       title: '',
       orderField: '',
-      orderType: ''
+      orderType: '',
+      uploadNewsCoverPicModel: false,
+      baseUrl: process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro,
+      uploadFormat: ['jpg', 'png'],
+      uploadHeaders: {
+        type: 'material_imgs'
+      },
+      pictrueUploading: false
     }
   },
   components: {
@@ -506,10 +537,40 @@ export default {
       this.formObj.newsContent = html
     },
     uploadNewsCoverPic () {
-      this.$Modal.error({
-        title: '暂不支持单独上传，请到‘图片素材’中拷贝图片地址。'
-      })
+      // this.$Modal.error({
+      //   title: '暂不支持单独上传，请到‘图片素材’中拷贝图片地址。'
+      // })
       // 方案，弹出上传框
+      this.uploadNewsCoverPicModel = true
+    },
+    uploadPicBeforeHandle () {
+      this.pictrueUploading = true
+    },
+    uploadPicSuccessHandle (response, file) {
+      this.formObj.newsCoverPic = file.response.data
+      this.uploadNewsCoverPicModel = false
+      this.pictrueUploading = false
+    },
+    uploadPicErrorHandle (file) {
+      const _this = this
+      _this.pictrueUploading = false
+      _this.$Modal.error({
+        title: _this.$t('upload_error')
+      })
+    },
+    uploadPicErrorSizeHandle (file) {
+      const _this = this
+      _this.pictrueUploading = false
+      _this.$Modal.error({
+        title: _this.$t('upload_error_size')
+      })
+    },
+    uploadPicErrorFormatHandle (file, fileList) {
+      const _this = this
+      _this.pictrueUploading = false
+      _this.$Modal.error({
+        title: _this.$t('upload_error_format')
+      })
     }
   },
   mounted () {
