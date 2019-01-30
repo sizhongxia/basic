@@ -191,7 +191,7 @@
       :closable="false">
       <Form :model="platformObj" :label-width="120" :rules="rulePlatFormValidate" ref="basePlatForm">
         <FormItem label="选择平台" prop="platformType">
-          <Select v-model="platformObj.platformType" style="width:100%">
+          <Select v-model="platformObj.platformType" style="width:100%" :disabled="platformObj.resId != ''">
             <Option v-for="type in platformTypeDicts" :key="type.dictItemId" :value="type.dictItemValue">{{type.dictItemName}}</Option>
           </Select>
         </FormItem>
@@ -217,7 +217,7 @@
   </div>
 </template>
 <script>
-import { loadFuncs, upinsertFunc, deleteFunc, funcDetail, funcDescription, upinsertFuncDescription, funcPlatformInfos, upinsertFuncPlatform } from '@/api/func'
+import { loadFuncs, upinsertFunc, deleteFunc, funcDetail, funcDescription, upinsertFuncDescription, funcPlatformInfos, upinsertFuncPlatform, deleteFuncPlatform } from '@/api/func'
 import { selectDictItemsByCode } from '@/api/dict'
 import config from '@/config'
 import Editor from '_c/editor'
@@ -276,7 +276,8 @@ export default {
       },
       basePlatFormModel: false,
       loadingPlatformDicts: false,
-      platformTypeDicts: []
+      platformTypeDicts: [],
+      deleteingPlatform: false
     }
   },
   components: {
@@ -359,15 +360,10 @@ export default {
       }, {
         title: '付费模式',
         key: 'funcChargingMode',
-        minWidth: 160,
-        tooltip: true
-      }, {
-        title: '付费模式',
-        key: 'funcChargingMode',
         width: 160,
         render: (h, params) => {
           const row = params.row
-          const color = row.funcChargingMode === 'Fees' ? 'warning' : 'info'
+          const color = row.funcChargingMode === 'Fees' ? 'warning' : 'success'
           const text = row.funcChargingMode === 'Fees' ? '收费' : '免费'
           return h('Tag', {
             props: {
@@ -435,7 +431,7 @@ export default {
               },
               on: {
                 'click': () => {
-                  this.showEditForm(params)
+                  this.showEditPlatForm(params)
                 }
               }
             }, this.$t('edit')),
@@ -447,7 +443,7 @@ export default {
               },
               on: {
                 'on-ok': () => {
-                  this.handleDelete(params)
+                  this.handlePlatformDelete(params)
                 }
               }
             }, [
@@ -478,7 +474,6 @@ export default {
         title: '可用状态',
         key: 'canUse',
         width: 120,
-        sortable: 'custom',
         render: (h, params) => {
           const row = params.row
           const color = row.canUse === 'Y' ? 'success' : 'warning'
@@ -497,13 +492,11 @@ export default {
       }, {
         title: '创建时间',
         key: 'createAt',
-        sortable: 'custom',
         minWidth: 180,
         tooltip: true
       }, {
         title: '修改时间',
         key: 'updateAt',
-        sortable: 'custom',
         minWidth: 180,
         tooltip: true
       }]
@@ -812,7 +805,7 @@ export default {
       const _this = this
       _this.platformObj.funcId = params.row.funcId
       _this.funcPlatformInfoModel = true
-      _this.loadFuncPlatformInfos()
+      _this.loadFuncPlatformInfos(params.row.funcId)
     },
     cancelFuncPlatformInfoModel () {
       this.funcPlatformInfoModel = false
@@ -820,6 +813,11 @@ export default {
     },
     showCreatePaltForm () {
       const _this = this
+      _this.platformObj.resId = ''
+      _this.platformObj.inletUrl = ''
+      _this.platformObj.platformType = ''
+      _this.platformObj.canUse = ''
+      _this.platformObj.version = ''
       _this.basePlatFormModel = true
       _this.loadingPlatformDicts = false
       selectDictItemsByCode({ code: 'func_platform_classify' }).then(res => {
@@ -838,13 +836,52 @@ export default {
         })
       })
     },
+    showEditPlatForm (params) {
+      const _this = this
+      _this.basePlatFormModel = true
+      _this.platformObj.resId = params.row.resId
+      _this.platformObj.inletUrl = params.row.inletUrl
+      _this.platformObj.platformType = params.row.platformType
+      _this.platformObj.canUse = params.row.canUse
+      _this.platformObj.version = params.row.version
+      _this.loadingPlatformDicts = false
+      selectDictItemsByCode({ code: 'func_platform_classify' }).then(res => {
+        _this.loadingPlatformDicts = false
+        if (res.status === 200 && res.data.code === 200) {
+          _this.platformTypeDicts = res.data.data.list
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.loadingPlatformDicts = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
+    },
+    handlePlatformDelete (params) {
+      const _this = this
+      _this.deleteingPlatform = true
+      deleteFuncPlatform({ resultId: params.row.resId }).then(res => {
+        _this.deleteingPlatform = false
+        if (res.status === 200 && res.data.code === 200) {
+          _this.loadFuncPlatformInfos(params.row.funcId)
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.deleteingPlatform = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
+    },
     closeBasePlatFormHandle () {
       this.basePlatFormModel = false
-      this.platformObj.resId = ''
-      this.platformObj.inletUrl = ''
-      this.platformObj.platformType = ''
-      this.platformObj.canUse = ''
-      this.platformObj.version = ''
       this.$refs['basePlatForm'].resetFields()
     },
     submitBasePlatFormHandle () {
@@ -861,7 +898,7 @@ export default {
               if (!_this.platformObj.resId) {
                 _this.closeBasePlatFormHandle()
               }
-              _this.loadFuncPlatformInfos()
+              _this.loadFuncPlatformInfos(_this.platformObj.funcId)
             } else {
               _this.$Modal.error({
                 title: _this.$t('error_message_info') + res.data.message

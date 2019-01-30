@@ -80,6 +80,7 @@
           <span>字典项</span>
       </p>
       <div>
+        <Button type="primary" icon="ios-add-circle-outline" style="margin-bottom: 18px" @click="showCreateItemFormModel">新增字典项</Button>
         <Table
           :border="false"
           :stripe="true"
@@ -124,7 +125,8 @@ export default {
         dictCode: '',
         dictItemName: '',
         dictItemValue: ''
-      }
+      },
+      selectDictCode: ''
     }
   },
   computed: {
@@ -150,7 +152,7 @@ export default {
               props: {
                 transfer: true,
                 confirm: true,
-                title: this.$t('table_handle_delete_tip')
+                title: '是否要删除当前字典？'
               },
               on: {
                 'on-ok': () => {
@@ -174,17 +176,7 @@ export default {
                   this.showDictItemModel(params)
                 }
               }
-            }, '字典项'),
-            h('Button', {
-              props: {
-                type: 'text'
-              },
-              on: {
-                'click': () => {
-                  this.showCreateItemFormModel(params)
-                }
-              }
-            }, '新增项')
+            }, '字典项')
           ])
         }
       }, {
@@ -392,11 +384,13 @@ export default {
     },
     closeBaseFormHandle () {
       this.baseFormModel = false
+      this.$refs['baseForm'].resetFields()
     },
     showDictItemModel (param) {
       const _this = this
       _this.dictItemModel = true
-      _this.loadDictItems(param.row.dictCode)
+      _this.selectDictCode = param.row.dictCode
+      _this.loadDictItems(_this.selectDictCode)
     },
     loadDictItems (code) {
       const _this = this
@@ -418,9 +412,9 @@ export default {
         })
       })
     },
-    showCreateItemFormModel (param) {
+    showCreateItemFormModel () {
       const _this = this
-      _this.itemFormObj.dictCode = param.row.dictCode
+      _this.itemFormObj.dictCode = _this.selectDictCode
       _this.createItemFormModel = true
     },
     closeItemFormHandle (param) {
@@ -431,6 +425,7 @@ export default {
         dictItemValue: ''
       }
       _this.createItemFormModel = false
+      _this.$refs['createItemForm'].resetFields()
     },
     submitItemFormHandle () {
       const _this = this
@@ -443,6 +438,7 @@ export default {
               _this.$Modal.success({
                 title: '保存成功'
               })
+              _this.loadDictItems(_this.itemFormObj.dictCode)
               _this.itemFormObj.dictItemName = ''
               _this.itemFormObj.dictItemValue = ''
             } else {

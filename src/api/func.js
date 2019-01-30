@@ -85,3 +85,14 @@ export const upinsertFuncPlatform = (data) => {
     method: 'post'
   })
 }
+
+export const deleteFuncPlatform = ({ resultId }) => {
+  const data = {
+    resultId
+  }
+  return axios.request({
+    url: 'system/func/deletePlatform',
+    data,
+    method: 'post'
+  })
+}
