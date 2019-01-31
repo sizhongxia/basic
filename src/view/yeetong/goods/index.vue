@@ -1,7 +1,26 @@
 <style lang="less">
 @import "./index.less";
+.vertical-center-modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .ivu-modal{
+        top: 0;
+    }
+}
 .picModelStyle {
-  display: inline-block;width: 144px;height: 144px;text-align: center;line-height: 144px;border: 1px solid transparent;border-radius: 6px;overflow: hidden;background: #fff;position: relative;box-shadow: 0 1px 1px rgba(0,0,0,.2);margin-right: 8px;
+  display: inline-block;
+  width: 144px;
+  height: 144px;
+  text-align: center;
+  line-height: 144px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+  position: relative;
+  box-shadow: 0 1px 1px rgba(0,0,0,.2);
+  margin-right: 8px;
 }
 </style>
 <template>
@@ -33,100 +52,103 @@
       width="820"
       mask
       :mask-closable="false"
-      :closable="false">
-      <Form :model="formObj" :label-width="120" :rules="ruleValidate" ref="baseForm">
-        <Row style="padding-right: 60px;">
-          <Col span="9">
-            <FormItem label="商品排序权重" prop="sortNum">
-              <InputNumber :max="999999" :min="1" v-model="formObj.sortNum" style="width:100%"/>
-            </FormItem>
-          </Col>
-          <Col span="15">
-            <FormItem label="商品名称" prop="goodsName">
-              <Input v-model="formObj.goodsName" placeholder="请输入商品名称"/>
-            </FormItem>
-          </Col>
-          <Col span="24">
-            <FormItem label="商品简述" prop="goodsSketch">
-              <Input v-model="formObj.goodsSketch" type="textarea" :rows="2" :maxlength='180' placeholder="请输入商品简述"/>
-            </FormItem>
-          </Col>
-          <Col span="12">
-            <FormItem label="暂无报价" prop="goodsNoPrice">
-              <Select v-model="formObj.goodsNoPrice" style="width:100%">
-                <Option value="Y">暂无报价</Option>
-                <Option value="N">设置价格</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="12">
-            <FormItem label="商品成本价格" prop="goodsCostPrice">
-              <InputNumber :max="9999999" :min="1" :step="0.01" style="width:100%"
-              v-model="formObj.goodsCostPrice" placeholder="请输入商品成本价格"/>
-            </FormItem>
-          </Col>
-          <Col span="12">
-            <FormItem label="商品销售价格" prop="goodsSalePrice">
-              <InputNumber :max="9999999" :min="1" :step="0.01" style="width:100%"
-              v-model="formObj.goodsSalePrice" placeholder="请输入商品销售价格"/>
-            </FormItem>
-          </Col>
-          <Col span="12">
-            <FormItem label="商品折扣价格" prop="goodsDiscountPrice">
-              <InputNumber :max="9999999" :min="1" :step="0.01" style="width:100%"
-              v-model="formObj.goodsDiscountPrice" placeholder="请输入商品折扣价格"/>
-            </FormItem>
-          </Col>
-          <Col span="12">
-            <FormItem label="库存数量" prop="goodsRemainNum">
-              <InputNumber :max="9999999" :min="10" :step="1" style="width:100%"
-              v-model="formObj.goodsRemainNum" placeholder="请输入商品库存数量"/>
-            </FormItem>
-          </Col>
-          <Col span="12">
-            <FormItem label="商品已售数量" prop="goodsSoldNum">
-              <InputNumber :max="999999" :min="1" :step="1" style="width:100%"
-              v-model="formObj.goodsSoldNum" placeholder="请输入商品已售数量"/>
-            </FormItem>
-          </Col>
-          <Col span="12">
-            <FormItem label="在线状态" prop="showStatus">
-              <Select v-model="formObj.showStatus" style="width:100%">
-                <Option value="Y">展示</Option>
-                <Option value="N">下线</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="12">
-            <FormItem label="销售状态" prop="saleStatus">
-              <Select v-model="formObj.saleStatus" style="width:100%">
-                <Option value="Y">在售</Option>
-                <Option value="N">售罄</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="24">
-            <FormItem label="商品封面图片" prop="goodsCoverPic">
-              <Upload
-                type="select"
-                accept=".jpg,.png"
-                :format="uploadFormat"
-                :headers="uploadHeaders"
-                :before-upload="uploadPicBeforeHandle"
-                :on-success="uploadPicSuccessHandle"
-                :on-error="uploadPicErrorHandle"
-                :on-format-error="uploadPicErrorFormatHandle"
-                :on-exceeded-size="uploadPicErrorSizeHandle"
-                :max-size="4096"
-                :show-upload-list="false"
-                :action="baseUrl + 'upload'">
-                <Button icon="ios-cloud-upload-outline">选择封面图片</Button>
-              </Upload>
-              <img @click="showBigPictureModel(formObj.goodsCoverPic)" v-if="formObj.goodsCoverPic" style="width: 120px;height: 80px;display: block;margin-top: 10px;" :src="formObj.goodsCoverPic">
-            </FormItem>
-          </Col>
-        </Row>
-      </Form>
+      :closable="false"
+      class-name="vertical-center-modal">
+      <div style="width:100%;height:420px;overflow: auto;text-align: left;">
+        <Form :model="formObj" :label-width="120" :rules="ruleValidate" ref="baseForm">
+          <Row style="padding-right: 60px;">
+            <Col span="9">
+              <FormItem label="商品排序权重" prop="sortNum">
+                <InputNumber :max="999999" :min="1" v-model="formObj.sortNum" style="width:100%"/>
+              </FormItem>
+            </Col>
+            <Col span="15">
+              <FormItem label="商品名称" prop="goodsName">
+                <Input v-model="formObj.goodsName" placeholder="请输入商品名称"/>
+              </FormItem>
+            </Col>
+            <Col span="24">
+              <FormItem label="商品简述" prop="goodsSketch">
+                <Input v-model="formObj.goodsSketch" type="textarea" :rows="2" :maxlength='180' placeholder="请输入商品简述"/>
+              </FormItem>
+            </Col>
+            <Col span="12">
+              <FormItem label="暂无报价" prop="goodsNoPrice">
+                <Select v-model="formObj.goodsNoPrice" style="width:100%">
+                  <Option value="Y">暂无报价</Option>
+                  <Option value="N">设置价格</Option>
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="12">
+              <FormItem label="商品成本价格" prop="goodsCostPrice">
+                <InputNumber :max="9999999" :min="1" :step="0.01" style="width:100%"
+                v-model="formObj.goodsCostPrice" placeholder="请输入商品成本价格"/>
+              </FormItem>
+            </Col>
+            <Col span="12">
+              <FormItem label="商品销售价格" prop="goodsSalePrice">
+                <InputNumber :max="9999999" :min="1" :step="0.01" style="width:100%"
+                v-model="formObj.goodsSalePrice" placeholder="请输入商品销售价格"/>
+              </FormItem>
+            </Col>
+            <Col span="12">
+              <FormItem label="商品折扣价格" prop="goodsDiscountPrice">
+                <InputNumber :max="9999999" :min="1" :step="0.01" style="width:100%"
+                v-model="formObj.goodsDiscountPrice" placeholder="请输入商品折扣价格"/>
+              </FormItem>
+            </Col>
+            <Col span="12">
+              <FormItem label="库存数量" prop="goodsRemainNum">
+                <InputNumber :max="9999999" :min="10" :step="1" style="width:100%"
+                v-model="formObj.goodsRemainNum" placeholder="请输入商品库存数量"/>
+              </FormItem>
+            </Col>
+            <Col span="12">
+              <FormItem label="商品已售数量" prop="goodsSoldNum">
+                <InputNumber :max="999999" :min="1" :step="1" style="width:100%"
+                v-model="formObj.goodsSoldNum" placeholder="请输入商品已售数量"/>
+              </FormItem>
+            </Col>
+            <Col span="12">
+              <FormItem label="在线状态" prop="showStatus">
+                <Select v-model="formObj.showStatus" style="width:100%">
+                  <Option value="Y">展示</Option>
+                  <Option value="N">下线</Option>
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="12">
+              <FormItem label="销售状态" prop="saleStatus">
+                <Select v-model="formObj.saleStatus" style="width:100%">
+                  <Option value="Y">在售</Option>
+                  <Option value="N">售罄</Option>
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="24">
+              <FormItem label="商品封面图片" prop="goodsCoverPic">
+                <Upload
+                  type="select"
+                  accept=".jpg,.png"
+                  :format="uploadFormat"
+                  :headers="uploadHeaders"
+                  :before-upload="uploadPicBeforeHandle"
+                  :on-success="uploadPicSuccessHandle"
+                  :on-error="uploadPicErrorHandle"
+                  :on-format-error="uploadPicErrorFormatHandle"
+                  :on-exceeded-size="uploadPicErrorSizeHandle"
+                  :max-size="4096"
+                  :show-upload-list="false"
+                  :action="baseUrl + 'upload'">
+                  <Button icon="ios-cloud-upload-outline">选择封面图片</Button>
+                </Upload>
+                <img @click="showBigPictureModel(formObj.goodsCoverPic)" v-if="formObj.goodsCoverPic" style="width: 120px;height: 80px;display: block;margin-top: 10px;" :src="formObj.goodsCoverPic">
+              </FormItem>
+            </Col>
+          </Row>
+        </Form>
+      </div>
       <Spin size="large" fix v-if="loadingItem || submiting || pictrueUploading"></Spin>
       <div slot="footer">
         <Button type="text" @click="closeBaseFormHandleWithAlert">关闭</Button>
@@ -151,7 +173,8 @@
       width="820"
       mask
       :mask-closable="false"
-      :closable="false">
+      :closable="false"
+      class-name="vertical-center-modal">
       <Form :model="detailContentFormObj" :label-width="0" ref="detailContentForm">
         <editor ref="editor" @on-change="handleDetailContentChange"/>
       </Form>
@@ -166,7 +189,8 @@
       width="820"
       mask
       :mask-closable="false"
-      :closable="true">
+      :closable="true"
+      class-name="vertical-center-modal">
       <div style="width:100%;height:420px;overflow: auto;text-align: left;">
         <div v-for="picItem in goodsPictureList" :key='picItem.picId' class="picModelStyle">
           <img @click="showBigPictureModelWithCanDel(picItem)" :src="picItem.picUrl" style="vertical-align: top;border-style: none;width:100%;height:100%;">

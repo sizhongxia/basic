@@ -15,7 +15,7 @@
       </Input>
     </FormItem>
     <FormItem>
-      <Button @click="handleSubmit" type="primary" long>登录</Button>
+      <Button @click="handleSubmit" :loading="logining" type="primary" long>登录</Button>
     </FormItem>
   </Form>
 </template>
@@ -42,6 +42,7 @@ export default {
   },
   data () {
     return {
+      logining: false,
       form: {
         userName: '',
         password: ''
@@ -60,11 +61,12 @@ export default {
     handleSubmit () {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
+          this.logining = true
           this.$emit('on-success-valid', {
             userName: this.form.userName,
             password: this.form.password,
             callback: () => {
-              this.loading = false
+              this.logining = false
             }
           })
         }

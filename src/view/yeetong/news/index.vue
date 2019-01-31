@@ -1,5 +1,13 @@
 <style lang="less">
 @import "./index.less";
+.vertical-center-modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .ivu-modal{
+        top: 0;
+    }
+}
 </style>
 <template>
   <div>
@@ -27,32 +35,35 @@
       v-model="baseFormModel"
       :title="formObj.uniqueId === '' ? $t('create') : $t('update')"
       scrollable
-      :width="980"
+      :width="820"
       mask
       :mask-closable="false"
-      :closable="false">
-      <Form :model="formObj" :label-width="120" :rules="ruleValidate" ref="baseForm">
-        <FormItem label="新闻标题" prop="newsTitle">
-          <Input v-model="formObj.newsTitle" placeholder="请输入新闻标题"/>
-        </FormItem>
-        <FormItem label="新闻关键词" prop="newsKeywords">
-          <Input v-model="formObj.newsKeywords" placeholder="请输入新闻关键词, 多个关键词以英文逗号分隔"/>
-        </FormItem>
-        <FormItem label="新闻封面图地址" prop="newsCoverPic">
-          <Input v-model="formObj.newsCoverPic" placeholder="请输入新闻封面图地址">
-            <Button slot="append" @click="uploadNewsCoverPic" icon="ios-cloud-upload-outline">上传</Button>
-          </Input>
-        </FormItem>
-        <FormItem label="新闻摘要" prop="newsAbstract">
-          <Input type="textarea" :autosize="{minRows: 2,maxRows: 5}" v-model="formObj.newsAbstract" placeholder="请输入新闻摘要"/>
-        </FormItem>
-        <FormItem label="新闻内容" prop="newsContent">
-          <editor ref="editor" @on-change="handleNewsContentChange"/>
-        </FormItem>
-        <FormItem label="新闻来源" prop="newsOrigin">
-          <Input v-model="formObj.newsOrigin" placeholder="请输入新闻来源"/>
-        </FormItem>
-      </Form>
+      :closable="false"
+      class-name="vertical-center-modal">
+      <div style="width:100%;height:420px;overflow: auto;text-align: left;">
+        <Form :model="formObj" :label-width="120" :rules="ruleValidate" ref="baseForm">
+          <FormItem label="新闻标题" prop="newsTitle">
+            <Input v-model="formObj.newsTitle" placeholder="请输入新闻标题"/>
+          </FormItem>
+          <FormItem label="新闻关键词" prop="newsKeywords">
+            <Input v-model="formObj.newsKeywords" placeholder="请输入新闻关键词, 多个关键词以英文逗号分隔"/>
+          </FormItem>
+          <FormItem label="新闻封面图地址" prop="newsCoverPic">
+            <Input v-model="formObj.newsCoverPic" placeholder="请输入新闻封面图地址">
+              <Button slot="append" @click="uploadNewsCoverPic" icon="ios-cloud-upload-outline">上传</Button>
+            </Input>
+          </FormItem>
+          <FormItem label="新闻摘要" prop="newsAbstract">
+            <Input type="textarea" :autosize="{minRows: 2,maxRows: 5}" v-model="formObj.newsAbstract" placeholder="请输入新闻摘要"/>
+          </FormItem>
+          <FormItem label="新闻内容" prop="newsContent">
+            <editor ref="editor" @on-change="handleNewsContentChange"/>
+          </FormItem>
+          <FormItem label="新闻来源" prop="newsOrigin">
+            <Input v-model="formObj.newsOrigin" placeholder="请输入新闻来源"/>
+          </FormItem>
+        </Form>
+      </div>
       <Spin size="large" fix v-if="loadingItem || submiting"></Spin>
       <div slot="footer">
         <Button type="text" @click="closeBaseFormHandle">{{ $t('i.modal.cancelText') }}</Button>

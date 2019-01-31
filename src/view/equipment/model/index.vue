@@ -1,5 +1,13 @@
 <style lang="less">
 @import "./index.less";
+.vertical-center-modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .ivu-modal{
+        top: 0;
+    }
+}
 </style>
 <template>
   <div>
@@ -29,7 +37,8 @@
       width="620"
       mask
       :mask-closable="false"
-      :closable="false">
+      :closable="false"
+      class-name="vertical-center-modal">
       <Form :model="formObj" :label-width="120" :rules="ruleValidate" ref="baseForm">
         <FormItem :label="$t('equipment_model_name')" prop="modelName">
             <Input v-model="formObj.modelName" :placeholder="$t('please_input')+$t('equipment_model_name')"/>

@@ -1,5 +1,13 @@
 <style lang="less">
 @import "./index.less";
+.vertical-center-modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .ivu-modal{
+        top: 0;
+    }
+}
 </style>
 <template>
   <div>
@@ -43,7 +51,8 @@
       width="760"
       mask
       :mask-closable="false"
-      :closable="false">
+      :closable="false"
+      class-name="vertical-center-modal">
       <Form :model="formObj" :label-width="120" :rules="ruleValidate" ref="baseForm">
         <Row style="padding-right: 60px;">
           <Col span="24">
@@ -121,7 +130,8 @@
       width="820"
       mask
       :mask-closable="false"
-      :closable="false">
+      :closable="false"
+      class-name="vertical-center-modal">
       <Form :model="detailContentFormObj" :label-width="0" ref="detailContentForm">
         <editor ref="editor" @on-change="handleDetailContentChange"/>
       </Form>
@@ -159,7 +169,8 @@
       scrollable
       width="980"
       mask
-      :mask-closable="false">
+      :mask-closable="false"
+      class-name="vertical-center-modal">
       <p slot="header">
           <Icon type="md-arrow-dropright" />
           <span>适用平台</span>
@@ -188,7 +199,8 @@
       width="520"
       mask
       :mask-closable="false"
-      :closable="false">
+      :closable="false"
+      class-name="vertical-center-modal">
       <Form :model="platformObj" :label-width="120" :rules="rulePlatFormValidate" ref="basePlatForm">
         <FormItem label="选择平台" prop="platformType">
           <Select v-model="platformObj.platformType" style="width:100%" :disabled="platformObj.resId != ''">
@@ -311,7 +323,7 @@ export default {
                   this.showDetailContentForm(params)
                 }
               }
-            }, '详情'),
+            }, '修改描述'),
             h('Button', {
               props: {
                 type: 'text'

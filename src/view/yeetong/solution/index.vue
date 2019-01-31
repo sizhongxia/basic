@@ -1,5 +1,13 @@
 <style lang="less">
 @import "./index.less";
+.vertical-center-modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .ivu-modal{
+        top: 0;
+    }
+}
 </style>
 <template>
   <div>
@@ -27,40 +35,43 @@
       v-model="baseFormModel"
       :title="formObj.solutionId === '' ? $t('create') : $t('update')"
       scrollable
-      :width="980"
+      :width="820"
       mask
       :mask-closable="false"
-      :closable="false">
-      <Form :model="formObj" :label-width="160" :rules="ruleValidate" ref="baseForm">
-        <FormItem label="解决方案名称" prop="solutionName">
-          <Input v-model="formObj.solutionName" placeholder="请输入解决方案名称"/>
-        </FormItem>
-        <FormItem label="解决方案简述" prop="solutionSynopsis">
-          <Input v-model="formObj.solutionSynopsis" type="textarea" :rows="2" :maxlength='180' placeholder="请输入解决方案简述"/>
-        </FormItem>
-        <FormItem label="解决方案详情页信息" prop="solutionDilate">
-          <editor ref="editor" @on-change="handleSolutionDilateChange"/>
-        </FormItem>
-        <FormItem label="解决方案封面图片" prop="solutionCoverPic">
-          <Upload
-            type="select"
-            accept=".jpg,.png"
-            :format="uploadFormat"
-            :headers="uploadHeaders"
-            :before-upload="uploadPicBeforeHandle"
-            :on-success="uploadPicSuccessHandle"
-            :on-error="uploadPicErrorHandle"
-            :on-format-error="uploadPicErrorFormatHandle"
-            :on-exceeded-size="uploadPicErrorSizeHandle"
-            :max-size="4096"
-            :show-upload-list="false"
-            :action="baseUrl + 'upload'">
-            <Button icon="ios-cloud-upload-outline">选择解决方案封面图片</Button>
-          </Upload>
-          <img @click="showBigPictureModel(formObj.solutionCoverPic)" v-if="formObj.solutionCoverPic" style="width: 120px;height: 80px;display: block;margin-top: 10px;" :src="formObj.solutionCoverPic">
-        </FormItem>
-        <Spin size="large" fix v-if="pictrueUploading"></Spin>
-      </Form>
+      :closable="false"
+      class-name="vertical-center-modal">
+      <div style="width:100%;height:420px;overflow: auto;text-align: left;">
+        <Form :model="formObj" :label-width="160" :rules="ruleValidate" ref="baseForm">
+          <FormItem label="解决方案名称" prop="solutionName">
+            <Input v-model="formObj.solutionName" placeholder="请输入解决方案名称"/>
+          </FormItem>
+          <FormItem label="解决方案简述" prop="solutionSynopsis">
+            <Input v-model="formObj.solutionSynopsis" type="textarea" :rows="2" :maxlength='180' placeholder="请输入解决方案简述"/>
+          </FormItem>
+          <FormItem label="解决方案详情页信息" prop="solutionDilate">
+            <editor ref="editor" @on-change="handleSolutionDilateChange"/>
+          </FormItem>
+          <FormItem label="解决方案封面图片" prop="solutionCoverPic">
+            <Upload
+              type="select"
+              accept=".jpg,.png"
+              :format="uploadFormat"
+              :headers="uploadHeaders"
+              :before-upload="uploadPicBeforeHandle"
+              :on-success="uploadPicSuccessHandle"
+              :on-error="uploadPicErrorHandle"
+              :on-format-error="uploadPicErrorFormatHandle"
+              :on-exceeded-size="uploadPicErrorSizeHandle"
+              :max-size="4096"
+              :show-upload-list="false"
+              :action="baseUrl + 'upload'">
+              <Button icon="ios-cloud-upload-outline">选择解决方案封面图片</Button>
+            </Upload>
+            <img @click="showBigPictureModel(formObj.solutionCoverPic)" v-if="formObj.solutionCoverPic" style="width: 120px;height: 80px;display: block;margin-top: 10px;" :src="formObj.solutionCoverPic">
+          </FormItem>
+          <Spin size="large" fix v-if="pictrueUploading"></Spin>
+        </Form>
+      </div>
       <Spin size="large" fix v-if="submiting"></Spin>
       <div slot="footer">
         <Button type="text" @click="closeBaseFormHandle">关闭</Button>

@@ -1,5 +1,13 @@
 <style lang="less">
 @import "./index.less";
+.vertical-center-modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .ivu-modal{
+        top: 0;
+    }
+}
 </style>
 <template>
   <div>
@@ -21,7 +29,8 @@
       scrollable
       width="520"
       mask
-      :mask-closable="false">
+      :mask-closable="false"
+      class-name="vertical-center-modal">
       <p slot="header">
         <Icon type="md-arrow-dropright" />
         <span>上传图片素材</span>

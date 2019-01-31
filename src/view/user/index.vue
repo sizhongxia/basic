@@ -1,5 +1,13 @@
 <style lang="less">
 @import "./index.less";
+.vertical-center-modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .ivu-modal{
+        top: 0;
+    }
+}
 </style>
 <template>
   <div>
@@ -31,26 +39,41 @@
       v-model="baseFormModel"
       :title="formObj.userId === '' ? $t('create') : $t('update')"
       scrollable
+      :width="820"
       mask
-      :mask-closable="false">
+      :mask-closable="false"
+      :closable="false"
+      class-name="vertical-center-modal">
       <Form :model="formObj" :label-width="120" :rules="ruleValidate" ref="baseForm">
-        <FormItem label="登录账号" prop="userName">
-            <Input v-model="formObj.userName" :disabled="formObj.userId !== ''" placeholder="请输入登录账号"/>
-        </FormItem>
-        <FormItem :label="$t('phone_no')" prop="phoneNo">
-            <Input v-model="formObj.phoneNo" :placeholder="$t('please_input')+$t('phone_no')"/>
-        </FormItem>
-        <FormItem :label="$t('email')" prop="email">
-            <Input v-model="formObj.email" :placeholder="$t('please_input')+$t('email')"/>
-        </FormItem>
-        <FormItem label="可创建农场数量" prop="maxFarmNum">
-            <InputNumber style="width:100%" :max="999" :min="1" v-model="formObj.maxFarmNum" placeholder="请输入可创建农场数量"/>
-        </FormItem>
-        <FormItem :label="$t('organize')">
-          <Select v-model="formObj.organizeId" clearable filterable>
-            <Option v-for="item in organizes" :key="item.organizeId" :value="item.organizeId">{{ item.organizeName }}</Option>
-          </Select>
-        </FormItem>
+        <Row style="padding-right: 60px;">
+          <Col span="12">
+            <FormItem label="登录账号" prop="userName">
+              <Input v-model="formObj.userName" :disabled="formObj.userId !== ''" placeholder="请输入登录账号"/>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('organize')">
+              <Select v-model="formObj.organizeId" clearable filterable>
+                <Option v-for="item in organizes" :key="item.organizeId" :value="item.organizeId">{{ item.organizeName }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('phone_no')" prop="phoneNo">
+              <Input v-model="formObj.phoneNo" :placeholder="$t('please_input')+$t('phone_no')"/>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem :label="$t('email')" prop="email">
+              <Input v-model="formObj.email" :placeholder="$t('please_input')+$t('email')"/>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="农场数量" prop="maxFarmNum">
+              <InputNumber style="width:100%" :max="9999" :min="0" v-model="formObj.maxFarmNum" placeholder="请输入最大可创建农场数量"/>
+            </FormItem>
+          </Col>
+        </Row>
       </Form>
       <Spin size="large" fix v-if="submiting || organizesloading"></Spin>
       <div slot="footer">
@@ -63,7 +86,8 @@
       scrollable
       width="620"
       mask
-      :mask-closable="false">
+      :mask-closable="false"
+      class-name="vertical-center-modal">
       <p slot="header">
           <Icon type="md-arrow-dropright" />
           <span>{{ $t('user_identity') }}</span>
@@ -96,7 +120,8 @@
       scrollable
       width="620"
       mask
-      :mask-closable="false">
+      :mask-closable="false"
+      class-name="vertical-center-modal">
       <p slot="header">
           <Icon type="md-arrow-dropright" />
           <span>{{ $t('user_auth_farms') }}</span>
@@ -597,7 +622,6 @@ export default {
       this.load()
     },
     showCreateForm () {
-      this.$refs['baseForm'].resetFields()
       this.formObj.userId = ''
       this.formObj.userName = ''
       this.formObj.phoneNo = ''
@@ -623,7 +647,6 @@ export default {
       })
     },
     showEditForm (params) {
-      this.$refs['baseForm'].resetFields()
       this.formObj.userId = params.row.userId
       this.formObj.userName = params.row.userName
       this.formObj.phoneNo = params.row.phoneNo
@@ -682,6 +705,7 @@ export default {
       this.formObj.phoneNo = ''
       this.formObj.email = ''
       this.formObj.organizeId = ''
+      this.$refs['baseForm'].resetFields()
       this.baseFormModel = false
     }
   },

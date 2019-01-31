@@ -1,5 +1,13 @@
 <style lang="less">
 @import "./index.less";
+.vertical-center-modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .ivu-modal{
+        top: 0;
+    }
+}
 </style>
 <template>
   <div>
@@ -29,7 +37,8 @@
       width="620"
       mask
       :mask-closable="false"
-      :closable="false">
+      :closable="false"
+      class-name="vertical-center-modal">
       <Form :model="formObj" :label-width="120" :rules="ruleValidate" ref="baseForm">
         <FormItem label="字典名称" prop="dictName">
             <Input v-model="formObj.dictName" placeholder="请输入字典名称"/>
@@ -52,7 +61,8 @@
       height="420"
       mask
       :mask-closable="false"
-      :closable="false">
+      :closable="false"
+      class-name="vertical-center-modal">
       <Form :model="itemFormObj" :label-width="120" :rules="ruleItemValidate" ref="createItemForm">
         <FormItem label="字典编码">
           <Input v-model="itemFormObj.dictCode" readonly/>
@@ -74,12 +84,13 @@
       scrollable
       width="620"
       mask
-      :mask-closable="false">
+      :mask-closable="false"
+      class-name="vertical-center-modal">
       <p slot="header">
           <Icon type="md-arrow-dropright" />
           <span>字典项</span>
       </p>
-      <div>
+      <div style="width:100%;height:310px;overflow: auto;text-align: left;">
         <Button type="primary" icon="ios-add-circle-outline" style="margin-bottom: 18px" @click="showCreateItemFormModel">新增字典项</Button>
         <Table
           :border="false"
@@ -205,7 +216,7 @@ export default {
       }, {
         title: '字典编码',
         key: 'dictCode',
-        minWidth: 100,
+        minWidth: 160,
         tooltip: true
       }, {
         title: '字典项名称',
@@ -388,9 +399,10 @@ export default {
     },
     showDictItemModel (param) {
       const _this = this
-      _this.dictItemModel = true
+      _this.dictItems = []
       _this.selectDictCode = param.row.dictCode
       _this.loadDictItems(_this.selectDictCode)
+      _this.dictItemModel = true
     },
     loadDictItems (code) {
       const _this = this
