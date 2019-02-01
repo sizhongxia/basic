@@ -206,7 +206,7 @@
           </Col>
           <Col span="8">
             <FormItem :label="$t('camera_deploy_time')" prop="deployTime">
-              <Input v-model="cameraFormObj.deployTime" :placeholder="'格式:yyyy-MM-dd'"/>
+              <DatePicker type="date" v-model="cameraFormObj.deployTime" placeholder="请选择安装日期" style="width: 100%" @change="selectDeployTime"></DatePicker>
             </FormItem>
           </Col>
           <Col span="8">
@@ -726,6 +726,9 @@ export default {
           title: _this.$t('error_message_info') + reason.message
         })
       })
+    },
+    selectDeployTime (ds) {
+      this.cameraFormObj.deployTime = ds
     }
   },
   mounted () {

@@ -229,7 +229,7 @@ export default [
           icon: 'md-arrow-dropright',
           title: '知识百科管理'
         },
-        component: () => import('@/view/basic.vue')
+        component: () => import('@/view/yeetong/encycl/index.vue')
       }
     ]
   },

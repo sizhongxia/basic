@@ -39,6 +39,16 @@ export default {
         })
       })
     }
+  },
+  mounted () {
+    window.localStorage.removeItem('tagNaveList')
+    window.localStorage.removeItem('page_farm_edit_farm_id')
+    window.localStorage.removeItem('page_farm_area_farm_id')
+    window.localStorage.removeItem('page_farm_area_farm_name')
+    window.localStorage.removeItem('page_farm_picture_farm_id')
+    window.localStorage.removeItem('page_farm_console_farm_id')
+    window.localStorage.removeItem('page_farm_console_farm_name')
+    window.localStorage.removeItem('editorCache')
   }
 }
 </script>
