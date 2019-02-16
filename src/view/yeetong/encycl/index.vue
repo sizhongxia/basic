@@ -393,6 +393,7 @@ export default {
     showCreateForm () {
       const _this = this
       _this.$refs.editor.setHtml('')
+      _this.formObj.labelNames = []
       _this.baseFormModel = true
       _this.loadingEncyclClassifyDicts = true
       selectDictItemsByCode({ code: 'encycl_classify' }).then(res => {
@@ -501,19 +502,22 @@ export default {
     },
     submitAddLabelFormHandle () {
       if (this.newLabelName) {
-        let length = this.formObj.labelNames.length
-        for (var i = 0; i < length; i++) {
-          if (this.newLabelName === this.formObj.labelNames[i].labelName) {
-            this.$Modal.error({
-              title: '当前标签已存在'
-            })
-            return
+        var newLabelNames = this.newLabelName.split(',')
+        for (var inx in newLabelNames) {
+          if (!newLabelNames[inx]) {
+            continue
           }
+          let length = this.formObj.labelNames.length
+          for (var i = 0; i < length; i++) {
+            if (newLabelNames[inx] === this.formObj.labelNames[i].labelName) {
+              continue
+            }
+          }
+          this.formObj.labelNames.push({
+            resId: '',
+            labelName: newLabelNames[inx]
+          })
         }
-        this.formObj.labelNames.push({
-          resId: '',
-          labelName: this.newLabelName
-        })
         this.newLabelName = ''
         this.showAddLabelFormModel = false
       }
