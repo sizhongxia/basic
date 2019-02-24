@@ -125,8 +125,15 @@
               <Spin size="large" fix v-if="modelsLoading"></Spin>
             </FormItem>
           </Col>
+          <Col span="24">
+            <FormItem label="采集项">
+              <Select v-model="equipmentFormObj.monitorTerms" multiple>
+                <Option v-for="item in monitorTerms" :value="item.value" :key="item.value">{{ item.label }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
           <Col span="12">
-            <FormItem :label="$t('operator')">
+            <FormItem label="操作人">
                 <Input v-model="equipmentFormObj.operator" :placeholder="$t('please_input')+$t('operator')"/>
             </FormItem>
           </Col>
@@ -137,7 +144,7 @@
           </Col>
         </Row>
       </Form>
-      <Spin size="large" fix v-if="equipmentFormSubmiting || typesLoading || equipmentDetailLoading"></Spin>
+      <Spin size="large" fix v-if="equipmentFormSubmiting || typesLoading || monitorTermsLoading || equipmentDetailLoading"></Spin>
       <div slot="footer">
         <Button v-if="equipmentFormObj.equipmentId != ''" type="error" @click="deleteEquipmentHandle">{{ $t('delete') }}</Button>
         <Button type="text" @click="closeEquipmentFormHandle">{{ $t('i.modal.cancelText') }}</Button>
@@ -262,7 +269,7 @@
 <script>
 import { farmAllAreas } from '@/api/farmArea'
 import { farmDetail } from '@/api/farm'
-import { farmAllEquipments, upinsertEquipment, equipmentDetail, deleteEquipment } from '@/api/equipment'
+import { farmAllEquipments, upinsertEquipment, equipmentDetail, deleteEquipment, monitorTerms } from '@/api/equipment'
 import { farmAllCameras, upinsertCamera, cameraDetail, deleteCamera } from '@/api/camera'
 import { allEquipmentTypes } from '@/api/equipmentType'
 import { allEquipmentModels } from '@/api/equipmentModel'
@@ -278,6 +285,8 @@ export default {
       farmAreas: [],
       farmEquipmentsLoading: false,
       farmEquipments: [],
+      monitorTermsLoading: false,
+      monitorTerms: [],
       equipmentFormModel: false,
       equipmentFormSubmiting: false,
       equipmentFormObj: {
@@ -289,6 +298,7 @@ export default {
         typeName: '',
         modelId: '',
         modelName: '',
+        monitorTerms: [],
         farmId: '',
         farmName: '',
         farmAreaId: '',
@@ -421,13 +431,14 @@ export default {
       this.equipmentFormObj.farmAreaId = ''
       this.equipmentFormObj.typeId = ''
       this.equipmentFormObj.typeName = ''
+      this.equipmentFormObj.monitorTerms = []
       this.equipmentFormObj.modelId = ''
       this.equipmentFormObj.modelName = ''
       this.equipmentFormObj.operator = ''
       this.equipmentFormObj.remark = ''
       this.equipmentFormModel = true
-      this.typesLoading = false
       const _this = this
+      _this.typesLoading = true
       allEquipmentTypes().then(res => {
         _this.typesLoading = false
         if (res.status === 200 && res.data.code === 200) {
@@ -439,6 +450,22 @@ export default {
         }
       }).catch(function (reason) {
         _this.typesLoading = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
+      _this.monitorTermsLoading = true
+      monitorTerms().then(res => {
+        _this.monitorTermsLoading = false
+        if (res.status === 200 && res.data.code === 200) {
+          _this.monitorTerms = res.data.data
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.monitorTermsLoading = false
         _this.$Modal.error({
           title: _this.$t('error_message_info') + reason.message
         })
@@ -619,6 +646,22 @@ export default {
             }
           }).catch(function (reason) {
             _this.typesLoading = false
+            _this.$Modal.error({
+              title: _this.$t('error_message_info') + reason.message
+            })
+          })
+          _this.monitorTermsLoading = true
+          monitorTerms().then(res => {
+            _this.monitorTermsLoading = false
+            if (res.status === 200 && res.data.code === 200) {
+              _this.monitorTerms = res.data.data
+            } else {
+              _this.$Modal.error({
+                title: _this.$t('error_message_info') + res.data.message
+              })
+            }
+          }).catch(function (reason) {
+            _this.monitorTermsLoading = false
             _this.$Modal.error({
               title: _this.$t('error_message_info') + reason.message
             })

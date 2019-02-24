@@ -50,7 +50,7 @@ export const deleteEquipment = ({ resultId }) => {
   })
 }
 
-export const upinsertEquipment = ({ equipmentId, farmId, farmAreaId, equipmentName, equipmentCode, equipmentSn, equipmentDtuId, equipment485Addr, modelId, typeId, operator, remark }) => {
+export const upinsertEquipment = ({ equipmentId, farmId, farmAreaId, equipmentName, equipmentCode, equipmentSn, monitorTerms, equipmentDtuId, equipment485Addr, modelId, typeId, operator, remark }) => {
   const data = {
     equipmentId,
     farmId,
@@ -58,6 +58,7 @@ export const upinsertEquipment = ({ equipmentId, farmId, farmAreaId, equipmentNa
     equipmentName,
     equipmentCode,
     equipmentSn,
+    monitorTerms,
     equipmentDtuId,
     equipment485Addr,
     modelId,
@@ -67,6 +68,15 @@ export const upinsertEquipment = ({ equipmentId, farmId, farmAreaId, equipmentNa
   }
   return axios.request({
     url: 'equipment/upinsert',
+    data,
+    method: 'post'
+  })
+}
+
+export const monitorTerms = () => {
+  const data = {}
+  return axios.request({
+    url: 'equipment/monitorTerms',
     data,
     method: 'post'
   })
