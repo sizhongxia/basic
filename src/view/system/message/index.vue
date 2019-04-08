@@ -53,16 +53,36 @@
           </Select>
         </FormItem>
       </Form>
-      <Spin size="large" fix v-if="submiting"></Spin>
+      <Spin size="large" fix v-if="submiting || loadingItem"></Spin>
       <div slot="footer">
         <Button type="text" @click="closeBaseFormHandle">关闭</Button>
         <Button type="primary" @click="submitBaseFormHandle">保存</Button>
       </div>
     </Modal>
+    <Modal
+      v-model="selectUserFormModel"
+      title="请输入要接收系统的消息的用户名"
+      scrollable
+      :width="420"
+      mask
+      :mask-closable="false"
+      :closable="false"
+      class-name="vertical-center-modal">
+      <Form :model="releaseObj" :label-width="120">
+        <FormItem label="用户名">
+          <Input v-model="releaseObj.userName" placeholder="请输入用户名"/>
+        </FormItem>
+      </Form>
+      <Spin size="large" fix v-if="pushing"></Spin>
+      <div slot="footer">
+        <Button type="text" @click="closeSendFormHandle">关闭</Button>
+        <Button type="primary" @click="release">发送</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 <script>
-import { loadSystemMessages, deleteSystemMessage, upinsertSystemMessage } from '@/api/systemMessage'
+import { loadSystemMessages, deleteSystemMessage, systemMessageDetail, releaseSystemMessage, upinsertSystemMessage } from '@/api/systemMessage'
 import Editor from '_c/editor'
 export default {
   data () {
@@ -78,9 +98,15 @@ export default {
         msgContent: '',
         isEntire: ''
       },
+      releaseObj: {
+        resultId: '',
+        userName: ''
+      },
       baseFormModel: false,
+      selectUserFormModel: false,
       deleting: false,
       pushing: false,
+      loadingItem: false,
       current: 1,
       searchValue: '',
       orderField: '',
@@ -166,6 +192,11 @@ export default {
         title: '全员接收',
         key: 'isEntire',
         sortable: 'custom',
+        minWidth: 140,
+        tooltip: true
+      }, {
+        title: '接收人数',
+        key: 'receiveNum',
         minWidth: 140,
         tooltip: true
       }, {
@@ -267,13 +298,62 @@ export default {
       this.baseFormModel = true
     },
     showEditForm (params) {
-      this.$refs['baseForm'].resetFields()
-      this.formObj.resId = params.row.resId
+      const _this = this
+      _this.baseFormModel = true
+      _this.$refs['baseForm'].resetFields()
+      _this.loadingItem = true
+      systemMessageDetail({ resultId: params.row.resId }).then(res => {
+        _this.loadingItem = false
+        if (res.status === 200 && res.data.code === 200) {
+          _this.formObj = res.data.data
+          _this.$refs.editor.setHtml(_this.formObj.msgContent)
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.loadingItem = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
       this.formObj.msgTitle = params.row.msgTitle
       this.formObj.msgContent = params.row.msgContent
       this.$refs.editor.setHtml(params.row.msgContent)
-      this.formObj.isEntire = params.row.isEntire
+      this.formObj.isEntire = params.row.isEntireVal
       this.baseFormModel = true
+    },
+    handlePush (params) {
+      const _this = this
+      _this.releaseObj.resultId = params.row.resId
+      if (params.row.isEntireVal === 'Y') {
+        _this.release()
+      } else {
+        _this.releaseObj.userName = ''
+        _this.selectUserFormModel = true
+      }
+    },
+    release () {
+      const _this = this
+      _this.pushing = true
+      releaseSystemMessage(_this.releaseObj).then(res => {
+        _this.pushing = false
+        if (res.status === 200 && res.data.code === 200) {
+          _this.releaseObj.userName = ''
+          _this.selectUserFormModel = false
+          _this.load()
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.pushing = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
     },
     handleMsgContentChange (html) {
       this.formObj.msgContent = html
@@ -311,6 +391,9 @@ export default {
     closeBaseFormHandle () {
       this.baseFormModel = false
       this.$refs['baseForm'].resetFields()
+    },
+    closeSendFormHandle () {
+      this.selectUserFormModel = false
     }
   },
   components: {
