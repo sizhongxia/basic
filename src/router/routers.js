@@ -210,6 +210,17 @@ export default [
         component: () => import('@/view/yeetong/news/index.vue')
       },
       {
+        path: '/system/message',
+        name: 'system_message',
+        notCache: true,
+        meta: {
+          access: ['super_admin', 'system_message'],
+          icon: 'md-arrow-dropright',
+          title: '系统消息'
+        },
+        component: () => import('@/view/system/message/index.vue')
+      },
+      {
         path: '/business/solution',
         name: 'business_solution',
         notCache: true,
