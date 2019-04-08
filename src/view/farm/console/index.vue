@@ -92,12 +92,12 @@
           </Col>
           <Col span="12">
             <FormItem :label="$t('equipment_code')" prop="equipmentCode">
-                <Input v-model="equipmentFormObj.equipmentCode" :placeholder="$t('please_input')+$t('equipment_code')"/>
+                <Input v-model="equipmentFormObj.equipmentCode" placeholder="格式为当前年月日+四位顺序码, 如:201904080001"/>
             </FormItem>
           </Col>
           <Col span="12">
             <FormItem :label="$t('equipment_sn')" prop="equipmentSn">
-                <Input v-model="equipmentFormObj.equipmentSn" :placeholder="$t('please_input')+$t('equipment_sn')"/>
+                <Input v-model="equipmentFormObj.equipmentSn" placeholder="格式为SN+当前年月日+四位顺序码, 如:SN201904080001"/>
             </FormItem>
           </Col>
           <Col span="12">
