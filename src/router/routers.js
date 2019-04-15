@@ -216,7 +216,7 @@ export default [
         meta: {
           access: ['super_admin', 'system_message'],
           icon: 'md-arrow-dropright',
-          title: '系统消息'
+          title: '系统消息管理'
         },
         component: () => import('@/view/system/message/index.vue')
       },
@@ -311,17 +311,6 @@ export default [
           title: '用户管理'
         },
         component: () => import('@/view/user/index.vue')
-      },
-      {
-        path: '/user/certification',
-        name: 'user_certification',
-        notCache: true,
-        meta: {
-          access: ['super_admin', 'user_certification'],
-          icon: 'md-arrow-dropright',
-          title: '认证管理'
-        },
-        component: () => import('@/view/basic.vue')
       },
       {
         path: '/user/organize/manage',
