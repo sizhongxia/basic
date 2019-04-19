@@ -291,6 +291,63 @@ export default [
     ]
   },
   {
+    path: '/moa',
+    name: 'moa', // 重点农产品市场信息管理
+    notCache: true,
+    meta: {
+      access: ['super_admin', 'moa'],
+      title: '市场信息管理',
+      icon: 'ios-leaf-outline'
+    },
+    component: Main,
+    children: [
+      {
+        path: '/moa/wpap200dzs/manage',
+        name: 'moa_wpap_200dzs_manage',
+        notCache: true,
+        meta: {
+          access: ['super_admin', 'moa_wpap_200dzs_manage'],
+          icon: 'md-arrow-dropright',
+          title: '200指数(日)管理'
+        },
+        component: () => import('@/view/moa/wpap200dzs/index.vue')
+      },
+      {
+        path: '/moa/wpap200mzs/manage',
+        name: 'moa_wpap_200mzs_manage',
+        notCache: true,
+        meta: {
+          access: ['super_admin', 'moa_wpap_200mzs_manage'],
+          icon: 'md-arrow-dropright',
+          title: '200指数(月)管理'
+        },
+        component: () => import('@/view/moa/wpap200mzs/index.vue')
+      },
+      {
+        path: '/moa/wpapweek/manage',
+        name: 'moa_wpap_week_manage',
+        notCache: true,
+        meta: {
+          access: ['super_admin', 'moa_wpap_week_manage'],
+          icon: 'md-arrow-dropright',
+          title: '批发价格(周平均价)'
+        },
+        component: () => import('@/view/moa/wpapweek/index.vue')
+      },
+      {
+        path: '/moa/wpapmonth/manage',
+        name: 'moa_wpap_month_manage',
+        notCache: true,
+        meta: {
+          access: ['super_admin', 'moa_wpap_month_manage'],
+          icon: 'md-arrow-dropright',
+          title: '批发价格(月平均价)'
+        },
+        component: () => import('@/view/moa/wpapmonth/index.vue')
+      }
+    ]
+  },
+  {
     path: '/user',
     name: 'user', // 用户&权限
     notCache: true,
