@@ -5,7 +5,7 @@
   <div>
     <Card class="search-con" shadow>
       <Input clearable placeholder="请输入摄像头名称检索" class="search-input" v-model="name"/>
-      <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="search"/>&nbsp;&nbsp;{{ $t('search') }}</Button>
+      <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="ios-search-outline" /> {{ $t('search') }}</Button>
       <p style="margin-top: 14px;font-size: 12px;">注：摄像头在农场控制台中进行维护</p>
     </Card>
     <Table

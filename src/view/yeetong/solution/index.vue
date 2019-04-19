@@ -13,7 +13,7 @@
   <div>
     <Card class="search-con" shadow>
       <Input clearable placeholder="按解决方案名称检索" class="search-input" v-model="searchValue"/>
-      <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="search"/>&nbsp;&nbsp;搜索</Button>
+      <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="ios-search-outline" /> 搜索</Button>
     </Card>
     <Button type="primary" icon="ios-add-circle-outline" style="margin-bottom: 18px" @click="showCreateForm">新增解决方案</Button>
     <Table

@@ -141,3 +141,12 @@ export const allMoaTypes = () => {
     method: 'post'
   })
 }
+
+export const updateMoaWpap200dzsCvData = () => {
+  const data = { }
+  return axios.request({
+    url: 'moa/updateMoaWpap200dzsCvData',
+    data,
+    method: 'post'
+  })
+}

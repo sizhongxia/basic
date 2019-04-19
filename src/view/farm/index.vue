@@ -6,7 +6,7 @@
     <Card class="search-con" shadow>
       <Input clearable :placeholder="$t('search_by_keyword_farm_name')" class="search-input" v-model="name"/>
       <Input clearable :placeholder="$t('search_by_keyword_farm_code')" class="search-input" v-model="code"/>
-      <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="search"/>&nbsp;&nbsp;{{ $t('search') }}</Button>
+      <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="ios-search-outline" /> {{ $t('search') }}</Button>
     </Card>
     <Table
       :border="false"

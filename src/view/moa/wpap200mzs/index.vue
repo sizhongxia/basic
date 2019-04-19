@@ -14,7 +14,7 @@
     <Card class="search-con" shadow>
       <Input style="width: 200px" placeholder="按年份查询" v-model="searchYear" clearable/>
       <Input style="width: 200px" placeholder="按月份查询" v-model="searchMonth" clearable/>
-      <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="search"/>&nbsp;&nbsp;检索</Button>
+      <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="ios-search-outline" /> 检索</Button>
     </Card>
     <Button type="primary" icon="ios-add-circle-outline" style="margin-bottom: 18px" @click="showCreateForm">新增</Button>
     <Table
@@ -43,7 +43,7 @@
           <Row>
               <Col span="12">
                   <FormItem label="年份">
-                    <InputNumber :min="2000" :step="1" :disabled="formObj.resId != ''" style="width: 200px;" v-model="formObj.dateYear" placeholder="请输入年份"></InputNumber>
+                    <InputNumber :min="1" :step="1" :disabled="formObj.resId != ''" style="width: 200px;" v-model="formObj.dateYear" placeholder="请输入年份"></InputNumber>
                   </FormItem>
               </Col>
               <Col span="12">

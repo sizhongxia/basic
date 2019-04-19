@@ -13,9 +13,12 @@
   <div>
     <Card class="search-con" shadow>
       <DatePicker type="date" placeholder="按日期查询" v-model="searchValue" clearable></DatePicker>
-      <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="search"/>&nbsp;&nbsp;检索</Button>
+      <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="ios-search-outline" /> 检索</Button>
     </Card>
-    <Button type="primary" icon="ios-add-circle-outline" style="margin-bottom: 18px" @click="showCreateForm">新增</Button>
+    <ButtonGroup style="margin-bottom: 18px">
+      <Button type="primary" icon="ios-add-circle-outline" @click="showCreateForm">新增</Button>
+      <Button :loading="updateing" @click="updateMoaWpap200dzsCvDataHandle"><Icon type="ios-refresh-circle-outline" /> 更新日增长数据</Button>
+    </ButtonGroup>
     <Table
       :border="false"
       :stripe="true"
@@ -141,13 +144,13 @@
       <Spin size="large" fix v-if="submiting"></Spin>
       <div slot="footer">
         <Button type="text" @click="closeBaseFormHandle">关闭</Button>
-        <Button type="primary" @click="submitBaseFormHandle">保存</Button>
+        <Button type="primary" :loading="submiting" @click="submitBaseFormHandle">保存</Button>
       </div>
     </Modal>
   </div>
 </template>
 <script>
-import { loadMoaWpap200dzs, upinsertWpap200dzs, deleteWpap200dzs } from '@/api/moa'
+import { loadMoaWpap200dzs, upinsertWpap200dzs, deleteWpap200dzs, updateMoaWpap200dzsCvData } from '@/api/moa'
 export default {
   data () {
     return {
@@ -156,6 +159,7 @@ export default {
       current: 1,
       total: 0,
       size: 10,
+      updateing: false,
       loading: false,
       submiting: false,
       baseFormModel: false,
@@ -254,6 +258,16 @@ export default {
         minWidth: 200,
         tooltip: true
       }, {
+        title: '粮油产品指数',
+        key: 'lycp',
+        minWidth: 140,
+        tooltip: true
+      }, {
+        title: '粮油产品指数涨幅',
+        key: 'lycpCv',
+        minWidth: 140,
+        tooltip: true
+      }, {
         title: '畜产品指数',
         key: 'xcp',
         minWidth: 140,
@@ -291,16 +305,6 @@ export default {
       }, {
         title: '水果价格指数涨幅',
         key: 'sgCv',
-        minWidth: 140,
-        tooltip: true
-      }, {
-        title: '粮油产品指数',
-        key: 'lycp',
-        minWidth: 140,
-        tooltip: true
-      }, {
-        title: '粮油产品指数涨幅',
-        key: 'lycpCv',
         minWidth: 140,
         tooltip: true
       }, {
@@ -432,6 +436,28 @@ export default {
       this.formObj.syy = params.row.syy
       this.formObj.syyCv = params.row.syyCv
       this.baseFormModel = true
+    },
+    updateMoaWpap200dzsCvDataHandle () {
+      const _this = this
+      _this.updateing = true
+      updateMoaWpap200dzsCvData().then(res => {
+        _this.updateing = false
+        if (res.status === 200 && res.data.code === 200) {
+          _this.$Modal.success({
+            title: '更新成功'
+          })
+          _this.load()
+        } else {
+          _this.$Modal.error({
+            title: _this.$t('error_message_info') + res.data.message
+          })
+        }
+      }).catch(function (reason) {
+        _this.updateing = false
+        _this.$Modal.error({
+          title: _this.$t('error_message_info') + reason.message
+        })
+      })
     },
     submitBaseFormHandle () {
       const _this = this

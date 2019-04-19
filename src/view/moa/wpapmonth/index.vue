@@ -17,7 +17,7 @@
       <Select v-model="searchTypeId" style="width:200px" placeholder="按农产品类型查询" clearable>
         <Option v-for="item in types" :key="item.typeId" :value="item.typeId">{{item.typeName}}</Option>
       </Select>
-      <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="search"/>&nbsp;&nbsp;检索</Button>
+      <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="ios-search-outline" /> 检索</Button>
     </Card>
     <Button type="primary" icon="ios-add-circle-outline" style="margin-bottom: 18px" @click="showCreateForm">新增</Button>
     <Table
@@ -46,7 +46,7 @@
           <Row>
               <Col span="12">
                   <FormItem label="年份">
-                    <InputNumber :step="1" :min="2000" :disabled="formObj.resId != ''" style="width: 200px;" v-model="formObj.dateYear" placeholder="请输入年份"></InputNumber>
+                    <InputNumber :step="1" :min="1" :disabled="formObj.resId != ''" style="width: 200px;" v-model="formObj.dateYear" placeholder="请输入年份"></InputNumber>
                   </FormItem>
               </Col>
               <Col span="12">
