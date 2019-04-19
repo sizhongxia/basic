@@ -259,9 +259,6 @@ export default {
           _this.$Modal.success({
             title: '保存成功'
           })
-          if (!_this.formObj.resId) {
-            _this.closeBaseFormHandle()
-          }
           _this.load()
         } else {
           _this.$Modal.error({
