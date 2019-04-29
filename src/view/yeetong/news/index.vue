@@ -70,7 +70,7 @@
         <Button type="primary" @click="submitBaseFormHandle">{{ $t('i.modal.okText') }}</Button>
       </div>
     </Modal>
-    <Modal v-model="uploadNewsCoverPicModel">
+    <Modal v-model="uploadNewsCoverPicModel" :footer-hide="true">
       <Upload
         type="drag"
         accept=".jpg,.png"
@@ -91,7 +91,6 @@
         </div>
         <Spin size="large" fix v-if="pictrueUploading"></Spin>
       </Upload>
-      <div slot="footer" style="display: none;"></div>
     </Modal>
   </div>
 </template>
